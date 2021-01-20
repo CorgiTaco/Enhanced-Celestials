@@ -2,12 +2,14 @@ package corgitaco.enchancedcelestials.lunarevent;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 public abstract class LunarEvent {
@@ -31,7 +33,12 @@ public abstract class LunarEvent {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void modifySkyLightMapColor(Vector3f originalMoonColor) {
+    public boolean modifySkyLightMapColor(@Nullable Vector3f originalMoonColor) {
+        return false;
+    }
+
+    public boolean stopSleeping(PlayerEntity playerEntity) {
+        return false;
     }
 
     @OnlyIn(Dist.CLIENT)

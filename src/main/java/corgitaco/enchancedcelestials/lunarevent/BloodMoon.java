@@ -4,7 +4,9 @@ import corgitaco.enchancedcelestials.config.EnhancedCelestialsConfig;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
@@ -21,8 +23,10 @@ public class BloodMoon extends LunarEvent {
     }
 
     @Override
-    public void modifySkyLightMapColor(Vector3f lightMapSkyColor) {
-        lightMapSkyColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
+    public boolean modifySkyLightMapColor(Vector3f lightMapSkyColor) {
+        if (lightMapSkyColor != null)
+            lightMapSkyColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
+        return true;
     }
 
     @Override
@@ -64,5 +68,11 @@ public class BloodMoon extends LunarEvent {
             return COLOR;
         else
             return super.modifyCloudColor(originalCloudColor);
+    }
+
+    @Override
+    public boolean stopSleeping(PlayerEntity player) {
+        player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
+        return true;
     }
 }

@@ -18,5 +18,4 @@ public abstract class MixinLightMapTexture {
         if (EnhancedCelestials.currentLunarEvent != null)
             EnhancedCelestials.currentLunarEvent.modifySkyLightMapColor(skyVector);
     }
-
 }

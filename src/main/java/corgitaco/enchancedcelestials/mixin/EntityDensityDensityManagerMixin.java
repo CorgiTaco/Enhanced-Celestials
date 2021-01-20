@@ -1,5 +1,6 @@
 package corgitaco.enchancedcelestials.mixin;
 
+import corgitaco.enchancedcelestials.misc.AdditionalEntityDensityManagerData;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.EntityClassification;
@@ -12,13 +13,21 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldEntitySpawner.EntityDensityManager.class)
-public abstract class EntityDensityManagerMixin {
+public class EntityDensityDensityManagerMixin implements AdditionalEntityDensityManagerData {
+	private boolean isOverworld;
+
 	@Shadow @Final private int field_234981_a_;
 
 	@Shadow @Final private Object2IntOpenHashMap<EntityClassification> field_234982_b_;
 
 	@Inject(at = @At("RETURN"), method = "func_234991_a_", cancellable = true)
 	private void modifySpawnCap(EntityClassification entityClassification, CallbackInfoReturnable<Boolean> cir) {
-		EnhancedCelestialsUtils.modifySpawnCap(entityClassification, this.field_234981_a_, this.field_234982_b_, cir);
+		if (isOverworld)
+			EnhancedCelestialsUtils.modifySpawnCap(entityClassification, this.field_234981_a_, this.field_234982_b_, cir);
+	}
+
+	@Override
+	public void setIsOverworld(boolean isOverworld) {
+		this.isOverworld = isOverworld;
 	}
 }

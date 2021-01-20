@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "enhancedcelestials.refmap.json",
   "mixins": [
-    "EntityDensityManagerMixin",
+    "EntityDensityDensityManagerMixin",
+    "MixinBedBlock",
+    "MixinEntityWorldSpawner",
     "MixinMinecraftServer"
   ],
   "client": [

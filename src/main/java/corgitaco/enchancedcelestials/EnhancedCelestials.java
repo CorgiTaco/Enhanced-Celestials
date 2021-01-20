@@ -9,6 +9,7 @@ import corgitaco.enchancedcelestials.data.network.packet.LunarEventPacket;
 import corgitaco.enchancedcelestials.data.world.LunarData;
 import corgitaco.enchancedcelestials.lunarevent.LunarEvent;
 import corgitaco.enchancedcelestials.lunarevent.LunarEventSystem;
+import corgitaco.enchancedcelestials.modcompat.OptifineCompat;
 import corgitaco.enchancedcelestials.server.SetLunarEventCommand;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.command.CommandSource;
@@ -50,6 +51,7 @@ public class EnhancedCelestials {
 
     public static final Path CONFIG_PATH = new File(String.valueOf(FMLPaths.CONFIGDIR.get().resolve(MOD_ID))).toPath();
 
+    public static boolean usingOptifine;
 
     public EnhancedCelestials() {
         CONFIG_PATH.toFile().mkdirs();
@@ -66,6 +68,7 @@ public class EnhancedCelestials {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        usingOptifine = OptifineCompat.IS_OPTIFINE_PRESENT.getValue();
     }
 
     private void lateSetup(FMLLoadCompleteEvent event) {

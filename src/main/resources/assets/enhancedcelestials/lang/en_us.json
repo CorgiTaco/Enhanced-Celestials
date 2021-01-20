@@ -2,5 +2,6 @@
   "enhancedcelestials.commands.failed": "Could not set lunar event: %s",
   "enhancedcelestials.commands.failed.requiresnight": "In order to use this command, set the time to night(between 13000 & 23500 day time)! Current time: %s",
   "enhancedcelestials.commands.success.blood_moon": "Set lunar event to \"Blood Moon\"!",
-  "enhancedcelestials.commands.success.default": "Set lunar event to \"Default\"!"
+  "enhancedcelestials.commands.success.default": "Set lunar event to \"Default\"!",
+  "enhancedcelestials.sleep.fail.blood_moon": "You cannot sleep during blood moons!"
 }
