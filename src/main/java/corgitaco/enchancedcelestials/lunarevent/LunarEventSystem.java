@@ -13,8 +13,10 @@ public class LunarEventSystem {
 
     public static final String BLOOD_MOON_EVENT_ID = "BLOOD_MOON";
     public static final String DEFAULT_EVENT_ID = "DEFAULT";
+    public static final String HARVEST_MOON_EVENT_ID = "HARVEST_MOON";
     public static final BloodMoon BLOOD_MOON_EVENT = new BloodMoon();
     public static final Default DEFAULT_EVENT = new Default();
+    public static final HarvestMoon HARVEST_MOON_EVENT = new HarvestMoon();
 
     public static HashMap<String, Double> LUNAR_EVENTS_CONTROLLER = new HashMap<>();
 
@@ -25,6 +27,7 @@ public class LunarEventSystem {
     public static void registerDefaultLunarEvents() {
         LUNAR_EVENTS.add(BLOOD_MOON_EVENT);
         LUNAR_EVENTS.add(DEFAULT_EVENT);
+        LUNAR_EVENTS.add(HARVEST_MOON_EVENT);
     }
 
     public static void fillLunarEventsMapAndWeatherEventController() {

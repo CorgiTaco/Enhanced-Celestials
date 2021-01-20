@@ -19,6 +19,9 @@ public class EnhancedCelestialsConfig {
     public static ForgeConfigSpec.DoubleValue bloodMoonChance;
     public static ForgeConfigSpec.BooleanValue redClouds;
 
+    public static ForgeConfigSpec.DoubleValue harvestMoonCropGrowthChanceMultiplier;
+
+
     public static void loadConfig(Path path) {
         EnhancedCelestials.LOGGER.info("Loading config: " + path);
         refreshConfig();
@@ -33,6 +36,8 @@ public class EnhancedCelestialsConfig {
         spawnCapMultiplier = COMMON_BUILDER.comment("Multiply the monster spawn cap(70 monsters) by this value.\nRemember, more mobs = more server lag, so set this number responsibly!\nDefault is 5.0. aka 70 * 5.0 = 350 total mobs").defineInRange("MonsterSpawnCapMultiplier", 5.0, 1.5, 30.0);
         bloodMoonChance = COMMON_BUILDER.comment("The chance of a blood moon occurring each night. Chance is rolled at the daytime 13005.\nDefault 0.05").defineInRange("BloodMoonChance", 0.05, 0.01, 1.0);
         redClouds = COMMON_BUILDER.comment("Are blood moon clouds red?\nDefault true").define("BloodMoonRedClouds", true);
+        COMMON_BUILDER.push("Harvest_Moon_Settings");
+        harvestMoonCropGrowthChanceMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crops grow during harvest moons.\nDefault 15.0").defineInRange("HarvestMoonCropGrowthMultiplier", 25.0, 1.0, 500);
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

@@ -5,6 +5,7 @@
   "refmap": "enhancedcelestials.refmap.json",
   "mixins": [
     "EntityDensityDensityManagerMixin",
+    "MixinAbstractBlockState",
     "MixinBedBlock",
     "MixinEntityWorldSpawner",
     "MixinMinecraftServer"

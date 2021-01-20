@@ -1,12 +1,17 @@
 package corgitaco.enchancedcelestials.lunarevent;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
@@ -33,7 +38,7 @@ public abstract class LunarEvent {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean modifySkyLightMapColor(@Nullable Vector3f originalMoonColor) {
+    public boolean modifySkyLightMapColor(Vector3f originalMoonColor) {
         return false;
     }
 
@@ -73,5 +78,8 @@ public abstract class LunarEvent {
 
     public TranslationTextComponent successTranslationTextComponent() {
         return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase());
+    }
+
+    public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState, CallbackInfo ci) {
     }
 }
