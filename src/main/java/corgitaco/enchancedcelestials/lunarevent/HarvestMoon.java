@@ -37,7 +37,7 @@ public class HarvestMoon extends LunarEvent {
     @Override
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState, CallbackInfo ci) {
         if (BlockTags.CROPS.contains(block) || BlockTags.BEE_GROWABLES.contains(block) || BlockTags.SAPLINGS.contains(block)) {
-            for (int i = 0; i < cropGrowthMultiplier; i++) {
+            for (int i = 0; i <= cropGrowthMultiplier; i++) {
                 block.randomTick(blockState,  world, pos, world.rand);
             }
         }
