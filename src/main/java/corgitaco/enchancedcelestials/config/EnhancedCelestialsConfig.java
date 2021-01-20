@@ -37,7 +37,7 @@ public class EnhancedCelestialsConfig {
         bloodMoonChance = COMMON_BUILDER.comment("The chance of a blood moon occurring each night. Chance is rolled at the daytime 13005.\nDefault 0.05").defineInRange("BloodMoonChance", 0.05, 0.01, 1.0);
         redClouds = COMMON_BUILDER.comment("Are blood moon clouds red?\nDefault true").define("BloodMoonRedClouds", true);
         COMMON_BUILDER.push("Harvest_Moon_Settings");
-        harvestMoonCropGrowthChanceMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crops grow during harvest moons.\nDefault 15.0").defineInRange("HarvestMoonCropGrowthMultiplier", 25.0, 1.0, 500);
+        harvestMoonCropGrowthChanceMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crops grow during harvest moons.\nDefault 15.0").defineInRange("HarvestMoonCropGrowthMultiplier", 300.0, 1.0, 1000.0);
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

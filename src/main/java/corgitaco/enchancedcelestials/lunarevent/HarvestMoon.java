@@ -15,7 +15,6 @@ import java.awt.*;
 
 public class HarvestMoon extends LunarEvent {
 
-
     static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
 
     public HarvestMoon() {
