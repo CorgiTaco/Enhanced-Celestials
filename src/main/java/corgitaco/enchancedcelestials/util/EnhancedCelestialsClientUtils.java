@@ -107,7 +107,7 @@ public class EnhancedCelestialsClientUtils {
     }
 
 
-    public static Vector3f transformVectorColor(Color color) {
+    public static Vector3f transformToVectorColor(Color color) {
         int rgbColor = color.getRGB();
         float r = (float) (rgbColor >> 16 & 255) / 255.0F;
         float g = (float) (rgbColor >> 8 & 255) / 255.0F;

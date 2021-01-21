@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -14,7 +15,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 
 public abstract class LunarEvent {
@@ -76,10 +76,13 @@ public abstract class LunarEvent {
         return originalCloudColor;
     }
 
-    public TranslationTextComponent successTranslationTextComponent() {
+    public final TranslationTextComponent successTranslationTextComponent() {
         return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase());
     }
 
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState, CallbackInfo ci) {
+    }
+
+    public void multiplyDrops(ServerWorld world, ItemStack itemStack) {
     }
 }

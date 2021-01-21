@@ -19,7 +19,7 @@ public abstract class MixinWorldRender {
     @Inject(method = "renderSky(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getMoonPhase()I"))
     private void changeMoonColor(MatrixStack matrixStackIn, float partialTicks, CallbackInfo ci) {
         Color color = EnhancedCelestials.currentLunarEvent.modifyMoonColor();
-        Vector3f glColor = EnhancedCelestialsClientUtils.transformVectorColor(color);
+        Vector3f glColor = EnhancedCelestialsClientUtils.transformToVectorColor(color);
         RenderSystem.color4f(glColor.getX(), glColor.getY(), glColor.getZ(), color.getAlpha() / 255.0F);
     }
 }
