@@ -49,12 +49,8 @@ public class EnhancedCelestialsConfig {
         COMMON_BUILDER.pop();
         COMMON_BUILDER.push("Harvest_Moon_Settings");
         harvestMoonChance = COMMON_BUILDER.comment("The chance of a harvest moon occurring each night. Chance is rolled at the daytime 13005.\nDefault 0.025").defineInRange("BloodMoonChance", 0.025, 0.0, 1.0);
-        COMMON_BUILDER.push("Crop_Growth");
         harvestMoonCropGrowthChanceMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crops grow during harvest moons.\nDefault 15.0").defineInRange("CropGrowthMultiplier", 15.0, 1.0, 10000.0);
-        COMMON_BUILDER.pop();
-        COMMON_BUILDER.push("Crop_Drops");
         harvestMoonCropDropsMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crop items drop during harvest moons.\nDefault 2.0").defineInRange("CropItemDropMultiplier", 2.5, 1.0, 1000.0);
-        COMMON_BUILDER.pop();
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
     }
