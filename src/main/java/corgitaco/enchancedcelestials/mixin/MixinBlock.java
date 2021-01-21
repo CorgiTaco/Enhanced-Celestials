@@ -1,6 +1,7 @@
 package corgitaco.enchancedcelestials.mixin;
 
 import corgitaco.enchancedcelestials.EnhancedCelestials;
+import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +17,9 @@ public class MixinBlock {
 
     @Inject(method = "spawnAsEntity", at = @At("HEAD"))
     private static void modifyDrops(World world, BlockPos pos, ItemStack stack, CallbackInfo ci) {
-        if (world instanceof ServerWorld)
-            EnhancedCelestials.currentLunarEvent.multiplyDrops((ServerWorld) world, stack);
+        if (world instanceof ServerWorld) {
+            if (EnhancedCelestialsUtils.isOverworld(world.getDimensionKey()))
+                EnhancedCelestials.currentLunarEvent.multiplyDrops((ServerWorld) world, stack);
+        }
     }
 }
