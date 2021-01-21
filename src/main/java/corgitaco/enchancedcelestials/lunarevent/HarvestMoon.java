@@ -51,12 +51,23 @@ public class HarvestMoon extends LunarEvent {
     @Override
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState, CallbackInfo ci) {
 
-        boolean flag = isCropGrowthBlocksBlackList == blacklistedCropGrowthMultiplierBlocks.contains(block);
+        if (isCropGrowthBlocksBlackList) {
+            if (!blacklistedCropGrowthMultiplierBlocks.contains(block)) {
+                if (BlockTags.CROPS.contains(block) || BlockTags.BEE_GROWABLES.contains(block) || BlockTags.SAPLINGS.contains(block)) {
+                    for (int i = 0; i <= cropGrowthMultiplier; i++) {
+                        if (i > 0)
+                            blockState = world.getBlockState(pos);
 
-        if (flag) {
-            if (BlockTags.CROPS.contains(block) || BlockTags.BEE_GROWABLES.contains(block) || BlockTags.SAPLINGS.contains(block)) {
-                for (int i = 0; i <= cropGrowthMultiplier; i++) {
-                    block.randomTick(blockState, world, pos, world.rand);
+                        block.randomTick(blockState, world, pos, world.rand);
+                    }
+                }
+            } else {
+                if (blacklistedCropGrowthMultiplierBlocks.contains(block)) {
+                    for (int i = 0; i <= cropGrowthMultiplier; i++) {
+                        if (i > 0)
+                            blockState = world.getBlockState(pos);
+                        block.randomTick(blockState, world, pos, world.rand);
+                    }
                 }
             }
         }
