@@ -48,4 +48,8 @@ public class EnhancedCelestialsUtils {
             return false;
         }
     }
+
+    public static long modulosDaytime(long daytime) {
+        return daytime % 24000L;
+    }
 }

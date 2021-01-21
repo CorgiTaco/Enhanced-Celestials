@@ -8,6 +8,7 @@ import corgitaco.enchancedcelestials.data.network.NetworkHandler;
 import corgitaco.enchancedcelestials.data.network.packet.LunarEventPacket;
 import corgitaco.enchancedcelestials.lunarevent.LunarEvent;
 import corgitaco.enchancedcelestials.lunarevent.LunarEventSystem;
+import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -30,7 +31,7 @@ public class SetLunarEventCommand {
     public static int betterWeatherSetWeatherType(CommandSource source, String lunarType) {
         LunarEvent weatherEvent = LunarEventSystem.LUNAR_EVENTS_MAP.get(lunarType);
         if (weatherEvent != null) {
-            long dayTime = source.getWorld().getWorld().getWorldInfo().getDayTime();
+            long dayTime = EnhancedCelestialsUtils.modulosDaytime(source.getWorld().getWorld().getWorldInfo().getDayTime());
             if (!(dayTime >= 13000 && dayTime <= 23500)) {
                 source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.failed.requiresnight", dayTime), true);
                 return 0;
