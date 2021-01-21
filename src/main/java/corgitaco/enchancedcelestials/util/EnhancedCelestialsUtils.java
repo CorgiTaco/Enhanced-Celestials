@@ -33,11 +33,25 @@ public class EnhancedCelestialsUtils {
         return new Color((int) (floatColor.getX() * 255), (int) (floatColor.getY() * 255), (int) (floatColor.getZ() * 255));
     }
 
-    public static final Tags.IOptionalNamedTag<Item> FRUITS = tag("fruits");
-    public static final Tags.IOptionalNamedTag<Item> VEGETABLES = tag("vegetable");
+    public static final Tags.IOptionalNamedTag<Item> FRUITS = forgeTag("fruits");
+    public static final Tags.IOptionalNamedTag<Item> VEGETABLES = forgeTag("vegetable");
+    public static final Tags.IOptionalNamedTag<Block> HARVEST_MOON_WHITELISTED_CROP_GROWTH = ecBlockTag("harvest_moon_whitelisted_crop_growth");
+    public static final Tags.IOptionalNamedTag<Block> HARVEST_MOON_BLACKLISTED_CROP_GROWTH = ecBlockTag("harvest_moon_blacklisted_crop_growth");
 
-    private static Tags.IOptionalNamedTag<Item> tag(String name) {
+    public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_WHITELISTED_CROP_DROPS = ecItemTag("harvest_moon_whitelisted_crop_drops");
+    public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_BLACKLISTED_CROP_DROPS = ecItemTag("harvest_moon_blacklisted_crop_drops");
+
+
+    private static Tags.IOptionalNamedTag<Item> forgeTag(String name) {
         return ItemTags.createOptional(new ResourceLocation("forge", name));
+    }
+
+    private static Tags.IOptionalNamedTag<Item> ecItemTag(String name) {
+        return ItemTags.createOptional(new ResourceLocation(EnhancedCelestials.MOD_ID, name));
+    }
+
+    private static Tags.IOptionalNamedTag<Block> ecBlockTag(String name) {
+        return BlockTags.createOptional(new ResourceLocation(EnhancedCelestials.MOD_ID, name));
     }
 
     public static boolean filterRegistryID(ResourceLocation id, Registry<?> registry, String registryTypeName) {
