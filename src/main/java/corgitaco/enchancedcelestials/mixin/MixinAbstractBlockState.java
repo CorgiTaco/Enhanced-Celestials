@@ -23,11 +23,11 @@ public abstract class MixinAbstractBlockState {
 
     @Shadow protected abstract BlockState getSelf();
 
-    @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "randomTick", at = @At("HEAD"))
     private void cropGrowthModifier(ServerWorld world, BlockPos pos, Random randomIn, CallbackInfo ci) {
         if (EnhancedCelestialsUtils.isOverworld(world.getDimensionKey())) {
             if (EnhancedCelestials.currentLunarEvent != null)
-                EnhancedCelestials.currentLunarEvent.blockTick(world, pos, this.getBlock(), this.getSelf(), ci);
+                EnhancedCelestials.currentLunarEvent.blockTick(world, pos, this.getBlock(), this.getSelf());
         }
     }
 }

@@ -36,12 +36,14 @@ public class HarvestMoon extends LunarEvent {
 
 
     @Override
-    public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState, CallbackInfo ci) {
+    public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
         if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_GROWTH.contains(block)) {
             if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_GROWTH.contains(block)) {
-                for (int i = 0; i <= cropGrowthMultiplier; i++) {
-                    if (i > 0)
+                for (int i = 0; i < cropGrowthMultiplier; i++) {
+                    if (i > 0) {
                         blockState = world.getBlockState(pos);
+                        block = blockState.getBlock();
+                    }
 
                     block.randomTick(blockState, world, pos, world.rand);
                 }

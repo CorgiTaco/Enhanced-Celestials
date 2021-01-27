@@ -80,7 +80,7 @@ public abstract class LunarEvent {
         return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase());
     }
 
-    public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState, CallbackInfo ci) {
+    public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
     }
 
     public void multiplyDrops(ServerWorld world, ItemStack itemStack) {
