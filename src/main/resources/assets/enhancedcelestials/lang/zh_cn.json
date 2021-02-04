@@ -1,0 +1,8 @@
+{
+  "enhancedcelestials.commands.failed": "无法设置月亮事件: %s",
+  "enhancedcelestials.commands.failed.requiresnight": "使用这个命令，需将时间设置为晚上！（time13000-23500之间）当前时间：%s",
+  "enhancedcelestials.commands.success.blood_moon": "设置月亮事件为 \"血月\"!",
+  "enhancedcelestials.commands.success.default": "设置月亮事件为 \"默认\"!",
+  "enhancedcelestials.commands.success.harvest-moon": "设置月亮事件为 \"满月\"!",
+  "enhancedcelestials.sleep.fail.blood_moon": "你不能在血月来临时睡觉！"
+}
