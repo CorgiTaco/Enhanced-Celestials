@@ -1,8 +1,8 @@
 {
-  "enhancedcelestials.commands.failed": "无法设置月亮事件: %s",
-  "enhancedcelestials.commands.failed.requiresnight": "使用这个命令，需将时间设置为晚上！（time13000-23500之间）当前时间：%s",
-  "enhancedcelestials.commands.success.blood_moon": "设置月亮事件为 \"血月\"!",
-  "enhancedcelestials.commands.success.default": "设置月亮事件为 \"默认\"!",
-  "enhancedcelestials.commands.success.harvest-moon": "设置月亮事件为 \"满月\"!",
-  "enhancedcelestials.sleep.fail.blood_moon": "你不能在血月来临时睡觉！"
+  "enhancedcelestials.commands.failed": "无法设置月相: %s",
+  "enhancedcelestials.commands.failed.requiresnight": "需要将时间设置为夜晚 (daytime 的值在 13000 至 23500 之间) 以使用此命令. 当前时间为 %s",
+  "enhancedcelestials.commands.success.blood_moon": "月相已设置为 \"血月\"",
+  "enhancedcelestials.commands.success.default": "月相已设置为 \"默认\"",
+  "enhancedcelestials.commands.success.harvest-moon": "月相已设置为 \"满月\"",
+  "enhancedcelestials.sleep.fail.blood_moon": "你现在不能休息, 当前月相为 \"血月\""
 }
