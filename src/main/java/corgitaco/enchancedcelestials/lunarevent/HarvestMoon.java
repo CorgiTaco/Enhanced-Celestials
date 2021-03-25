@@ -55,9 +55,11 @@ public class HarvestMoon extends LunarEvent {
     public void multiplyDrops(ServerWorld world, ItemStack itemStack) {
         Item item = itemStack.getItem();
 
-        if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.contains(item)) {
-            if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.contains(item)) {
-                itemStack.setCount((int) (itemStack.getCount() * cropDropMultiplier));
+        if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.isDefaulted() && !EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.isDefaulted()) {
+            if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.contains(item)) {
+                if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.contains(item)) {
+                    itemStack.setCount((int) (itemStack.getCount() * cropDropMultiplier));
+                }
             }
         }
     }
