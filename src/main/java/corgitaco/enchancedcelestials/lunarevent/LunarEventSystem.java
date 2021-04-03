@@ -43,6 +43,7 @@ public class LunarEventSystem {
             LunarEvent currentLunarEvent = LUNAR_EVENTS_MAP.get(EnhancedCelestials.getLunarData(world).getEvent());
             if (!cachedLunarEvent.equals(currentLunarEvent)) {
                 world.getPlayers().forEach(player -> {
+                    currentLunarEvent.sendRisingNotification(player);
                     NetworkHandler.sendToClient(player, new LunarEventPacket(currentLunarEvent.getID()));
                 });
                 cachedLunarEvent = currentLunarEvent;
@@ -52,6 +53,7 @@ public class LunarEventSystem {
             if (currentLunarEvent != DEFAULT_EVENT) {
                 EnhancedCelestials.getLunarData(world).setEvent(DEFAULT_EVENT_ID);
                 world.getPlayers().forEach(player -> {
+                    currentLunarEvent.sendSettingNotification(player);
                     NetworkHandler.sendToClient(player, new LunarEventPacket(DEFAULT_EVENT_ID));
                 });
             }

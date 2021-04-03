@@ -5,10 +5,14 @@ import corgitaco.enchancedcelestials.util.EnhancedCelestialsClientUtils;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -59,5 +63,19 @@ public class HarvestMoon extends LunarEvent {
                 }
             }
         }
+    }
+
+    @Override
+    public void sendRisingNotification(PlayerEntity player) {
+        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise");
+        component.getStyle().applyFormatting(TextFormatting.GOLD);
+        player.sendMessage(component, Util.DUMMY_UUID);
+    }
+
+    @Override
+    public void sendSettingNotification(PlayerEntity player) {
+        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.set");
+        component.getStyle().applyFormatting(TextFormatting.GOLD);
+        player.sendMessage(component, Util.DUMMY_UUID);
     }
 }

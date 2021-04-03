@@ -5,7 +5,9 @@ import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -71,5 +73,19 @@ public class BloodMoon extends LunarEvent {
     public boolean stopSleeping(PlayerEntity player) {
         player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
         return true;
+    }
+
+    @Override
+    public void sendRisingNotification(PlayerEntity player) {
+        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.rise");
+        component.getStyle().applyFormatting(TextFormatting.RED);
+        player.sendMessage(component, Util.DUMMY_UUID);
+    }
+
+    @Override
+    public void sendSettingNotification(PlayerEntity player) {
+        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.set");
+        component.getStyle().applyFormatting(TextFormatting.RED);
+        player.sendMessage(component, Util.DUMMY_UUID);
     }
 }
