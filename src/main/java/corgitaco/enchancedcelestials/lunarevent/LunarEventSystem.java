@@ -1,6 +1,5 @@
 package corgitaco.enchancedcelestials.lunarevent;
 
-
 import corgitaco.enchancedcelestials.EnhancedCelestials;
 import corgitaco.enchancedcelestials.data.network.NetworkHandler;
 import corgitaco.enchancedcelestials.data.network.packet.LunarEventPacket;
@@ -11,7 +10,6 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.HashMap;
 
 public class LunarEventSystem {
-
     public static final String BLOOD_MOON_EVENT_ID = "BLOOD_MOON";
     public static final String DEFAULT_EVENT_ID = "DEFAULT";
     public static final String HARVEST_MOON_EVENT_ID = "HARVEST_MOON";
@@ -20,10 +18,9 @@ public class LunarEventSystem {
     public static final HarvestMoon HARVEST_MOON_EVENT = new HarvestMoon();
 
     public static HashMap<String, Double> LUNAR_EVENTS_CONTROLLER = new HashMap<>();
-
     public static HashMap<String, LunarEvent> LUNAR_EVENTS_MAP = new HashMap<>();
-
     public static ObjectOpenHashSet<LunarEvent> LUNAR_EVENTS = new ObjectOpenHashSet<>();
+    private static LunarEvent cachedLunarEvent = DEFAULT_EVENT;
 
     public static void registerDefaultLunarEvents() {
         LUNAR_EVENTS.add(BLOOD_MOON_EVENT);
@@ -34,12 +31,11 @@ public class LunarEventSystem {
     public static void fillLunarEventsMapAndWeatherEventController() {
         for (LunarEvent lunarEvent : LUNAR_EVENTS) {
             LUNAR_EVENTS_MAP.put(lunarEvent.getID(), lunarEvent);
-            if (!lunarEvent.getID().equals(DEFAULT_EVENT_ID))
+            if (!lunarEvent.getID().equals(DEFAULT_EVENT_ID)) {
                 LUNAR_EVENTS_CONTROLLER.put(lunarEvent.getID(), lunarEvent.getChance());
+            }
         }
     }
-
-    private static LunarEvent cachedLunarEvent = DEFAULT_EVENT;
 
     public static void updateLunarEventPacket(ServerWorld world) {
         long dayTime = EnhancedCelestialsUtils.modulosDaytime(world.getWorldInfo().getDayTime());
@@ -51,8 +47,7 @@ public class LunarEventSystem {
                 });
                 cachedLunarEvent = currentLunarEvent;
             }
-        }
-        else {
+        } else {
             LunarEvent currentLunarEvent = LUNAR_EVENTS_MAP.get(EnhancedCelestials.getLunarData(world).getEvent());
             if (currentLunarEvent != DEFAULT_EVENT) {
                 EnhancedCelestials.getLunarData(world).setEvent(DEFAULT_EVENT_ID);

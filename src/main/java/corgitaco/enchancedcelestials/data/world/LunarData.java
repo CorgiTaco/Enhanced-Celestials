@@ -44,7 +44,6 @@ public class LunarData extends WorldSavedData {
         EnhancedCelestials.currentLunarEvent = LunarEventSystem.LUNAR_EVENTS_MAP.get(event);
     }
 
-
     public static LunarData get(IWorld world) {
         if (!(world instanceof ServerWorld))
             return new LunarData();

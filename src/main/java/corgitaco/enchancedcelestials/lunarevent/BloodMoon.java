@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.awt.*;
 
 public class BloodMoon extends LunarEvent {
-
     public static final Color COLOR = new Color(166, 16, 30);
 
     static double spawnCapMultiplier = EnhancedCelestialsConfig.spawnCapMultiplier.get();
@@ -24,8 +23,9 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public boolean modifySkyLightMapColor(Vector3f lightMapSkyColor) {
-        if (lightMapSkyColor != null)
+        if (lightMapSkyColor != null) {
             lightMapSkyColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
+        }
         return true;
     }
 
@@ -64,10 +64,7 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public Color modifyCloudColor(Color originalCloudColor) {
-        if (redClouds)
-            return COLOR;
-        else
-            return super.modifyCloudColor(originalCloudColor);
+        return redClouds ? COLOR : super.modifyCloudColor(originalCloudColor);
     }
 
     @Override

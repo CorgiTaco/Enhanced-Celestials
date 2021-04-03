@@ -17,13 +17,13 @@ public class EntityDensityDensityManagerMixin implements AdditionalEntityDensity
 	private boolean isOverworld;
 
 	@Shadow @Final private int field_234981_a_;
-
 	@Shadow @Final private Object2IntOpenHashMap<EntityClassification> field_234982_b_;
 
 	@Inject(at = @At("RETURN"), method = "func_234991_a_", cancellable = true)
 	private void modifySpawnCap(EntityClassification entityClassification, CallbackInfoReturnable<Boolean> cir) {
-		if (isOverworld)
+		if (isOverworld) {
 			EnhancedCelestialsUtils.modifySpawnCap(entityClassification, this.field_234981_a_, this.field_234982_b_, cir);
+		}
 	}
 
 	@Override

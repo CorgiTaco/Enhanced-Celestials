@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 public class HarvestMoon extends LunarEvent {
-
     static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
     static double cropDropMultiplier = EnhancedCelestialsConfig.harvestMoonCropDropsMultiplier.get();
 
@@ -34,7 +33,6 @@ public class HarvestMoon extends LunarEvent {
         return new Color(255, 219, 99, 255);
     }
 
-
     @Override
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
         if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_GROWTH.contains(block)) {
@@ -44,7 +42,6 @@ public class HarvestMoon extends LunarEvent {
                         blockState = world.getBlockState(pos);
                         block = blockState.getBlock();
                     }
-
                     block.randomTick(blockState, world, pos, world.rand);
                 }
             }

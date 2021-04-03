@@ -18,8 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.awt.*;
 
 public class EnhancedCelestialsUtils {
-
-    public static final int CHUNK_AREA = (int)Math.pow(17.0D, 2.0D);
+    public static final int CHUNK_AREA = (int) Math.pow(17.0D, 2.0D);
+    public static final Tags.IOptionalNamedTag<Item> FRUITS = forgeTag("fruits");
+    public static final Tags.IOptionalNamedTag<Item> VEGETABLES = forgeTag("vegetable");
+    public static final Tags.IOptionalNamedTag<Block> HARVEST_MOON_WHITELISTED_CROP_GROWTH = ecBlockTag("harvest_moon_whitelisted_crop_growth");
+    public static final Tags.IOptionalNamedTag<Block> HARVEST_MOON_BLACKLISTED_CROP_GROWTH = ecBlockTag("harvest_moon_blacklisted_crop_growth");
+    public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_WHITELISTED_CROP_DROPS = ecItemTag("harvest_moon_whitelisted_crop_drops");
+    public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_BLACKLISTED_CROP_DROPS = ecItemTag("harvest_moon_blacklisted_crop_drops");
 
     public static void modifySpawnCap(EntityClassification mobCategory, int spawningChunkCount, Object2IntOpenHashMap<EntityClassification> currentMobCategoryCounts, CallbackInfoReturnable<Boolean> cir) {
         EnhancedCelestials.currentLunarEvent.multiplySpawnCap(mobCategory, spawningChunkCount, currentMobCategoryCounts, cir);
@@ -32,15 +37,6 @@ public class EnhancedCelestialsUtils {
     public static Color transformFloatColor(Vector3d floatColor) {
         return new Color((int) (floatColor.getX() * 255), (int) (floatColor.getY() * 255), (int) (floatColor.getZ() * 255));
     }
-
-    public static final Tags.IOptionalNamedTag<Item> FRUITS = forgeTag("fruits");
-    public static final Tags.IOptionalNamedTag<Item> VEGETABLES = forgeTag("vegetable");
-    public static final Tags.IOptionalNamedTag<Block> HARVEST_MOON_WHITELISTED_CROP_GROWTH = ecBlockTag("harvest_moon_whitelisted_crop_growth");
-    public static final Tags.IOptionalNamedTag<Block> HARVEST_MOON_BLACKLISTED_CROP_GROWTH = ecBlockTag("harvest_moon_blacklisted_crop_growth");
-
-    public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_WHITELISTED_CROP_DROPS = ecItemTag("harvest_moon_whitelisted_crop_drops");
-    public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_BLACKLISTED_CROP_DROPS = ecItemTag("harvest_moon_blacklisted_crop_drops");
-
 
     private static Tags.IOptionalNamedTag<Item> forgeTag(String name) {
         return ItemTags.createOptional(new ResourceLocation("forge", name));
@@ -55,9 +51,9 @@ public class EnhancedCelestialsUtils {
     }
 
     public static boolean filterRegistryID(ResourceLocation id, Registry<?> registry, String registryTypeName) {
-        if (registry.keySet().contains(id))
+        if (registry.keySet().contains(id)) {
             return true;
-        else {
+        } else {
             EnhancedCelestials.LOGGER.error("\"" + id.toString() + "\" was not a registryID in the " + registryTypeName + "! Skipping entry...");
             return false;
         }

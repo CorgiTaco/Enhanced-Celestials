@@ -11,7 +11,6 @@ import java.awt.*;
 
 @Mixin(Biome.class)
 public class MixinBiomeClient {
-
     @Inject(method = "getSkyColor", at = @At("RETURN"), cancellable = true)
     private void modifyLunarEventSkyColor(CallbackInfoReturnable<Integer> cir) {
         if (EnhancedCelestials.currentLunarEvent != null) {

@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientWorld.class)
 public class MixinClientWorld {
-
     @Inject(method = "getCloudColor", at = @At("RETURN"), cancellable = true)
     private void modifyCloudColor(float partialTicks, CallbackInfoReturnable<Vector3d> cir) {
         if (EnhancedCelestialsUtils.isOverworld(((ClientWorld) (Object) this).getDimensionKey())) {

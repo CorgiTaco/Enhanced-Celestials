@@ -40,17 +40,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod(EnhancedCelestials.MOD_ID)
 public class EnhancedCelestials {
-
     public static final String MOD_ID = "enhancedcelestials"; //Enhanced Celestials/Celestial Enhancement
-
     public static final Logger LOGGER = LogManager.getLogger();
-
-    public static LunarData lunarData = null;
-
-    public static LunarEvent currentLunarEvent = null;
-
     public static final Path CONFIG_PATH = new File(String.valueOf(FMLPaths.CONFIGDIR.get().resolve(MOD_ID))).toPath();
 
+    public static LunarData lunarData = null;
+    public static LunarEvent currentLunarEvent = null;
     public static boolean usingOptifine;
 
     public EnhancedCelestials() {
@@ -78,10 +73,11 @@ public class EnhancedCelestials {
 
     public static LunarData getLunarData(@Nullable IWorld world) {
         if (lunarData == null) {
-            if (world == null)
+            if (world == null) {
                 throw new NullPointerException("Attempting to set Lunar data w/ a null world!");
-            else
+            } else {
                 lunarData = LunarData.get(world);
+            }
         }
         return lunarData;
     }
@@ -103,8 +99,9 @@ public class EnhancedCelestials {
                                     getLunarData(event.world).setEvent(eventName);
                                 }
                             });
-                            if (!lunarEventWasSet.get())
+                            if (!lunarEventWasSet.get()) {
                                 getLunarData(event.world).setEvent(LunarEventSystem.DEFAULT_EVENT.getID());
+                            }
 
                             ((ServerWorld) event.world).getPlayers().forEach(player -> {
                                 NetworkHandler.sendToClient(player, new LunarEventPacket(getLunarData(event.world).getEvent()));
@@ -143,4 +140,3 @@ public class EnhancedCelestials {
         LOGGER.debug("Registered Enhanced Celestials Commands!");
     }
 }
-

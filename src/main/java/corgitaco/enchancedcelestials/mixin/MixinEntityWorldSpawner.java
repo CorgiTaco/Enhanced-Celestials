@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldEntitySpawner.class)
 public class MixinEntityWorldSpawner {
-
     @Inject(method = "func_234979_a_", at = @At("HEAD"))
     private static void bindData(ServerWorld world, Chunk chunk, WorldEntitySpawner.EntityDensityManager densityManager, boolean p_234979_3_, boolean p_234979_4_, boolean p_234979_5_, CallbackInfo ci) {
         ((AdditionalEntityDensityManagerData) densityManager).setIsOverworld(world.getDimensionKey() == World.OVERWORLD);

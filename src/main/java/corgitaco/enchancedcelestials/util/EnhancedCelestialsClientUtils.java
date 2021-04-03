@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import java.awt.*;
 
 public class EnhancedCelestialsClientUtils {
-
     public static boolean updateLightmap(float partialTicks, float torchFlicker, Minecraft client, GameRenderer entityRenderer, NativeImage nativeImage, DynamicTexture dynamicTexture) {
         client.getProfiler().startSection("lightTex");
         ClientWorld clientworld = client.world;
@@ -38,8 +37,9 @@ public class EnhancedCelestialsClientUtils {
 
             Vector3f surfaceColor = new Vector3f(1.0F, 0, 0);
 
-            if (EnhancedCelestials.currentLunarEvent != null)
+            if (EnhancedCelestials.currentLunarEvent != null) {
                 EnhancedCelestials.currentLunarEvent.modifySkyLightMapColor(surfaceColor);
+            }
 
             float torchFlicker2 = torchFlicker + 1.5F;
             Vector3f vector3f1 = new Vector3f();
@@ -106,7 +106,6 @@ public class EnhancedCelestialsClientUtils {
         return worldIn.getDimensionType().getAmbientLight(lightLevelIn);
     }
 
-
     public static Vector3f transformToVectorColor(Color color) {
         int rgbColor = color.getRGB();
         float r = (float) (rgbColor >> 16 & 255) / 255.0F;
@@ -114,5 +113,4 @@ public class EnhancedCelestialsClientUtils {
         float b = (float) (rgbColor & 255) / 255.0F;
         return new Vector3f(r, g, b);
     }
-
 }
