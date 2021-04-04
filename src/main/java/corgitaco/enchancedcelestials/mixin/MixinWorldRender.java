@@ -17,7 +17,6 @@ import java.awt.*;
 
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRender {
-
     @Shadow private ClientWorld world;
 
     @Inject(method = "renderSky(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getMoonPhase()I"))

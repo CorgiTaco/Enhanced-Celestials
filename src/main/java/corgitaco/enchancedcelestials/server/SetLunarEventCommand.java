@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SetLunarEventCommand {
-
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
         List<String> weatherTypes = LunarEventSystem.LUNAR_EVENTS.stream().map(LunarEvent::getID).collect(Collectors.toList());
 
@@ -32,7 +31,7 @@ public class SetLunarEventCommand {
         LunarEvent weatherEvent = LunarEventSystem.LUNAR_EVENTS_MAP.get(lunarType);
         if (weatherEvent != null) {
             long dayTime = EnhancedCelestialsUtils.modulosDaytime(source.getWorld().getWorld().getWorldInfo().getDayTime());
-            if (!(dayTime >= 13000 && dayTime <= 23500)) {
+            if (!(dayTime >= 12000 && dayTime <= 24000)) {
                 source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.failed.requiresnight", dayTime), true);
                 return 0;
             }

@@ -5,19 +5,23 @@ import corgitaco.enchancedcelestials.util.EnhancedCelestialsClientUtils;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
 public class HarvestMoon extends LunarEvent {
-
-    static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
-    static double cropDropMultiplier = EnhancedCelestialsConfig.harvestMoonCropDropsMultiplier.get();
+    private static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
+    private static double cropDropMultiplier = EnhancedCelestialsConfig.harvestMoonCropDropsMultiplier.get();
+    private static boolean displayNotification = EnhancedCelestialsConfig.harvestMoonNotification.get();
 
     public HarvestMoon() {
         super(LunarEventSystem.HARVEST_MOON_EVENT_ID, EnhancedCelestialsConfig.harvestMoonChance.get());
@@ -34,7 +38,6 @@ public class HarvestMoon extends LunarEvent {
         return new Color(255, 219, 99, 255);
     }
 
-
     @Override
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
         if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_GROWTH.contains(block)) {
@@ -44,7 +47,6 @@ public class HarvestMoon extends LunarEvent {
                         blockState = world.getBlockState(pos);
                         block = blockState.getBlock();
                     }
-
                     block.randomTick(blockState, world, pos, world.rand);
                 }
             }
@@ -61,6 +63,24 @@ public class HarvestMoon extends LunarEvent {
                     itemStack.setCount((int) (itemStack.getCount() * cropDropMultiplier));
                 }
             }
+        }
+    }
+
+    @Override
+    public void sendRisingNotification(PlayerEntity player) {
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise");
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.GOLD));
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
+    }
+
+    @Override
+    public void sendSettingNotification(PlayerEntity player) {
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.set");
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.GOLD));
+            player.sendMessage(component, Util.DUMMY_UUID);
         }
     }
 }

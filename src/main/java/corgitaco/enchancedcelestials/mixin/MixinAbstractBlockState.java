@@ -17,17 +17,15 @@ import java.util.Random;
 
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public abstract class MixinAbstractBlockState {
-
-
     @Shadow public abstract Block getBlock();
-
     @Shadow protected abstract BlockState getSelf();
 
     @Inject(method = "randomTick", at = @At("HEAD"))
     private void cropGrowthModifier(ServerWorld world, BlockPos pos, Random randomIn, CallbackInfo ci) {
         if (EnhancedCelestialsUtils.isOverworld(world.getDimensionKey())) {
-            if (EnhancedCelestials.currentLunarEvent != null)
+            if (EnhancedCelestials.currentLunarEvent != null) {
                 EnhancedCelestials.currentLunarEvent.blockTick(world, pos, this.getBlock(), this.getSelf());
+            }
         }
     }
 }

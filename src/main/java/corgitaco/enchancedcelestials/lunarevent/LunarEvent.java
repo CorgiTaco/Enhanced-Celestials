@@ -85,4 +85,10 @@ public abstract class LunarEvent {
 
     public void multiplyDrops(ServerWorld world, ItemStack itemStack) {
     }
+
+    public void sendRisingNotification(PlayerEntity player) {
+    }
+
+    public void sendSettingNotification(PlayerEntity player) {
+    }
 }

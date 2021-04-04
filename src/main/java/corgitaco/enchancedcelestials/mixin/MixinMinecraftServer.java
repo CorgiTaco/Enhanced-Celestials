@@ -17,7 +17,6 @@ import javax.annotation.Nullable;
 
 @Mixin(MinecraftServer.class)
 public abstract class MixinMinecraftServer {
-
     @Shadow @Nullable public abstract ServerWorld getWorld(RegistryKey<World> dimension);
 
     @Inject(method = "func_240787_a_", at = @At("RETURN"))

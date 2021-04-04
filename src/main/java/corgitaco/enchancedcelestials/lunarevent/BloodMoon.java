@@ -5,18 +5,20 @@ import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
 
 public class BloodMoon extends LunarEvent {
-
     public static final Color COLOR = new Color(166, 16, 30);
 
-    static double spawnCapMultiplier = EnhancedCelestialsConfig.spawnCapMultiplier.get();
-    static boolean redClouds = EnhancedCelestialsConfig.redClouds.get();
+    private static double spawnCapMultiplier = EnhancedCelestialsConfig.spawnCapMultiplier.get();
+    private static boolean redClouds = EnhancedCelestialsConfig.redClouds.get();
+    private static boolean displayNotification = EnhancedCelestialsConfig.bloodMoonNotification.get();
 
     public BloodMoon() {
         super(LunarEventSystem.BLOOD_MOON_EVENT_ID, EnhancedCelestialsConfig.bloodMoonChance.get());
@@ -24,8 +26,9 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public boolean modifySkyLightMapColor(Vector3f lightMapSkyColor) {
-        if (lightMapSkyColor != null)
+        if (lightMapSkyColor != null) {
             lightMapSkyColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
+        }
         return true;
     }
 
@@ -64,15 +67,30 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public Color modifyCloudColor(Color originalCloudColor) {
-        if (redClouds)
-            return COLOR;
-        else
-            return super.modifyCloudColor(originalCloudColor);
+        return redClouds ? COLOR : super.modifyCloudColor(originalCloudColor);
     }
 
     @Override
     public boolean stopSleeping(PlayerEntity player) {
         player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
         return true;
+    }
+
+    @Override
+    public void sendRisingNotification(PlayerEntity player) {
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.rise");
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.RED));
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
+    }
+
+    @Override
+    public void sendSettingNotification(PlayerEntity player) {
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.set");
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.RED));
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
     }
 }
