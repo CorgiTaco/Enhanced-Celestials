@@ -44,12 +44,12 @@ public class EnhancedCelestialsConfig {
         COMMON_BUILDER.comment("Blood Moon Settings");
         COMMON_BUILDER.push("Blood_Moon_Settings");
         spawnCapMultiplier = COMMON_BUILDER.comment("Multiply the monster spawn cap (70 monsters) by this value.\nRemember, more mobs = more server lag, so set this number responsibly!\nDefault is 5.0. aka 70 * 5.0 = 350 total mobs").defineInRange("MonsterSpawnCapMultiplier", 5.0, 1.5, 30.0);
-        bloodMoonChance = COMMON_BUILDER.comment("The chance of Blood Moon occurring each night. Chance is rolled at the daytime 13005.\nDefault 0.05").defineInRange("BloodMoonChance", 0.05, 0.01, 1.0);
+        bloodMoonChance = COMMON_BUILDER.comment("The chance of Blood Moon occurring each night. Chance is rolled at the daytime 12000.\nDefault 0.05").defineInRange("BloodMoonChance", 0.05, 0.01, 1.0);
         bloodMoonNotification = COMMON_BUILDER.comment("Show notifications of Blood Moon?\nDefault true").define("BloodMoonNotification", true);
         redClouds = COMMON_BUILDER.comment("Are Blood Moon clouds red?\nDefault true").define("BloodMoonRedClouds", true);
         COMMON_BUILDER.pop();
         COMMON_BUILDER.push("Harvest_Moon_Settings");
-        harvestMoonChance = COMMON_BUILDER.comment("The chance of a Harvest Moon occurring each night. Chance is rolled at the daytime 13005.\nDefault 0.025").defineInRange("HarvestMoonChance", 0.025, 0.0, 1.0);
+        harvestMoonChance = COMMON_BUILDER.comment("The chance of a Harvest Moon occurring each night. Chance is rolled at the daytime 12000.\nDefault 0.025").defineInRange("HarvestMoonChance", 0.025, 0.0, 1.0);
         harvestMoonNotification = COMMON_BUILDER.comment("Show notifications of Harvest Moon?\nDefault true").define("HarvestMoonNotification", true);
         harvestMoonCropGrowthChanceMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crops grow during Harvest Moon.\nDefault 15.0").defineInRange("CropGrowthMultiplier", 15.0, 1.0, 10000.0);
         harvestMoonCropDropsMultiplier = COMMON_BUILDER.comment("Multiplies the rate at which crop items drop during Harvest Moon.\nDefault 2.0").defineInRange("CropItemDropMultiplier", 2.5, 1.0, 1000.0);

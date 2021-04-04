@@ -91,7 +91,7 @@ public class EnhancedCelestials {
                     ServerWorld serverWorld = (ServerWorld) event.world;
                     if (EnhancedCelestialsUtils.isOverworld(serverWorld.getDimensionKey())) {
                         World world = event.world;
-                        if (EnhancedCelestialsUtils.modulosDaytime(world.getWorldInfo().getDayTime()) % 13005 == 0) {
+                        if (EnhancedCelestialsUtils.modulosDaytime(world.getWorldInfo().getDayTime()) == 12000) {
                             AtomicBoolean lunarEventWasSet = new AtomicBoolean(false);
                             LunarEventSystem.LUNAR_EVENTS_CONTROLLER.forEach((eventName, eventChance) -> {
                                 if (world.rand.nextDouble() < eventChance) {

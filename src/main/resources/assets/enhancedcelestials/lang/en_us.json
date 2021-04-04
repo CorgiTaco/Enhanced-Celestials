@@ -1,6 +1,6 @@
 {
   "enhancedcelestials.commands.failed": "Could not set the lunar event: %s",
-  "enhancedcelestials.commands.failed.requiresnight": "Set the time to night (the value of daytime between 13000 and 23500) so as to use this command. The current time is %s",
+  "enhancedcelestials.commands.failed.requiresnight": "Set the time to dusk or night (the value of daytime between 12000 and 24000) so as to use this command. The current time is %s",
   "enhancedcelestials.commands.success.blood_moon": "Set the lunar event to \"Blood Moon\"",
   "enhancedcelestials.commands.success.default": "Set the lunar event to \"Default\"",
   "enhancedcelestials.commands.success.harvest_moon": "Set the lunar event to \"Harvest Moon\"",
