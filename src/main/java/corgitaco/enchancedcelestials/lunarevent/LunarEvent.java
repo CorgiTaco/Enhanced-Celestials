@@ -80,6 +80,10 @@ public abstract class LunarEvent {
         return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase());
     }
 
+    public final TranslationTextComponent successNextNightTranslationTextComponent() {
+        return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase() + ".next_night");
+    }
+
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
     }
 

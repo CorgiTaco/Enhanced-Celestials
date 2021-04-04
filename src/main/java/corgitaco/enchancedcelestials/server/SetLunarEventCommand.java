@@ -21,30 +21,33 @@ import java.util.stream.Collectors;
 
 public class SetLunarEventCommand {
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
-        List<String> weatherTypes = LunarEventSystem.LUNAR_EVENTS.stream().map(LunarEvent::getID).collect(Collectors.toList());
+        List<String> lunarEventType = LunarEventSystem.LUNAR_EVENTS.stream().map(LunarEvent::getID).collect(Collectors.toList());
 
-        return Commands.literal("setlunarevent").then(Commands.argument("lunarevent", StringArgumentType.string()).suggests((ctx, sb) -> ISuggestionProvider.suggest(weatherTypes.stream(), sb))
-                .executes((cs) -> betterWeatherSetWeatherType(cs.getSource(), cs.getArgument("lunarevent", String.class))));
+        return Commands.literal("setlunarevent").then(Commands.argument("lunarevent", StringArgumentType.string()).suggests((ctx, sb) -> ISuggestionProvider.suggest(lunarEventType.stream(), sb))
+                .executes((cs) -> setLunarEventType(cs.getSource(), cs.getArgument("lunarevent", String.class))));
     }
 
-    public static int betterWeatherSetWeatherType(CommandSource source, String lunarType) {
-        LunarEvent weatherEvent = LunarEventSystem.LUNAR_EVENTS_MAP.get(lunarType);
-        if (weatherEvent != null) {
+    public static int setLunarEventType(CommandSource source, String lunarType) {
+        LunarEvent oldLunarEvent = EnhancedCelestials.currentLunarEvent;
+        LunarEvent newLunarEvent = LunarEventSystem.LUNAR_EVENTS_MAP.get(lunarType);
+        if (newLunarEvent != null) {
             long dayTime = EnhancedCelestialsUtils.modulosDaytime(source.getWorld().getWorld().getWorldInfo().getDayTime());
-            if (!(dayTime >= 12000 && dayTime <= 24000)) {
-                source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.failed.requiresnight", dayTime), true);
-                return 0;
+            if (dayTime >= 12000 && dayTime <= 24000) {
+                EnhancedCelestials.lunarData.setEvent(newLunarEvent.getID());
+                source.sendFeedback(newLunarEvent.successTranslationTextComponent(), true);
+                source.getWorld().getPlayers().forEach(player -> {
+                    if (!oldLunarEvent.getID().equals(newLunarEvent.getID())) {
+                        oldLunarEvent.sendSettingNotification(player);
+                    }
+                    NetworkHandler.sendToClient(player, new LunarEventPacket(lunarType));
+                });
+            } else {
+                EnhancedCelestials.nextNightLunarEvent = newLunarEvent;
+                source.sendFeedback(newLunarEvent.successNextNightTranslationTextComponent(), true);
             }
-
-            EnhancedCelestials.lunarData.setEvent(weatherEvent.getID());
-            source.sendFeedback(weatherEvent.successTranslationTextComponent(), true);
-            source.getWorld().getPlayers().forEach(player -> {
-                NetworkHandler.sendToClient(player, new LunarEventPacket(lunarType));
-            });
-        } else {
-            source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.failed", lunarType), true);
-            return 0;
+            return 1;
         }
-        return 1;
+        source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.failed", lunarType), true);
+        return 0;
     }
 }

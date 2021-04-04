@@ -40,12 +40,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod(EnhancedCelestials.MOD_ID)
 public class EnhancedCelestials {
-    public static final String MOD_ID = "enhancedcelestials"; //Enhanced Celestials/Celestial Enhancement
+    public static final String MOD_ID = "enhancedcelestials";  // Enhanced Celestials/Celestial Enhancement
     public static final Logger LOGGER = LogManager.getLogger();
     public static final Path CONFIG_PATH = new File(String.valueOf(FMLPaths.CONFIGDIR.get().resolve(MOD_ID))).toPath();
 
     public static LunarData lunarData = null;
     public static LunarEvent currentLunarEvent = null;
+    public static LunarEvent nextNightLunarEvent = null;
     public static boolean usingOptifine;
 
     public EnhancedCelestials() {
@@ -94,11 +95,14 @@ public class EnhancedCelestials {
                         if (EnhancedCelestialsUtils.modulosDaytime(world.getWorldInfo().getDayTime()) == 12000) {
                             AtomicBoolean lunarEventWasSet = new AtomicBoolean(false);
                             LunarEventSystem.LUNAR_EVENTS_CONTROLLER.forEach((eventName, eventChance) -> {
-                                if (world.rand.nextDouble() < eventChance) {
-                                    lunarEventWasSet.set(true);
+                                lunarEventWasSet.set(true);
+                                if (nextNightLunarEvent != null) {
+                                    getLunarData(event.world).setEvent(nextNightLunarEvent.getID());
+                                } else if (world.rand.nextDouble() < eventChance) {
                                     getLunarData(event.world).setEvent(eventName);
                                 }
                             });
+                            nextNightLunarEvent = null;
                             if (!lunarEventWasSet.get()) {
                                 getLunarData(event.world).setEvent(LunarEventSystem.DEFAULT_EVENT.getID());
                             }
