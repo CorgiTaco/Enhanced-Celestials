@@ -19,8 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 public class HarvestMoon extends LunarEvent {
-    static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
-    static double cropDropMultiplier = EnhancedCelestialsConfig.harvestMoonCropDropsMultiplier.get();
+    private static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
+    private static double cropDropMultiplier = EnhancedCelestialsConfig.harvestMoonCropDropsMultiplier.get();
+    private static boolean displayNotification = EnhancedCelestialsConfig.harvestMoonNotification.get();
 
     public HarvestMoon() {
         super(LunarEventSystem.HARVEST_MOON_EVENT_ID, EnhancedCelestialsConfig.harvestMoonChance.get());
@@ -67,15 +68,19 @@ public class HarvestMoon extends LunarEvent {
 
     @Override
     public void sendRisingNotification(PlayerEntity player) {
-        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise");
-        component.getStyle().applyFormatting(TextFormatting.GOLD);
-        player.sendMessage(component, Util.DUMMY_UUID);
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise");
+            component.getStyle().applyFormatting(TextFormatting.GOLD);
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
     }
 
     @Override
     public void sendSettingNotification(PlayerEntity player) {
-        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.set");
-        component.getStyle().applyFormatting(TextFormatting.GOLD);
-        player.sendMessage(component, Util.DUMMY_UUID);
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.set");
+            component.getStyle().applyFormatting(TextFormatting.GOLD);
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
     }
 }

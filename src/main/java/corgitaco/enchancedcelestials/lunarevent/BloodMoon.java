@@ -16,8 +16,9 @@ import java.awt.*;
 public class BloodMoon extends LunarEvent {
     public static final Color COLOR = new Color(166, 16, 30);
 
-    static double spawnCapMultiplier = EnhancedCelestialsConfig.spawnCapMultiplier.get();
-    static boolean redClouds = EnhancedCelestialsConfig.redClouds.get();
+    private static double spawnCapMultiplier = EnhancedCelestialsConfig.spawnCapMultiplier.get();
+    private static boolean redClouds = EnhancedCelestialsConfig.redClouds.get();
+    private static boolean displayNotification = EnhancedCelestialsConfig.bloodMoonNotification.get();
 
     public BloodMoon() {
         super(LunarEventSystem.BLOOD_MOON_EVENT_ID, EnhancedCelestialsConfig.bloodMoonChance.get());
@@ -77,15 +78,19 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public void sendRisingNotification(PlayerEntity player) {
-        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.rise");
-        component.getStyle().applyFormatting(TextFormatting.RED);
-        player.sendMessage(component, Util.DUMMY_UUID);
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.rise");
+            component.getStyle().applyFormatting(TextFormatting.RED);
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
     }
 
     @Override
     public void sendSettingNotification(PlayerEntity player) {
-        TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.set");
-        component.getStyle().applyFormatting(TextFormatting.RED);
-        player.sendMessage(component, Util.DUMMY_UUID);
+        if (displayNotification) {
+            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.set");
+            component.getStyle().applyFormatting(TextFormatting.RED);
+            player.sendMessage(component, Util.DUMMY_UUID);
+        }
     }
 }
