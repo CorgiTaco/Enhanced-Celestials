@@ -80,7 +80,7 @@ public class BloodMoon extends LunarEvent {
     public void sendRisingNotification(PlayerEntity player) {
         if (displayNotification) {
             TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.rise");
-            component.getStyle().applyFormatting(TextFormatting.RED);
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.RED));
             player.sendMessage(component, Util.DUMMY_UUID);
         }
     }
@@ -89,7 +89,7 @@ public class BloodMoon extends LunarEvent {
     public void sendSettingNotification(PlayerEntity player) {
         if (displayNotification) {
             TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.set");
-            component.getStyle().applyFormatting(TextFormatting.RED);
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.RED));
             player.sendMessage(component, Util.DUMMY_UUID);
         }
     }

@@ -70,7 +70,7 @@ public class HarvestMoon extends LunarEvent {
     public void sendRisingNotification(PlayerEntity player) {
         if (displayNotification) {
             TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise");
-            component.getStyle().applyFormatting(TextFormatting.GOLD);
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.GOLD));
             player.sendMessage(component, Util.DUMMY_UUID);
         }
     }
@@ -79,7 +79,7 @@ public class HarvestMoon extends LunarEvent {
     public void sendSettingNotification(PlayerEntity player) {
         if (displayNotification) {
             TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.set");
-            component.getStyle().applyFormatting(TextFormatting.GOLD);
+            component.setStyle(component.getStyle().applyFormatting(TextFormatting.GOLD));
             player.sendMessage(component, Util.DUMMY_UUID);
         }
     }
