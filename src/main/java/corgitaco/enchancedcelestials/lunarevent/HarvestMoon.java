@@ -8,7 +8,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TextFormatting;
@@ -24,7 +23,7 @@ public class HarvestMoon extends LunarEvent {
     private static boolean displayNotification = EnhancedCelestialsConfig.harvestMoonNotification.get();
 
     public HarvestMoon() {
-        super(LunarEventSystem.HARVEST_MOON_EVENT_ID, EnhancedCelestialsConfig.harvestMoonChance.get());
+        super(LunarEventSystem.HARVEST_MOON_EVENT_ID, "enhancedcelestials.harvest_moon", EnhancedCelestialsConfig.harvestMoonChance.get());
     }
 
     @Override
@@ -66,21 +65,17 @@ public class HarvestMoon extends LunarEvent {
         }
     }
 
-    @Override
+        @Override
     public void sendRisingNotification(PlayerEntity player) {
         if (displayNotification) {
-            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise");
-            component.setStyle(component.getStyle().applyFormatting(TextFormatting.GOLD));
-            player.sendMessage(component, Util.DUMMY_UUID);
+            EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.rise", new TranslationTextComponent(getName())), TextFormatting.GOLD);
         }
     }
 
     @Override
     public void sendSettingNotification(PlayerEntity player) {
         if (displayNotification) {
-            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.harvest_moon.set");
-            component.setStyle(component.getStyle().applyFormatting(TextFormatting.GOLD));
-            player.sendMessage(component, Util.DUMMY_UUID);
+            EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.set", new TranslationTextComponent(getName())), TextFormatting.GOLD);
         }
     }
 }

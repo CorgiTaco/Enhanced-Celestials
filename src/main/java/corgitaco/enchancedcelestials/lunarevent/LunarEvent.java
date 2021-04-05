@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,15 +18,21 @@ import java.awt.*;
 
 public abstract class LunarEvent {
     private final String id;
+    private final String name;
     private final double chance;
 
-    public LunarEvent(String id, double chance) {
+    public LunarEvent(String id, String name, double chance) {
         this.id = id;
+        this.name = name;
         this.chance = chance;
     }
 
     public final String getID() {
         return id;
+    }
+
+    public final String getName() {
+        return name;
     }
 
     public final double getChance() {
@@ -74,14 +79,6 @@ public abstract class LunarEvent {
     @OnlyIn(Dist.CLIENT)
     public Color modifyCloudColor(Color originalCloudColor) {
         return originalCloudColor;
-    }
-
-    public final TranslationTextComponent successTranslationTextComponent() {
-        return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase());
-    }
-
-    public final TranslationTextComponent successNextNightTranslationTextComponent() {
-        return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase() + ".next_night");
     }
 
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {

@@ -23,7 +23,7 @@ public class SetLunarEventCommand {
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
         List<String> lunarEventType = LunarEventSystem.LUNAR_EVENTS.stream().map(LunarEvent::getID).collect(Collectors.toList());
 
-        return Commands.literal("setlunarevent").then(Commands.argument("lunarevent", StringArgumentType.string()).suggests((ctx, sb) -> ISuggestionProvider.suggest(lunarEventType.stream(), sb))
+        return Commands.literal("set").then(Commands.argument("lunarevent", StringArgumentType.string()).suggests((ctx, sb) -> ISuggestionProvider.suggest(lunarEventType.stream(), sb))
                 .executes((cs) -> setLunarEventType(cs.getSource(), cs.getArgument("lunarevent", String.class))));
     }
 
@@ -34,7 +34,7 @@ public class SetLunarEventCommand {
             long dayTime = EnhancedCelestialsUtils.modulosDaytime(source.getWorld().getWorld().getWorldInfo().getDayTime());
             if (dayTime >= 12000 && dayTime <= 24000) {
                 EnhancedCelestials.lunarData.setEvent(newLunarEvent.getID());
-                source.sendFeedback(newLunarEvent.successTranslationTextComponent(), true);
+                source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.set.success", new TranslationTextComponent(newLunarEvent.getName())), true);
                 source.getWorld().getPlayers().forEach(player -> {
                     if (!oldLunarEvent.getID().equals(newLunarEvent.getID())) {
                         oldLunarEvent.sendSettingNotification(player);
@@ -43,11 +43,11 @@ public class SetLunarEventCommand {
                 });
             } else {
                 EnhancedCelestials.nextNightLunarEvent = newLunarEvent;
-                source.sendFeedback(newLunarEvent.successNextNightTranslationTextComponent(), true);
+                source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.set.success.next_night", new TranslationTextComponent(newLunarEvent.getName())), true);
             }
             return 1;
         }
-        source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.failed", lunarType), true);
+        source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.set.failed", lunarType), true);
         return 0;
     }
 }

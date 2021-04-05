@@ -5,7 +5,6 @@ import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -21,7 +20,7 @@ public class BloodMoon extends LunarEvent {
     private static boolean displayNotification = EnhancedCelestialsConfig.bloodMoonNotification.get();
 
     public BloodMoon() {
-        super(LunarEventSystem.BLOOD_MOON_EVENT_ID, EnhancedCelestialsConfig.bloodMoonChance.get());
+        super(LunarEventSystem.BLOOD_MOON_EVENT_ID, "enhancedcelestials.blood_moon", EnhancedCelestialsConfig.bloodMoonChance.get());
     }
 
     @Override
@@ -79,18 +78,14 @@ public class BloodMoon extends LunarEvent {
     @Override
     public void sendRisingNotification(PlayerEntity player) {
         if (displayNotification) {
-            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.rise");
-            component.setStyle(component.getStyle().applyFormatting(TextFormatting.RED));
-            player.sendMessage(component, Util.DUMMY_UUID);
+            EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.rise", new TranslationTextComponent(getName())), TextFormatting.RED);
         }
     }
 
     @Override
     public void sendSettingNotification(PlayerEntity player) {
         if (displayNotification) {
-            TranslationTextComponent component = new TranslationTextComponent("enhancedcelestials.notification.blood_moon.set");
-            component.setStyle(component.getStyle().applyFormatting(TextFormatting.RED));
-            player.sendMessage(component, Util.DUMMY_UUID);
+            EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.set", new TranslationTextComponent(getName())), TextFormatting.RED);
         }
     }
 }
