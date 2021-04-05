@@ -1,6 +1,7 @@
 package corgitaco.enchancedcelestials.mixin;
 
 import corgitaco.enchancedcelestials.EnhancedCelestials;
+import corgitaco.enchancedcelestials.lunarevent.BloodMoon;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,9 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinBedBlock {
     @Inject(method = "onBlockActivated", at = @At("HEAD"), cancellable = true)
     private void cancelSleeping(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> cir) {
-        if (EnhancedCelestials.currentLunarEvent.stopSleeping(player) && !state.get(BedBlock.OCCUPIED)) {
+        if (EnhancedCelestials.currentLunarEvent instanceof BloodMoon && !state.get(BedBlock.OCCUPIED)) {
             // player.setSleepingPos(pos);
             cir.setReturnValue(ActionResultType.FAIL);
+            player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
         }
     }
 }

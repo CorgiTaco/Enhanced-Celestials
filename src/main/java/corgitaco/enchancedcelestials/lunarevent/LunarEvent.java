@@ -47,10 +47,6 @@ public abstract class LunarEvent {
         return false;
     }
 
-    public boolean stopSleeping(PlayerEntity playerEntity) {
-        return false;
-    }
-
     @OnlyIn(Dist.CLIENT)
     public Color modifyMoonColor() {
         return new Color(255, 255, 255, 255);

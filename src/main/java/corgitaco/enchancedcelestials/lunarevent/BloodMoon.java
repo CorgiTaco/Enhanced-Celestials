@@ -70,12 +70,6 @@ public class BloodMoon extends LunarEvent {
     }
 
     @Override
-    public boolean stopSleeping(PlayerEntity player) {
-        player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
-        return true;
-    }
-
-    @Override
     public void sendRisingNotification(PlayerEntity player) {
         if (displayNotification) {
             EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.rise", new TranslationTextComponent(getName())), TextFormatting.RED);
