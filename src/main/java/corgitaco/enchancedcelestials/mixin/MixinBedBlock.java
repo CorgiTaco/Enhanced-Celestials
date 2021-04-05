@@ -18,7 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinBedBlock {
     @Inject(method = "onBlockActivated", at = @At("HEAD"), cancellable = true)
     private void cancelSleeping(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> cir) {
-        if (EnhancedCelestials.currentLunarEvent.stopSleeping(player)) {
+        if (EnhancedCelestials.currentLunarEvent.stopSleeping(player) && !state.get(BedBlock.OCCUPIED)) {
+            // player.setSleepingPos(pos);
             cir.setReturnValue(ActionResultType.FAIL);
         }
     }
