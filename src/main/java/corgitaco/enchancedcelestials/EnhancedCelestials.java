@@ -10,8 +10,9 @@ import corgitaco.enchancedcelestials.data.world.LunarData;
 import corgitaco.enchancedcelestials.lunarevent.LunarEvent;
 import corgitaco.enchancedcelestials.lunarevent.LunarEventSystem;
 import corgitaco.enchancedcelestials.modcompat.OptifineCompat;
-import corgitaco.enchancedcelestials.server.GetLunarEventCommand;
-import corgitaco.enchancedcelestials.server.SetLunarEventCommand;
+import corgitaco.enchancedcelestials.command.GetLunarEventCommand;
+import corgitaco.enchancedcelestials.command.ReloadConfigurationsCommand;
+import corgitaco.enchancedcelestials.command.SetLunarEventCommand;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -139,9 +140,11 @@ public class EnhancedCelestials {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LOGGER.debug("Registering Enhanced Celestials commands...");
-        LiteralArgumentBuilder<CommandSource> requires = Commands.literal("lunarevent").requires(commandSource -> commandSource.hasPermissionLevel(3));
-        dispatcher.register(Commands.literal("lunarevent").redirect(dispatcher.register(requires.then(GetLunarEventCommand.register(dispatcher)))));
-        dispatcher.register(Commands.literal("lunarevent").redirect(dispatcher.register(requires.then(SetLunarEventCommand.register(dispatcher)))));
+        LiteralArgumentBuilder<CommandSource> lunarEventRequires = Commands.literal("lunarevent").requires(commandSource -> commandSource.hasPermissionLevel(3));
+        dispatcher.register(Commands.literal("lunarevent").redirect(dispatcher.register(lunarEventRequires.then(GetLunarEventCommand.register(dispatcher)))));
+        dispatcher.register(Commands.literal("lunarevent").redirect(dispatcher.register(lunarEventRequires.then(SetLunarEventCommand.register(dispatcher)))));
+        LiteralArgumentBuilder<CommandSource> enhancedCelestialsRequires = Commands.literal(MOD_ID).requires(commandSource -> commandSource.hasPermissionLevel(3));
+        dispatcher.register(Commands.literal(MOD_ID).redirect(dispatcher.register(enhancedCelestialsRequires.then(ReloadConfigurationsCommand.register(dispatcher)))));
         LOGGER.debug("Registered Enhanced Celestials Commands!");
     }
 }
