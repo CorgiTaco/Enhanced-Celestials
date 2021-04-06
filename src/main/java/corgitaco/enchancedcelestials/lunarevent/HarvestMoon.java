@@ -65,7 +65,7 @@ public class HarvestMoon extends LunarEvent {
         }
     }
 
-        @Override
+    @Override
     public void sendRisingNotification(PlayerEntity player) {
         if (displayNotification) {
             EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.rise", new TranslationTextComponent(getName())), TextFormatting.GOLD);

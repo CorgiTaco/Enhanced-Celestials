@@ -22,6 +22,7 @@ public class EnhancedCelestialsConfig {
     public static ForgeConfigSpec.DoubleValue bloodMoonChance;
     public static ForgeConfigSpec.BooleanValue redClouds;
     public static ForgeConfigSpec.BooleanValue bloodMoonNotification;
+    public static ForgeConfigSpec.BooleanValue bloodMoonCanSleep;
     public static ForgeConfigSpec.DoubleValue harvestMoonCropGrowthChanceMultiplier;
     public static ForgeConfigSpec.DoubleValue harvestMoonCropDropsMultiplier;
     public static ForgeConfigSpec.DoubleValue harvestMoonChance;
@@ -47,6 +48,7 @@ public class EnhancedCelestialsConfig {
         bloodMoonChance = COMMON_BUILDER.comment("The chance of Blood Moon occurring each night. Chance is rolled at the daytime 12000.\nDefault 0.05").defineInRange("BloodMoonChance", 0.05, 0.01, 1.0);
         bloodMoonNotification = COMMON_BUILDER.comment("Show notifications of Blood Moon?\nDefault true").define("BloodMoonNotification", true);
         redClouds = COMMON_BUILDER.comment("Are Blood Moon clouds red?\nDefault true").define("BloodMoonRedClouds", true);
+        bloodMoonCanSleep =  COMMON_BUILDER.comment("Whether players can sleep during Blood Moon or not.\nDefault false").define("CanSleepDuringBloodMoon", false);
         COMMON_BUILDER.pop();
         COMMON_BUILDER.push("Harvest_Moon_Settings");
         harvestMoonChance = COMMON_BUILDER.comment("The chance of a Harvest Moon occurring each night. Chance is rolled at the daytime 12000.\nDefault 0.025").defineInRange("HarvestMoonChance", 0.025, 0.0, 1.0);
