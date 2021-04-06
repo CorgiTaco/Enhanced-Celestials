@@ -6,7 +6,8 @@
   "enhancedcelestials.commands.set.success": "Set the lunar event to \"%s\"",
   "enhancedcelestials.commands.set.success.next_night": "Set the lunar event to \"%s\" tonight",
   "enhancedcelestials.commands.get.success": "The current lunar event is \"%s\"",
-  "enhancedcelestials.commands.get.success.no_event": "There is no lunar event happening currently",
+  "enhancedcelestials.commands.get.success.next_night": "There will be a \"%s\" tonight",
+  "enhancedcelestials.commands.get.success.no_event": "There are currently no lunar events that are happening or are known to happen",
   "enhancedcelestials.notification.rise": "The \"%s\" is rising...",
   "enhancedcelestials.notification.set": "The \"%s\" is setting...",
   "enhancedcelestials.sleep.fail.blood_moon": "You may not rest now; the current lunar event is \"Blood Moon\""
