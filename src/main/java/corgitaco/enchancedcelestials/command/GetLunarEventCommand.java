@@ -16,7 +16,7 @@ public class GetLunarEventCommand {
 
     public static int getLunarEventType(CommandSource source) {
         long dayTime = EnhancedCelestialsUtils.modulosDaytime(source.getWorld().getWorld().getWorldInfo().getDayTime());
-        if (dayTime >= 12000 && dayTime <= 24000) {
+        if (dayTime >= 12000 && dayTime < 24000) {
             source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.get.success", new TranslationTextComponent(EnhancedCelestials.currentLunarEvent.getName())), true);
         } else if (EnhancedCelestials.nextNightLunarEvent != null) {
             source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.get.success.next_night", new TranslationTextComponent(EnhancedCelestials.nextNightLunarEvent.getName())), true);

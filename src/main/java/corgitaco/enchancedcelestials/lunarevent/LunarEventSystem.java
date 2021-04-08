@@ -39,7 +39,7 @@ public class LunarEventSystem {
 
     public static void updateLunarEventPacket(ServerWorld world) {
         long dayTime = EnhancedCelestialsUtils.modulosDaytime(world.getWorldInfo().getDayTime());
-        if (dayTime >= 12000 && dayTime <= 24000) {
+        if (dayTime >= 12000 && dayTime < 24000) {
             LunarEvent currentLunarEvent = LUNAR_EVENTS_MAP.get(EnhancedCelestials.getLunarData(world).getEvent());
             if (!cachedLunarEvent.equals(currentLunarEvent)) {
                 world.getPlayers().forEach(player -> {

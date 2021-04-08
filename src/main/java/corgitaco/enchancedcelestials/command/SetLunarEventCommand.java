@@ -32,7 +32,7 @@ public class SetLunarEventCommand {
         LunarEvent newLunarEvent = LunarEventSystem.LUNAR_EVENTS_MAP.get(lunarType);
         if (newLunarEvent != null) {
             long dayTime = EnhancedCelestialsUtils.modulosDaytime(source.getWorld().getWorld().getWorldInfo().getDayTime());
-            if (dayTime >= 12000 && dayTime <= 24000) {
+            if (dayTime >= 12000 && dayTime < 24000) {
                 EnhancedCelestials.lunarData.setEvent(newLunarEvent.getID());
                 source.sendFeedback(new TranslationTextComponent("enhancedcelestials.commands.set.success", new TranslationTextComponent(newLunarEvent.getName())), true);
                 source.getWorld().getPlayers().forEach(player -> {
