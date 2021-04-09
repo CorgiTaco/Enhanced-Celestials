@@ -15,12 +15,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class HarvestMoon extends LunarEvent {
+    public static final Color COLOR = new Color(255, 219, 99);
+
     private static double cropGrowthMultiplier = EnhancedCelestialsConfig.harvestMoonCropGrowthChanceMultiplier.get();
     private static double cropDropMultiplier = EnhancedCelestialsConfig.harvestMoonCropDropsMultiplier.get();
-    private static boolean displayNotification = EnhancedCelestialsConfig.harvestMoonNotification.get();
 
     public HarvestMoon() {
         super(LunarEventSystem.HARVEST_MOON_EVENT_ID, "enhancedcelestials.harvest_moon", EnhancedCelestialsConfig.harvestMoonChance.get());
@@ -34,7 +35,7 @@ public class HarvestMoon extends LunarEvent {
 
     @Override
     public Color modifyMoonColor() {
-        return new Color(255, 219, 99, 255);
+        return COLOR;
     }
 
     @Override
@@ -72,14 +73,14 @@ public class HarvestMoon extends LunarEvent {
 
     @Override
     public void sendRisingNotification(PlayerEntity player) {
-        if (displayNotification) {
+        if (displayNotifications()) {
             EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.rise", new TranslationTextComponent(getName())), TextFormatting.GOLD);
         }
     }
 
     @Override
     public void sendSettingNotification(PlayerEntity player) {
-        if (displayNotification) {
+        if (displayNotifications()) {
             EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.set", new TranslationTextComponent(getName())), TextFormatting.GOLD);
         }
     }

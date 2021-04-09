@@ -2,6 +2,7 @@
   "enhancedcelestials.blood_moon": "血月",
   "enhancedcelestials.default": "默认",
   "enhancedcelestials.harvest_moon": "丰收之月",
+  "enhancedcelestials.blue_moon": "蓝月",
   "enhancedcelestials.commands.set.failed": "无法将月相设置为 \"%s\"",
   "enhancedcelestials.commands.set.success": "月相已设置为 \"%s\"",
   "enhancedcelestials.commands.set.success.next_night": "今晚的月相已设置为 \"%s\"",

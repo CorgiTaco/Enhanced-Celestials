@@ -7,13 +7,12 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class BloodMoon extends LunarEvent {
     public static final Color COLOR = new Color(166, 16, 30);
 
     private static boolean redClouds = EnhancedCelestialsConfig.redClouds.get();
-    private static boolean displayNotification = EnhancedCelestialsConfig.bloodMoonNotification.get();
 
     public BloodMoon() {
         super(LunarEventSystem.BLOOD_MOON_EVENT_ID, "enhancedcelestials.blood_moon", EnhancedCelestialsConfig.bloodMoonChance.get());
@@ -64,14 +63,14 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public void sendRisingNotification(PlayerEntity player) {
-        if (displayNotification) {
+        if (displayNotifications()) {
             EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.rise", new TranslationTextComponent(getName())), TextFormatting.RED);
         }
     }
 
     @Override
     public void sendSettingNotification(PlayerEntity player) {
-        if (displayNotification) {
+        if (displayNotifications()) {
             EnhancedCelestialsUtils.sendNotification(player, new TranslationTextComponent("enhancedcelestials.notification.set", new TranslationTextComponent(getName())), TextFormatting.RED);
         }
     }

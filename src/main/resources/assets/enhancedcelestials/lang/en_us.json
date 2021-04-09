@@ -2,6 +2,7 @@
   "enhancedcelestials.blood_moon": "Blood Moon",
   "enhancedcelestials.default": "Default",
   "enhancedcelestials.harvest_moon": "Harvest Moon",
+  "enhancedcelestials.blue_moon": "Blue Moon",
   "enhancedcelestials.commands.set.failed": "Could not set the lunar event to \"%s\"",
   "enhancedcelestials.commands.set.success": "Set the lunar event to \"%s\"",
   "enhancedcelestials.commands.set.success.next_night": "Set the lunar event to \"%s\" tonight",
