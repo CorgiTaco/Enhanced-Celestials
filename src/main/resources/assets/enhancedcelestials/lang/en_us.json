@@ -10,5 +10,5 @@
   "enhancedcelestials.commands.get.success.no_event": "There are currently no lunar events that are happening or are known to happen",
   "enhancedcelestials.notification.rise": "The \"%s\" is rising...",
   "enhancedcelestials.notification.set": "The \"%s\" is setting...",
-  "enhancedcelestials.sleep.fail.blood_moon": "You may not rest now; the current lunar event is \"Blood Moon\""
+  "enhancedcelestials.sleep.fail.lunar_event": "You may not rest now; the current lunar event is \"%s\""
 }

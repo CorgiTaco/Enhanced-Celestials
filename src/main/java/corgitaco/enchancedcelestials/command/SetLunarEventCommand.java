@@ -38,6 +38,7 @@ public class SetLunarEventCommand {
                 source.getWorld().getPlayers().forEach(player -> {
                     if (!oldLunarEvent.getID().equals(newLunarEvent.getID())) {
                         oldLunarEvent.sendSettingNotification(player);
+                        newLunarEvent.sendRisingNotification(player);
                     }
                     NetworkHandler.sendToClient(player, new LunarEventPacket(lunarType));
                 });

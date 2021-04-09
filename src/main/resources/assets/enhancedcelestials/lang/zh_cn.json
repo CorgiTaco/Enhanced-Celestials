@@ -10,5 +10,5 @@
   "enhancedcelestials.commands.get.success.no_event": "目前没有正在发生或已知将要发生的月相",
   "enhancedcelestials.notification.rise": "\"%s\" 正在升起...",
   "enhancedcelestials.notification.set": "\"%s\" 正在落下...",
-  "enhancedcelestials.sleep.fail.blood_moon": "你现在不能休息, 当前月相为 \"血月\""
+  "enhancedcelestials.sleep.fail.lunar_event": "你现在不能休息, 当前月相为 \"%s\""
 }

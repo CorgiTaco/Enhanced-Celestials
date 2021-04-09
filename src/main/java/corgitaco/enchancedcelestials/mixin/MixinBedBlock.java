@@ -3,6 +3,7 @@ package corgitaco.enchancedcelestials.mixin;
 import corgitaco.enchancedcelestials.EnhancedCelestials;
 import corgitaco.enchancedcelestials.config.EnhancedCelestialsConfig;
 import corgitaco.enchancedcelestials.lunarevent.BloodMoon;
+import corgitaco.enchancedcelestials.lunarevent.LunarEventSystem;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +24,7 @@ public class MixinBedBlock {
     private void cancelSleeping(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> cir) {
         if (!EnhancedCelestialsConfig.bloodMoonCanSleep.get() && EnhancedCelestials.currentLunarEvent instanceof BloodMoon && !state.get(BedBlock.OCCUPIED)) {
             cir.setReturnValue(ActionResultType.FAIL);
-            player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
+            player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.lunar_event", new TranslationTextComponent(LunarEventSystem.BLOOD_MOON_EVENT.getName())), true);
         }
     }
 }

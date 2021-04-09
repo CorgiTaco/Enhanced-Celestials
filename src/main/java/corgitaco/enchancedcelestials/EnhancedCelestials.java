@@ -110,6 +110,7 @@ public class EnhancedCelestials {
                             }
 
                             ((ServerWorld) event.world).getPlayers().forEach(player -> {
+                                currentLunarEvent.sendRisingNotification(player);
                                 NetworkHandler.sendToClient(player, new LunarEventPacket(getLunarData(event.world).getEvent()));
                             });
                         }
