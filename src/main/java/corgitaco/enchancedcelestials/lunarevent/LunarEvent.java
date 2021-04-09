@@ -39,7 +39,8 @@ public abstract class LunarEvent {
         return chance;
     }
 
-    public void multiplySpawnCap(EntityClassification mobCategory, int spawningChunkCount, Object2IntOpenHashMap<EntityClassification> currentMobCategoryCounts, CallbackInfoReturnable<Boolean> cir) {
+    public double getSpawnCapacityMultiplier() {
+        return 1.0F;
     }
 
     @OnlyIn(Dist.CLIENT)

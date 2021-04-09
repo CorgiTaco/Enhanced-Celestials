@@ -2,20 +2,16 @@ package corgitaco.enchancedcelestials.lunarevent;
 
 import corgitaco.enchancedcelestials.config.EnhancedCelestialsConfig;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
 
 public class BloodMoon extends LunarEvent {
     public static final Color COLOR = new Color(166, 16, 30);
 
-    private static double spawnCapMultiplier = EnhancedCelestialsConfig.spawnCapMultiplier.get();
     private static boolean redClouds = EnhancedCelestialsConfig.redClouds.get();
     private static boolean displayNotification = EnhancedCelestialsConfig.bloodMoonNotification.get();
 
@@ -29,14 +25,6 @@ public class BloodMoon extends LunarEvent {
             lightMapSkyColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
         }
         return true;
-    }
-
-    @Override
-    public void multiplySpawnCap(EntityClassification mobCategory, int spawningChunkCount, Object2IntOpenHashMap<EntityClassification> currentMobCategoryCounts, CallbackInfoReturnable<Boolean> cir) {
-        if (mobCategory == EntityClassification.MONSTER) {
-            int spawnCap = (int) (mobCategory.getMaxNumberOfCreature() * (spawningChunkCount * spawnCapMultiplier) / EnhancedCelestialsUtils.CHUNK_AREA);
-            cir.setReturnValue(currentMobCategoryCounts.getInt(mobCategory) < spawnCap);
-        }
     }
 
     @Override
@@ -67,6 +55,11 @@ public class BloodMoon extends LunarEvent {
     @Override
     public Color modifyCloudColor(Color originalCloudColor) {
         return redClouds ? COLOR : super.modifyCloudColor(originalCloudColor);
+    }
+
+    @Override
+    public double getSpawnCapacityMultiplier() {
+        return EnhancedCelestialsConfig.spawnCapacityMultiplier.get();
     }
 
     @Override

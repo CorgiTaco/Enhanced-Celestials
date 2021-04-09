@@ -38,6 +38,11 @@ public class HarvestMoon extends LunarEvent {
     }
 
     @Override
+    public double getSpawnCapacityMultiplier() {
+        return 1 / EnhancedCelestialsConfig.spawnCapacityMultiplier.get();
+    }
+
+    @Override
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
         if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_GROWTH.contains(block)) {
             if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_GROWTH.contains(block)) {

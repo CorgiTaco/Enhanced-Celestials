@@ -18,7 +18,7 @@ import java.util.*;
 public class EnhancedCelestialsConfig {
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
     public static ForgeConfigSpec COMMON_CONFIG;
-    public static ForgeConfigSpec.DoubleValue spawnCapMultiplier;
+    public static ForgeConfigSpec.DoubleValue spawnCapacityMultiplier;
     public static ForgeConfigSpec.DoubleValue bloodMoonChance;
     public static ForgeConfigSpec.BooleanValue redClouds;
     public static ForgeConfigSpec.BooleanValue bloodMoonNotification;
@@ -44,7 +44,7 @@ public class EnhancedCelestialsConfig {
     private static void refreshConfig() {
         COMMON_BUILDER.comment("Blood Moon Settings");
         COMMON_BUILDER.push("Blood_Moon_Settings");
-        spawnCapMultiplier = COMMON_BUILDER.comment("Multiply the monster spawn cap (70 monsters) by this value.\nRemember, more mobs = more server lag, so set this number responsibly!\nDefault is 5.0. aka 70 * 5.0 = 350 total mobs").defineInRange("MonsterSpawnCapMultiplier", 5.0, 1.5, 30.0);
+        spawnCapacityMultiplier = COMMON_BUILDER.comment("Multiply the monster spawn capacity (70 monsters) by this value.\nRemember, more mobs = more server lag, so set this number responsibly!\nDefault is 5.0. aka 70 * 5.0 = 350 total mobs").defineInRange("MonsterSpawnCapacityMultiplier", 5.0, 1.5, 30.0);
         bloodMoonChance = COMMON_BUILDER.comment("The chance of Blood Moon occurring each night. Chance is rolled at the daytime 12000.\nDefault 0.05").defineInRange("BloodMoonChance", 0.05, 0.01, 1.0);
         bloodMoonNotification = COMMON_BUILDER.comment("Show notifications of Blood Moon?\nDefault true").define("BloodMoonNotification", true);
         redClouds = COMMON_BUILDER.comment("Are Blood Moon clouds red?\nDefault true").define("BloodMoonRedClouds", true);

@@ -31,7 +31,10 @@ public class EnhancedCelestialsUtils {
     public static final Tags.IOptionalNamedTag<Item> HARVEST_MOON_BLACKLISTED_CROP_DROPS = ecItemTag("harvest_moon_blacklisted_crop_drops");
 
     public static void modifySpawnCap(EntityClassification mobCategory, int spawningChunkCount, Object2IntOpenHashMap<EntityClassification> currentMobCategoryCounts, CallbackInfoReturnable<Boolean> cir) {
-        EnhancedCelestials.currentLunarEvent.multiplySpawnCap(mobCategory, spawningChunkCount, currentMobCategoryCounts, cir);
+        if (mobCategory == EntityClassification.MONSTER) {
+            int spawnCapacity = (int) (mobCategory.getMaxNumberOfCreature() * (spawningChunkCount * EnhancedCelestials.currentLunarEvent.getSpawnCapacityMultiplier()) / EnhancedCelestialsUtils.CHUNK_AREA);
+            cir.setReturnValue(currentMobCategoryCounts.getInt(mobCategory) < spawnCapacity);
+        }
     }
 
     public static boolean isOverworld(RegistryKey<World> worldKey) {

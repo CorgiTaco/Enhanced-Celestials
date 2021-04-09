@@ -22,7 +22,6 @@ public class MixinBedBlock {
     @Inject(method = "onBlockActivated", at = @At("HEAD"), cancellable = true)
     private void cancelSleeping(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> cir) {
         if (!EnhancedCelestialsConfig.bloodMoonCanSleep.get() && EnhancedCelestials.currentLunarEvent instanceof BloodMoon && !state.get(BedBlock.OCCUPIED)) {
-            // player.setSleepingPos(pos);
             cir.setReturnValue(ActionResultType.FAIL);
             player.sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail.blood_moon"), true);
         }
