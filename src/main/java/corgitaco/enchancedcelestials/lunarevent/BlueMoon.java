@@ -1,8 +1,10 @@
 package corgitaco.enchancedcelestials.lunarevent;
 
 import corgitaco.enchancedcelestials.config.EnhancedCelestialsConfig;
+import corgitaco.enchancedcelestials.util.EnhancedCelestialsClientUtils;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -13,6 +15,14 @@ public class BlueMoon extends LunarEvent {
 
     public BlueMoon() {
         super(LunarEventSystem.BLUE_MOON_EVENT_ID, "enhancedcelestials.blue_moon", EnhancedCelestialsConfig.blueMoonChance.get());
+    }
+
+    @Override
+    public boolean modifySkyLightMapColor(Vector3f originalMoonColor) {
+        if (originalMoonColor != null) {
+            originalMoonColor.lerp(EnhancedCelestialsClientUtils.transformToVectorColor(COLOR), 1.0F);
+        }
+        return true;
     }
 
     @Override

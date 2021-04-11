@@ -19,9 +19,9 @@ public class BloodMoon extends LunarEvent {
     }
 
     @Override
-    public boolean modifySkyLightMapColor(Vector3f lightMapSkyColor) {
-        if (lightMapSkyColor != null) {
-            lightMapSkyColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
+    public boolean modifySkyLightMapColor(Vector3f originalMoonColor) {
+        if (originalMoonColor != null) {
+            originalMoonColor.lerp(new Vector3f(2.0F, 0, 0), 1.0F);
         }
         return true;
     }

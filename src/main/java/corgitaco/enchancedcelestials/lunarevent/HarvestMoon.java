@@ -28,8 +28,10 @@ public class HarvestMoon extends LunarEvent {
     }
 
     @Override
-    public boolean modifySkyLightMapColor(Vector3f originalLightmapColor) {
-        originalLightmapColor.lerp(EnhancedCelestialsClientUtils.transformToVectorColor(new Color(255, 219, 99)), 1.0F);
+    public boolean modifySkyLightMapColor(Vector3f originalMoonColor) {
+        if (originalMoonColor != null) {
+            originalMoonColor.lerp(EnhancedCelestialsClientUtils.transformToVectorColor(COLOR), 1.0F);
+        }
         return true;
     }
 
