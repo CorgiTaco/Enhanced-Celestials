@@ -14,7 +14,6 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
@@ -40,13 +39,13 @@ public class HarvestMoon extends LunarEvent {
 
     @Override
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
-        if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_GROWTH.contains(block)) {
-            if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_GROWTH.contains(block)) {
-                for (int i = 0; i < cropGrowthMultiplier; i++) {
-                    if (i > 0) {
-                        blockState = world.getBlockState(pos);
-                        block = blockState.getBlock();
-                    }
+        for (int i = 0; i < cropGrowthMultiplier; i++) {
+            if (i > 0) {
+                blockState = world.getBlockState(pos);
+                block = blockState.getBlock();
+            }
+            if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_GROWTH.contains(block)) {
+                if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_GROWTH.contains(block)) {
                     block.randomTick(blockState, world, pos, world.rand);
                 }
             }
@@ -56,14 +55,18 @@ public class HarvestMoon extends LunarEvent {
     @Override
     public void multiplyDrops(ServerWorld world, ItemStack itemStack) {
         Item item = itemStack.getItem();
-
-        if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.isDefaulted() && !EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.isDefaulted()) {
-            if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.contains(item)) {
-                if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.contains(item)) {
-                    itemStack.setCount((int) (itemStack.getCount() * cropDropMultiplier));
+        try {
+            if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.isDefaulted() && !EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.isDefaulted()) {
+                if (!EnhancedCelestialsUtils.HARVEST_MOON_BLACKLISTED_CROP_DROPS.contains(item)) {
+                    if (EnhancedCelestialsUtils.HARVEST_MOON_WHITELISTED_CROP_DROPS.contains(item)) {
+                        itemStack.setCount((int) (itemStack.getCount() * cropDropMultiplier));
+                    }
                 }
             }
+        } catch (IllegalStateException e) {
+            //Silently fail
         }
+
     }
 
     @Override
