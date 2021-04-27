@@ -1,8 +1,5 @@
 package corgitaco.enchancedcelestials;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import corgitaco.enchancedcelestials.config.EnhancedCelestialsConfig;
 import corgitaco.enchancedcelestials.data.network.NetworkHandler;
 import corgitaco.enchancedcelestials.data.network.packet.LunarEventPacket;
@@ -10,12 +7,7 @@ import corgitaco.enchancedcelestials.data.world.LunarData;
 import corgitaco.enchancedcelestials.lunarevent.LunarEvent;
 import corgitaco.enchancedcelestials.lunarevent.LunarEventSystem;
 import corgitaco.enchancedcelestials.modcompat.OptifineCompat;
-import corgitaco.enchancedcelestials.command.GetLunarEventCommand;
-import corgitaco.enchancedcelestials.command.ReloadConfigurationsCommand;
-import corgitaco.enchancedcelestials.command.SetLunarEventCommand;
 import corgitaco.enchancedcelestials.util.EnhancedCelestialsUtils;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -27,7 +19,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod(EnhancedCelestials.MOD_ID)
 public class EnhancedCelestials {
-    public static final String MOD_ID = "enhancedcelestials";  // Enhanced Celestials/Celestial Enhancement
+    public static final String MOD_ID = "enhancedcelestials";  // Enhanced Celestials/Celestial Enhancement.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final Path CONFIG_PATH = new File(String.valueOf(FMLPaths.CONFIGDIR.get().resolve(MOD_ID))).toPath();
 
@@ -130,22 +121,5 @@ public class EnhancedCelestials {
                 NetworkHandler.sendToClient(player, new LunarEventPacket(getLunarData(player.getServerWorld()).getEvent()));
             });
         }
-
-        @SubscribeEvent
-        public static void commandRegisterEvent(FMLServerStartingEvent event) {
-            LOGGER.debug("Enhanced Celestials: \"Server Starting\" Event Starting...");
-            register(event.getServer().getCommandManager().getDispatcher());
-            LOGGER.info("Enhanced Celestials: \"Server Starting\" Event Complete!");
-        }
-    }
-
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LOGGER.debug("Registering Enhanced Celestials commands...");
-        LiteralArgumentBuilder<CommandSource> lunarEventRequires = Commands.literal("lunarevent").requires(commandSource -> commandSource.hasPermissionLevel(3));
-        dispatcher.register(Commands.literal("lunarevent").redirect(dispatcher.register(lunarEventRequires.then(GetLunarEventCommand.register(dispatcher)))));
-        dispatcher.register(Commands.literal("lunarevent").redirect(dispatcher.register(lunarEventRequires.then(SetLunarEventCommand.register(dispatcher)))));
-        LiteralArgumentBuilder<CommandSource> enhancedCelestialsRequires = Commands.literal(MOD_ID).requires(commandSource -> commandSource.hasPermissionLevel(3));
-        dispatcher.register(Commands.literal(MOD_ID).redirect(dispatcher.register(enhancedCelestialsRequires.then(ReloadConfigurationsCommand.register(dispatcher)))));
-        LOGGER.debug("Registered Enhanced Celestials Commands!");
     }
 }
