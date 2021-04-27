@@ -13,9 +13,11 @@ public class LunarEventSystem {
     public static final String BLOOD_MOON_EVENT_ID = "BLOOD_MOON";
     public static final String DEFAULT_EVENT_ID = "DEFAULT";
     public static final String HARVEST_MOON_EVENT_ID = "HARVEST_MOON";
+    public static final String BLUE_MOON_EVENT_ID = "BLUE_MOON";
     public static final BloodMoon BLOOD_MOON_EVENT = new BloodMoon();
     public static final Default DEFAULT_EVENT = new Default();
     public static final HarvestMoon HARVEST_MOON_EVENT = new HarvestMoon();
+    public static final BlueMoon BLUE_MOON_EVENT = new BlueMoon();
 
     public static HashMap<String, Double> LUNAR_EVENTS_CONTROLLER = new HashMap<>();
     public static HashMap<String, LunarEvent> LUNAR_EVENTS_MAP = new HashMap<>();
@@ -26,6 +28,7 @@ public class LunarEventSystem {
         LUNAR_EVENTS.add(BLOOD_MOON_EVENT);
         LUNAR_EVENTS.add(DEFAULT_EVENT);
         LUNAR_EVENTS.add(HARVEST_MOON_EVENT);
+        LUNAR_EVENTS.add(BLUE_MOON_EVENT);
     }
 
     public static void fillLunarEventsMapAndWeatherEventController() {
@@ -39,11 +42,10 @@ public class LunarEventSystem {
 
     public static void updateLunarEventPacket(ServerWorld world) {
         long dayTime = EnhancedCelestialsUtils.modulosDaytime(world.getWorldInfo().getDayTime());
-        if (dayTime >= 12000 && dayTime <= 24000) {
+        if (dayTime >= 12000 && dayTime < 24000) {
             LunarEvent currentLunarEvent = LUNAR_EVENTS_MAP.get(EnhancedCelestials.getLunarData(world).getEvent());
             if (!cachedLunarEvent.equals(currentLunarEvent)) {
                 world.getPlayers().forEach(player -> {
-                    currentLunarEvent.sendRisingNotification(player);
                     NetworkHandler.sendToClient(player, new LunarEventPacket(currentLunarEvent.getID()));
                 });
                 cachedLunarEvent = currentLunarEvent;
@@ -55,6 +57,10 @@ public class LunarEventSystem {
                 world.getPlayers().forEach(player -> {
                     currentLunarEvent.sendSettingNotification(player);
                     NetworkHandler.sendToClient(player, new LunarEventPacket(DEFAULT_EVENT_ID));
+                });
+            } else {
+                world.getPlayers().forEach(player -> {
+                    currentLunarEvent.sendSettingNotification(player);
                 });
             }
         }

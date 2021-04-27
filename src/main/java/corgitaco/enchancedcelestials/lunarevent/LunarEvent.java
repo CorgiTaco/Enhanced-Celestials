@@ -1,5 +1,6 @@
 package corgitaco.enchancedcelestials.lunarevent;
 
+import corgitaco.enchancedcelestials.config.EnhancedCelestialsConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,41 +9,45 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.awt.*;
+import java.awt.Color;
 
 public abstract class LunarEvent {
     private final String id;
+    private final String name;
     private final double chance;
+    private final boolean displayNotifications;
 
-    public LunarEvent(String id, double chance) {
+    public LunarEvent(String id, String name, double chance) {
         this.id = id;
+        this.name = name;
         this.chance = chance;
+        displayNotifications = EnhancedCelestialsConfig.lunarEventNotifications.get();
     }
 
     public final String getID() {
         return id;
     }
 
+    public final String getName() {
+        return name;
+    }
+
     public final double getChance() {
         return chance;
     }
 
-    public void multiplySpawnCap(EntityClassification mobCategory, int spawningChunkCount, Object2IntOpenHashMap<EntityClassification> currentMobCategoryCounts, CallbackInfoReturnable<Boolean> cir) {
+    public double getSpawnCapacityMultiplier() {
+        return 1.0F;
     }
 
     @OnlyIn(Dist.CLIENT)
     public boolean modifySkyLightMapColor(Vector3f originalMoonColor) {
-        return false;
-    }
-
-    public boolean stopSleeping(PlayerEntity playerEntity) {
         return false;
     }
 
@@ -76,14 +81,14 @@ public abstract class LunarEvent {
         return originalCloudColor;
     }
 
-    public final TranslationTextComponent successTranslationTextComponent() {
-        return new TranslationTextComponent("enhancedcelestials.commands.success." + id.toLowerCase());
-    }
-
     public void blockTick(ServerWorld world, BlockPos pos, Block block, BlockState blockState) {
     }
 
     public void multiplyDrops(ServerWorld world, ItemStack itemStack) {
+    }
+
+    public final boolean displayNotifications() {
+        return displayNotifications;
     }
 
     public void sendRisingNotification(PlayerEntity player) {
