@@ -1,21 +1,14 @@
 {
   "required": true,
-  "package": "corgitaco.enchancedcelestials.mixin",
+  "package": "corgitaco.enhancedcelestials.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "enhancedcelestials.refmap.json",
   "mixins": [
-    "EntityDensityDensityManagerMixin",
     "MixinBlock",
-    "MixinAbstractBlockState",
-    "MixinBedBlock",
-    "MixinEntityWorldSpawner",
-    "MixinMinecraftServer"
+    "MixinServerWorld",
+    "RegistryAccess"
   ],
   "client": [
-    "MixinLightMapTexture",
-    "MixinWorldRender",
-    "client.MixinBiomeClient",
-    "client.MixinClientWorld"
   ],
   "injectors": {
     "defaultRequire": 1
