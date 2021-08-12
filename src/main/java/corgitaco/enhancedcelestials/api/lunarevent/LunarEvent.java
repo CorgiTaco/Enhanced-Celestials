@@ -4,13 +4,11 @@ import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
