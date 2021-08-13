@@ -27,7 +27,7 @@ public class MixinServerWorld implements EnhancedCelestialsWorldData {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectLunarContext(MinecraftServer server, Executor executor, SaveFormat.LevelSave save, IServerWorldInfo worldInfo, RegistryKey<World> key, DimensionType dimensionType, IChunkStatusListener statusListener, ChunkGenerator generator, boolean b, long seed, List<ISpecialSpawner> specialSpawners, boolean b1, CallbackInfo ci) {
-        lunarContext = new LunarContext();
+        lunarContext = new LunarContext((ServerWorld) (Object) this);
     }
 
 

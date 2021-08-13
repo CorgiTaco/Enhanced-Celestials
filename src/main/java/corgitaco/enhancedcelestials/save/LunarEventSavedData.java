@@ -1,13 +1,17 @@
 package corgitaco.enhancedcelestials.save;
 
+import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.Main;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
+
+import javax.annotation.Nullable;
 
 public class LunarEventSavedData extends WorldSavedData {
     public static final String DATA_NAME = new ResourceLocation(Main.MOD_ID, "lunar_event_data").toString();
@@ -33,6 +37,8 @@ public class LunarEventSavedData extends WorldSavedData {
         return weatherData;
     }
 
+    @Nullable
+    private LunarForecast forecast;
 
     public LunarEventSavedData(String name) {
         super(name);
@@ -44,11 +50,22 @@ public class LunarEventSavedData extends WorldSavedData {
 
     @Override
     public void read(CompoundNBT nbt) {
-
+        forecast = LunarForecast.CODEC.decode(NBTDynamicOps.INSTANCE, nbt.get("forecast")).result().get().getFirst();
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        return null;
+        compound.put("forecast", LunarForecast.CODEC.encodeStart(NBTDynamicOps.INSTANCE, forecast).result().get());
+        return compound;
+    }
+
+    @Nullable
+    public LunarForecast getForecast() {
+        return forecast;
+    }
+
+    public void setForecast(LunarForecast forecast) {
+        this.forecast = forecast;
+        markDirty();
     }
 }
