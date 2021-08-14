@@ -11,18 +11,18 @@ public class LunarEventInstance {
     public static final Codec<LunarEventInstance> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(Codec.STRING.fieldOf("lunarEventKey").forGetter((lunarEventInstance) -> {
             return lunarEventInstance.lunarEventKey;
-        }), Codec.INT.fieldOf("daysUntil").forGetter((lunarEventInstance -> {
-            return lunarEventInstance.daysUntil;
+        }), Codec.INT.fieldOf("scheduledDay").forGetter((lunarEventInstance -> {
+            return lunarEventInstance.scheduledDay;
         }))).apply(builder, LunarEventInstance::new);
     });
 
 
     private final String lunarEventKey;
-    private int daysUntil;
+    private int scheduledDay;
 
-    public LunarEventInstance(String lunarEventKey, int daysUntil) {
+    public LunarEventInstance(String lunarEventKey, int scheduledDay) {
         this.lunarEventKey = lunarEventKey;
-        this.daysUntil = daysUntil;
+        this.scheduledDay = scheduledDay;
     }
 
     public String getLunarEventKey() {
@@ -33,11 +33,19 @@ public class LunarEventInstance {
         return events.get(lunarEventKey);
     }
 
-    public int getDaysUntil() {
-        return daysUntil;
+    public int scheduledDay() {
+        return scheduledDay;
     }
 
-    public void setDaysUntil(int timeUntil) {
-        this.daysUntil = timeUntil;
+    public int getDaysUntil(int currentDay) {
+       return this.scheduledDay - currentDay;
+    }
+
+    public boolean passed(int currentDay) {
+        return this.scheduledDay - currentDay <= -1;
+    }
+
+    public void setScheduledDay(int scheduledDay) {
+        this.scheduledDay = scheduledDay;
     }
 }

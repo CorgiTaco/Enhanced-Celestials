@@ -3,7 +3,7 @@ package corgitaco.enhancedcelestials.api;
 import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import corgitaco.enhancedcelestials.mixin.RegistryAccess;
+import corgitaco.enhancedcelestials.mixin.access.RegistryAccess;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;

@@ -4,6 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +31,15 @@ public class BlueMoon extends LunarEvent {
 
     public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases) {
         super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases);
+    }
+
+    @Override
+    public void livingEntityTick(LivingEntity entity, World world) {
+        if (!world.isRemote) {
+            if (!(entity instanceof MonsterEntity)) {
+                entity.addPotionEffect(new EffectInstance(Effects.LUCK, 1200, this.isSuperMoon() ? 4 : 0, true, false, false));
+            }
+        }
     }
 
     @Override

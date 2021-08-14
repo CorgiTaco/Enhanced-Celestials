@@ -5,8 +5,11 @@ import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -75,6 +78,13 @@ public abstract class LunarEvent {
     public LunarEventClient<?> setLunarEventClient(LunarEventClient<?> lunarEventClient) {
         this.lunarEventClient = lunarEventClient;
         return this.lunarEventClient;
+    }
+
+    public double getSpawnMultiplierForMonsterCategory(EntityClassification classification) {
+        return 1.0;
+    }
+
+    public void livingEntityTick(LivingEntity entity, World world) {
     }
 
     public boolean isSuperMoon() {

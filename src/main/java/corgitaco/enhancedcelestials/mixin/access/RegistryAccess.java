@@ -1,4 +1,4 @@
-package corgitaco.enhancedcelestials.mixin;
+package corgitaco.enhancedcelestials.mixin.access;
 
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;

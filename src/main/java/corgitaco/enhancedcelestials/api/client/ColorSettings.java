@@ -2,6 +2,8 @@ package corgitaco.enhancedcelestials.api.client;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import corgitaco.enhancedcelestials.util.ColorUtil;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class ColorSettings {
 
@@ -53,7 +55,23 @@ public class ColorSettings {
         return moonTextureColor;
     }
 
+    public Vector3f getGLMoonColor() {
+        return ColorUtil.glColor(ColorUtil.unpack(this.moonTextureColor));
+    }
+
     public double getMoonTextureBlendStrength() {
         return moonTextureBlendStrength;
+    }
+
+    public int getSkyLightColor() {
+        return skyLightColor;
+    }
+
+    public Vector3f getGLSkyLightColor() {
+        return ColorUtil.glColor(ColorUtil.unpack(this.skyLightColor));
+    }
+
+    public double getSkyLightBlendStrength() {
+        return skyLightBlendStrength;
     }
 }

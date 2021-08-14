@@ -9,13 +9,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.lunarevent.Moon;
+import corgitaco.enhancedcelestials.network.NetworkHandler;
+import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -30,9 +34,9 @@ public class LunarContext {
     private static final LunarEvent DEFAULT = Moon.MOON;
 
     public static final Codec<LunarContext> PACKET_CODEC = RecordCodecBuilder.create((builder) -> {
-        return builder.group(LunarForecast.CODEC.fieldOf("lunarForecast").forGetter((lunarContext -> {
-            return lunarContext.forecast;
-        })), ResourceLocation.CODEC.fieldOf("worldID").forGetter((weatherEventContext) -> {
+        return builder.group(LunarForecast.CODEC.fieldOf("lunarForecast").forGetter((lunarContext) -> {
+            return lunarContext.lunarForecast;
+        }), ResourceLocation.CODEC.fieldOf("worldID").forGetter((weatherEventContext) -> {
             return weatherEventContext.worldID;
         }), Codec.unboundedMap(Codec.STRING, LunarEvent.CODEC).fieldOf("weatherEvents").forGetter((weatherEventContext) -> {
             return weatherEventContext.lunarEvents;
@@ -46,7 +50,6 @@ public class LunarContext {
     private final Path lunarEventsConfigPath;
     private final File lunarConfigFile;
     private LunarEvent currentEvent;
-    private LunarForecast forecast;
 
     public LunarContext(ServerWorld world) {
         this.worldID = world.getDimensionKey().getLocation();
@@ -57,51 +60,77 @@ public class LunarContext {
         this.lunarForecast = getAndComputeLunarForecast(world).getForecast();
         assert lunarForecast != null;
         LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
-        this.currentEvent = nextLunarEvent.getDaysUntil() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
+        this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / 24000)) <= 0 && world.isNightTime() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
     }
 
-    public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, @Nullable Map<String, LunarEvent> lunarEvents) {
+    public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents) {
         this.worldID = worldID;
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
         this.lunarConfigFile = this.lunarConfigPath.resolve(CONFIG_NAME).toFile();
-        boolean isClient = lunarEvents != null;
+        this.lunarEvents.putAll(lunarEvents);
         LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
-        this.currentEvent = nextLunarEvent.getDaysUntil() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
+        this.currentEvent = nextLunarEvent.scheduledDay() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
         this.lunarForecast = lunarForecast;
     }
 
     public LunarEventSavedData getAndComputeLunarForecast(ServerWorld world) {
         LunarEventSavedData lunarEventSavedData = LunarEventSavedData.get(world);
         if (lunarEventSavedData.getForecast() == null) {
-            lunarEventSavedData.setForecast(computeInitialLunarForecast(world));
+            lunarEventSavedData.setForecast(computeLunarForecast(world, (int) (world.getGameTime() / 24000)));
         }
         return lunarEventSavedData;
     }
 
-    public LunarForecast computeInitialLunarForecast(ServerWorld world) {
-        Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode());
-        long gameTime = world.getGameTime();
+    public LunarForecast computeLunarForecast(ServerWorld world, int currentDay) {
+        long gameTime = world.getDayTime();
+        int dayLength = 24000; // TODO: Allow custom day lengths
         List<LunarEventInstance> lunarEventInstances = new ArrayList<>();
 
         Object2IntArrayMap<LunarEvent> eventByLastTime = new Object2IntArrayMap<>();
         int lastDay = 0;
 
         ArrayList<String> eventKeys = new ArrayList<>(this.lunarEvents.keySet());
-        Collections.shuffle(eventKeys, random);
-        for (int day = 0; day < 100 /*TODO: Add custom year length in days*/; day++) {
-            gameTime += 24000; // TODO: Allow custom day lengths
+        for (int day = currentDay; day < currentDay + 100 /*TODO: Add custom year length in days*/; day++) {
+            Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day);
+
+            Collections.shuffle(eventKeys, random);
+            gameTime += dayLength;
 
             for (String key : eventKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
-                if ((day - eventByLastTime.getOrDefault(value, 25)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > 5/*TODO: Add min day count between events*/ && value.getChance() > random.nextDouble()) {
+                if ((day - eventByLastTime.getOrDefault(value, 0)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > 5/*TODO: Add min day count between events*/ && value.getChance() > random.nextDouble()) {
                     lastDay = day;
-                    lunarEventInstances.add(new LunarEventInstance(key, (int) (gameTime / 24000)));
+                    lunarEventInstances.add(new LunarEventInstance(key, (int) (gameTime / dayLength)));
                     eventByLastTime.put(value, day);
                 }
             }
         }
         return new LunarForecast(lunarEventInstances, gameTime);
+    }
+
+
+    public void tick(World world) {
+        LunarEvent lastEvent = this.currentEvent;
+        int currentDay = (int) (world.getDayTime() / 24000); // TODO: Allow custom day lengths
+        if (!world.isRemote) {
+            LunarEventInstance nextEvent = this.getLunarForecast().getForecast().get(0);
+            this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNightTime() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
+            updateForecast(world, currentDay);
+
+            if (this.currentEvent != lastEvent) {
+                NetworkHandler.sendToAllPlayers(((ServerWorld) world).getPlayers(), new LunarEventChangedPacket(this.currentEvent.getName()));
+            }
+        }
+    }
+
+    public void updateForecast(World world, int currentDay) {
+        if (!world.isRemote) {
+            LunarEventInstance nextEvent = this.lunarForecast.getForecast().get(0);
+            if (nextEvent.passed(currentDay)) {
+                this.lunarForecast.getForecast().remove(0);
+            }
+        }
     }
 
     public LunarEvent getCurrentEvent() {
@@ -183,6 +212,23 @@ public class LunarContext {
             }
         } catch (FileNotFoundException e) {
             Main.LOGGER.error(e.toString());
+        }
+    }
+
+    public LunarForecast getLunarForecast() {
+        return lunarForecast;
+    }
+
+    public Map<String, LunarEvent> getLunarEvents() {
+        return lunarEvents;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void setCurrentEvent(String currentEvent) {
+        if (currentEvent.equals(DEFAULT.getName())) {
+            this.currentEvent = DEFAULT;
+        } else {
+            this.currentEvent = this.lunarEvents.get(currentEvent);
         }
     }
 }

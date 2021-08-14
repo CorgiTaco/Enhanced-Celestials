@@ -5,8 +5,15 @@
   "refmap": "enhancedcelestials.refmap.json",
   "mixins": [
     "MixinBlock",
+    "MixinLivingEntity",
+    "MixinPlayerList",
     "MixinServerWorld",
-    "RegistryAccess"
+    "access.DimensionTypeAccess",
+    "access.EffectInstanceAccess",
+    "access.RegistryAccess",
+    "client.MixinClientWorld",
+    "client.MixinLightMapTexture",
+    "client.MixinWorldRenderer"
   ],
   "client": [
   ],
