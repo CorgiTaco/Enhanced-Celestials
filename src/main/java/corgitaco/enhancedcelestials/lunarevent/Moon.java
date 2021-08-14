@@ -15,7 +15,7 @@ public class Moon extends LunarEvent {
     public static final Codec<Moon> CODEC = Codec.unit(() -> MOON);
 
     public Moon() {
-        super(new MoonClientSettings(new ColorSettings("", 0, "", 0)), true, 0, 0, Util.make(new IntArraySet(), (set) -> IntStream.rangeClosed(0, 7).forEach(set::add)));
+        super(new MoonClientSettings(new ColorSettings("", 0, "", 0)), false, 0, 0, Util.make(new IntArraySet(), (set) -> IntStream.rangeClosed(0, 7).forEach(set::add)));
     }
 
 
