@@ -3,6 +3,7 @@ package corgitaco.enhancedcelestials.network;
 import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.network.packet.LunarContextConstructionPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
+import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -23,6 +24,7 @@ public class NetworkHandler {
     public static void init() {
         SIMPLE_CHANNEL.registerMessage(0, LunarContextConstructionPacket.class, LunarContextConstructionPacket::writeToPacket, LunarContextConstructionPacket::readFromPacket, LunarContextConstructionPacket::handle);
         SIMPLE_CHANNEL.registerMessage(1, LunarEventChangedPacket.class, LunarEventChangedPacket::writeToPacket, LunarEventChangedPacket::readFromPacket, LunarEventChangedPacket::handle);
+        SIMPLE_CHANNEL.registerMessage(2, LunarForecastChangedPacket.class, LunarForecastChangedPacket::writeToPacket, LunarForecastChangedPacket::readFromPacket, LunarForecastChangedPacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayerEntity playerEntity, Object objectToSend) {
