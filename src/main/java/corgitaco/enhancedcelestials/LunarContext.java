@@ -83,7 +83,7 @@ public class LunarContext {
     }
 
     public LunarForecast computeLunarForecast(ServerWorld world, int currentDay) {
-        long gameTime = world.getDayTime();
+        long dayTime = world.getDayTime();
         int dayLength = 24000; // TODO: Allow custom day lengths
         List<LunarEventInstance> lunarEventInstances = new ArrayList<>();
 
@@ -95,18 +95,18 @@ public class LunarContext {
             Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day);
 
             Collections.shuffle(eventKeys, random);
-            gameTime += dayLength;
+            dayTime += dayLength;
 
             for (String key : eventKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
-                if ((day - eventByLastTime.getOrDefault(value, 0)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > 5/*TODO: Add min day count between events*/ && value.getChance() > random.nextDouble()) {
+                if ((day - eventByLastTime.getOrDefault(value, 0)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > 5/*TODO: Add min day count between events*/ && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime))) {
                     lastDay = day;
-                    lunarEventInstances.add(new LunarEventInstance(key, (int) (gameTime / dayLength)));
+                    lunarEventInstances.add(new LunarEventInstance(key, (int) (dayTime / dayLength)));
                     eventByLastTime.put(value, day);
                 }
             }
         }
-        return new LunarForecast(lunarEventInstances, gameTime);
+        return new LunarForecast(lunarEventInstances, dayTime);
     }
 
 
