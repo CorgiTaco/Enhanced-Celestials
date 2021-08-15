@@ -191,6 +191,7 @@ public class LunarContext {
         long lastCheckedDay = lastCheckedGameTime / this.dayLength;
         if (newLastCheckedDay != lastCheckedDay) {
             NetworkHandler.sendToAllPlayers(players, new LunarForecastChangedPacket(this.lunarForecast));
+            LunarEventSavedData.get(world).setForecast(lunarForecast);
         }
     }
 
@@ -199,6 +200,7 @@ public class LunarContext {
         if (nextEvent.passed(currentDay)) {
             this.lunarForecast.getForecast().remove(0);
             NetworkHandler.sendToAllPlayers(((ServerWorld) world).getPlayers(), new LunarForecastChangedPacket(this.lunarForecast));
+            LunarEventSavedData.get(world).setForecast(lunarForecast);
         }
     }
 
@@ -207,6 +209,9 @@ public class LunarContext {
     }
 
     public void handleEventConfigs(boolean isClient) {
+        if (isClient) {
+            DEFAULT.setLunarEventClient(DEFAULT.getClientSettings().createClient());
+        }
         File eventsDirectory = this.lunarEventsConfigPath.toFile();
         if (!eventsDirectory.exists()) {
             createDefaultEventConfigs();
@@ -216,6 +221,10 @@ public class LunarContext {
 
         if (files.length == 0) {
             createDefaultEventConfigs();
+        }
+
+        if (isClient) {
+            addSettingsIfMissing();
         }
 
         iterateAndReadConfiguredEvents(files, isClient);
@@ -246,6 +255,29 @@ public class LunarContext {
 //                } else {
 //                    createTomlEventConfig(event, location.toString());
 //                }
+            } else {
+                throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addSettingsIfMissing() {
+        for (Map.Entry<String, LunarEvent> entry : this.lunarEvents.entrySet()) {
+            LunarEvent event = entry.getValue();
+            String key = entry.getKey();
+            File tomlFile = this.lunarEventsConfigPath.resolve(key + ".toml").toFile();
+            File jsonFile = this.lunarEventsConfigPath.resolve(key + ".json").toFile();
+            Optional<RegistryKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getOptionalKey(event.codec());
+
+            if (optionalKey.isPresent()) {
+                if (!tomlFile.exists() && !jsonFile.exists()) {
+//                    if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
+                        createJsonEventConfig(event, key);
+//                    } else {
+//                        createTomlEventConfig(event, key);
+//                    }
+                }
             } else {
                 throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
             }

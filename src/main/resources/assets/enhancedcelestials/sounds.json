@@ -3,8 +3,8 @@
     "sounds": [
       {
         "name": "enhancedcelestials:blood_moon",
-        "volume": 1.0,
-        "pitch": 1.0
+        "volume": 3.0,
+        "pitch": 3.0
       }
     ]
   },
@@ -12,8 +12,8 @@
     "sounds": [
       {
         "name": "enhancedcelestials:blue_moon",
-        "volume": 1.0,
-        "pitch": 1.0
+        "volume": 3.0,
+        "pitch": 3.0
       }
     ]
   },
@@ -21,8 +21,8 @@
     "sounds": [
       {
         "name": "enhancedcelestials:harvest_moon",
-        "volume": 1.0,
-        "pitch": 1.0
+        "volume": 3.0,
+        "pitch": 3.0
       }
     ]
   }

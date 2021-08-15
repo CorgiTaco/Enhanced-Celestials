@@ -4,6 +4,7 @@ import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.network.NetworkHandler;
 import corgitaco.enhancedcelestials.network.packet.LunarContextConstructionPacket;
+import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.server.ServerWorld;
@@ -20,6 +21,7 @@ public abstract class MixinPlayerList {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
         if (lunarContext != null) {
             NetworkHandler.sendToPlayer(playerIn, new LunarContextConstructionPacket(lunarContext));
+            NetworkHandler.sendToPlayer(playerIn, new LunarEventChangedPacket(lunarContext.getCurrentEvent().getName()));
         }
     }
 }

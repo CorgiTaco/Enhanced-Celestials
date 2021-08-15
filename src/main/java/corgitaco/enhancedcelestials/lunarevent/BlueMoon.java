@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
+import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.potion.EffectInstance;
@@ -26,14 +27,14 @@ public class BlueMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
-        }), Codec.STRING.fieldOf("startNotificationLangKey").forGetter((clientSettings) -> {
-            return clientSettings.getStartNotificationLangKey();
-        }), Codec.STRING.fieldOf("endNotificationLangKey").orElse("").forGetter((clientSettings) -> {
-            return clientSettings.getEndNotificationLangKey();
+        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("startNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
+            return clientSettings.startNotification();
+        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
+            return clientSettings.endNotification();
         })).apply(builder, BlueMoon::new);
     });
 
-    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, String startNotificationLangKey, String endNotificationLangKey) {
+    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey) {
         super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
     }
 

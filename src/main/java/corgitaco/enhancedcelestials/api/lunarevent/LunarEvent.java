@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
+import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,25 +28,21 @@ public abstract class LunarEvent {
     private final int minNumberOfNightsBetween;
     private final double chance;
     private final Set<Integer> validMoonPhases;
-    private final String startNotificationLangKey;
-    private final String endNotificationLangKey;
     @Nullable
-    private final TranslationTextComponent startNotification;
+    private final CustomTranslationTextComponent startNotification;
     @Nullable
-    private final TranslationTextComponent endNotification;
+    private final CustomTranslationTextComponent endNotification;
     private LunarEventClient<?> lunarEventClient;
     private String name;
 
-    public LunarEvent(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, String startNotificationLangKey, String endNotificationLangKey) {
+    public LunarEvent(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotification, CustomTranslationTextComponent endNotification) {
         this.clientSettings = clientSettings;
         this.superMoon = superMoon;
         this.minNumberOfNightsBetween = minNumberOfNightsBetween;
         this.chance = chance;
         this.validMoonPhases = new IntArraySet(validMoonPhases);
-        this.startNotificationLangKey = startNotificationLangKey;
-        this.endNotificationLangKey = endNotificationLangKey;
-        this.startNotification = this.startNotificationLangKey.isEmpty() ? null : new TranslationTextComponent(this.startNotificationLangKey);
-        this.endNotification = this.endNotificationLangKey.isEmpty() ? null : new TranslationTextComponent(this.endNotificationLangKey);
+        this.startNotification = startNotification == CustomTranslationTextComponent.DEFAULT || startNotification.getKey().isEmpty() ? null : startNotification;
+        this.endNotification = endNotification == CustomTranslationTextComponent.DEFAULT || endNotification.getKey().isEmpty() ? null : endNotification;
     }
 
     public abstract Codec<? extends LunarEvent> codec();
@@ -67,12 +63,12 @@ public abstract class LunarEvent {
     }
 
     @Nullable
-    public TranslationTextComponent startNotification() {
+    public CustomTranslationTextComponent startNotification() {
         return this.startNotification;
     }
 
     @Nullable
-    public TranslationTextComponent endNotification() {
+    public CustomTranslationTextComponent endNotification() {
         return this.endNotification;
     }
 
@@ -116,13 +112,5 @@ public abstract class LunarEvent {
 
     public Set<Integer> getValidMoonPhases() {
         return validMoonPhases;
-    }
-
-    public String getStartNotificationLangKey() {
-        return startNotificationLangKey;
-    }
-
-    public String getEndNotificationLangKey() {
-        return endNotificationLangKey;
     }
 }

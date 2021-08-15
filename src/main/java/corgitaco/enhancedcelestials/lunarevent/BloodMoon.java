@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
+import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import net.minecraft.entity.EntityClassification;
 
@@ -24,17 +25,17 @@ public class BloodMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
-        }), Codec.STRING.fieldOf("startNotificationLangKey").forGetter((clientSettings) -> {
-            return clientSettings.getStartNotificationLangKey();
-        }), Codec.STRING.fieldOf("endNotificationLangKey").orElse("").forGetter((clientSettings) -> {
-            return clientSettings.getEndNotificationLangKey();
+        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("startNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
+            return clientSettings.startNotification();
+        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotificationLangKey", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
+            return clientSettings.endNotification();
         }), Codec.unboundedMap(EntityClassification.CODEC, Codec.DOUBLE).fieldOf("spawnCategoryMultiplier").forGetter((clientSettings) -> {
             return clientSettings.spawnCategoryMultiplier;
         })).apply(builder, BloodMoon::new);
     });
     private final Object2DoubleArrayMap<EntityClassification> spawnCategoryMultiplier;
 
-    public BloodMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, String startNotificationLangKey, String endNotificationLangKey, Map<EntityClassification, Double> spawnCategoryMultiplier) {
+    public BloodMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, Map<EntityClassification, Double> spawnCategoryMultiplier) {
         super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
         this.spawnCategoryMultiplier = new Object2DoubleArrayMap<>(spawnCategoryMultiplier);
     }
