@@ -18,6 +18,7 @@ public class LunarSoundHandler implements IAmbientSoundHandler {
     private final SoundHandler soundHandler;
     private final ClientWorld world;
     private LunarEvent lunarEvent;
+
     public LunarSoundHandler(ClientWorld world) {
         this.world = world;
         this.soundHandler = Minecraft.getInstance().getSoundHandler();
@@ -33,12 +34,12 @@ public class LunarSoundHandler implements IAmbientSoundHandler {
         }
 
         LunarEvent currentEvent = lunarContext.getCurrentEvent();
-        SoundEvent soundTrack = currentEvent.getClientSettings().getSoundTrack(); // Use client directly here.
-            if (currentEvent != this.lunarEvent || this.activeLunarSoundsMap.isEmpty()) {
-                this.lunarEvent = currentEvent;
-                this.activeLunarSoundsMap.forEach(BiomeSoundHandler.Sound::fadeOutSound);
-                if (soundTrack != null) {
-                    BiomeSoundHandler.Sound sound = new BiomeSoundHandler.Sound(soundTrack);
+        SoundEvent soundTrack = currentEvent.getClient().getSoundTrack(); // Use client directly here.
+        if (currentEvent != this.lunarEvent || this.activeLunarSoundsMap.isEmpty()) {
+            this.lunarEvent = currentEvent;
+            this.activeLunarSoundsMap.forEach(BiomeSoundHandler.Sound::fadeOutSound);
+            if (soundTrack != null) {
+                BiomeSoundHandler.Sound sound = new BiomeSoundHandler.Sound(soundTrack);
                 this.activeLunarSoundsMap.add(sound);
                 this.soundHandler.play(sound);
                 sound.fadeInSound();

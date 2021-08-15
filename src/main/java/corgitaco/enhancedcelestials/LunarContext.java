@@ -71,7 +71,13 @@ public class LunarContext {
         this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / this.dayLength)) <= 0 && world.isNightTime() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
     }
 
+    // Packet Codec Constructor
     public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents) {
+        this(lunarForecast, worldID, lunarEvents, false);
+    }
+
+    // Client Constructor
+    public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents, boolean serializeClientOnlyConfigs) {
         this.worldID = worldID;
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
@@ -80,6 +86,9 @@ public class LunarContext {
         LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
         this.currentEvent = nextLunarEvent.scheduledDay() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
         this.lunarForecast = lunarForecast;
+        if (serializeClientOnlyConfigs) {
+            this.handleEventConfigs(true);
+        }
     }
 
     public LunarEventSavedData getAndComputeLunarForecast(ServerWorld world) {

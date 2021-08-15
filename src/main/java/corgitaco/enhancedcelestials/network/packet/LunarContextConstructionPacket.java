@@ -45,7 +45,7 @@ public class LunarContextConstructionPacket {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext == null) {
                         ((EnhancedCelestialsWorldData) world).setLunarContext(new LunarContext(message.lunarContext.getLunarForecast(),
-                                world.getDimensionKey().getLocation(), message.lunarContext.getLunarEvents()));
+                                world.getDimensionKey().getLocation(), message.lunarContext.getLunarEvents(), true));
                     }
                 }
             });
