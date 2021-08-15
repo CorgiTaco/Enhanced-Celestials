@@ -17,6 +17,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -90,6 +91,10 @@ public class LunarContext {
     }
 
     public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast) {
+        return computeLunarForecast(world, lunarForecast, 0L);
+    }
+
+    public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast, long seedModifier) {
         long dayTime = world.getDayTime();
         long lastCheckedTime = lunarForecast.getLastCheckedGameTime();
 
@@ -121,7 +126,7 @@ public class LunarContext {
 
         for (; day <= currentDay + this.yearLengthInDays; day++) {
             dayTime += this.dayLength;
-            Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day);
+            Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day + seedModifier);
             Collections.shuffle(scrambledKeys, random);
             for (String key : scrambledKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
@@ -150,6 +155,18 @@ public class LunarContext {
             }
 
             if (this.currentEvent != lastEvent) {
+                TranslationTextComponent startNotification = this.currentEvent.startNotification();
+                TranslationTextComponent endNotification = lastEvent.endNotification();
+                if (startNotification != null) {
+                    for (ServerPlayerEntity player : players) {
+                        player.sendStatusMessage(startNotification, false);
+                    }
+                }
+                if (endNotification != null) {
+                    for (ServerPlayerEntity player : players) {
+                        player.sendStatusMessage(endNotification, false);
+                    }
+                }
                 NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getName()));
             }
         }

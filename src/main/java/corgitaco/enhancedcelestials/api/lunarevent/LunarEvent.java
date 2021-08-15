@@ -28,15 +28,25 @@ public abstract class LunarEvent {
     private final int minNumberOfNightsBetween;
     private final double chance;
     private final Set<Integer> validMoonPhases;
+    private final String startNotificationLangKey;
+    private final String endNotificationLangKey;
+    @Nullable
+    private final TranslationTextComponent startNotification;
+    @Nullable
+    private final TranslationTextComponent endNotification;
     private LunarEventClient<?> lunarEventClient;
     private String name;
 
-    public LunarEvent(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases) {
+    public LunarEvent(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, String startNotificationLangKey, String endNotificationLangKey) {
         this.clientSettings = clientSettings;
         this.superMoon = superMoon;
         this.minNumberOfNightsBetween = minNumberOfNightsBetween;
         this.chance = chance;
         this.validMoonPhases = new IntArraySet(validMoonPhases);
+        this.startNotificationLangKey = startNotificationLangKey;
+        this.endNotificationLangKey = endNotificationLangKey;
+        this.startNotification = this.startNotificationLangKey.isEmpty() ? null : new TranslationTextComponent(this.startNotificationLangKey);
+        this.endNotification = this.endNotificationLangKey.isEmpty() ? null : new TranslationTextComponent(this.endNotificationLangKey);
     }
 
     public abstract Codec<? extends LunarEvent> codec();
@@ -57,8 +67,13 @@ public abstract class LunarEvent {
     }
 
     @Nullable
-    public TranslationTextComponent lunarEventStartNotification() {
-        return null;
+    public TranslationTextComponent startNotification() {
+        return this.startNotification;
+    }
+
+    @Nullable
+    public TranslationTextComponent endNotification() {
+        return this.endNotification;
     }
 
     public LunarEventClientSettings getClientSettings() {
@@ -101,5 +116,13 @@ public abstract class LunarEvent {
 
     public Set<Integer> getValidMoonPhases() {
         return validMoonPhases;
+    }
+
+    public String getStartNotificationLangKey() {
+        return startNotificationLangKey;
+    }
+
+    public String getEndNotificationLangKey() {
+        return endNotificationLangKey;
     }
 }

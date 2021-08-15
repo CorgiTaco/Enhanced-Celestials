@@ -21,11 +21,15 @@ public class HarvestMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
+        }), Codec.STRING.fieldOf("startNotificationLangKey").forGetter((clientSettings) -> {
+            return clientSettings.getStartNotificationLangKey();
+        }), Codec.STRING.fieldOf("endNotificationLangKey").orElse("").forGetter((clientSettings) -> {
+            return clientSettings.getEndNotificationLangKey();
         })).apply(builder, HarvestMoon::new);
     });
 
-    public HarvestMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases) {
-        super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases);
+    public HarvestMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, String startNotificationLangKey, String endNotificationLangKey) {
+        super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
     }
 
     @Override

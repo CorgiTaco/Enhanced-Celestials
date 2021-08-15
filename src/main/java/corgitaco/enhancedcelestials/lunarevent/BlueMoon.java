@@ -26,11 +26,15 @@ public class BlueMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
+        }), Codec.STRING.fieldOf("startNotificationLangKey").forGetter((clientSettings) -> {
+            return clientSettings.getStartNotificationLangKey();
+        }), Codec.STRING.fieldOf("endNotificationLangKey").orElse("").forGetter((clientSettings) -> {
+            return clientSettings.getEndNotificationLangKey();
         })).apply(builder, BlueMoon::new);
     });
 
-    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases) {
-        super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases);
+    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, String startNotificationLangKey, String endNotificationLangKey) {
+        super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
     }
 
     @Override
