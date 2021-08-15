@@ -52,7 +52,9 @@ public class LunarContext {
     private final Path lunarEventsConfigPath;
     private final File lunarConfigFile;
     private LunarEvent currentEvent;
-    private final int dayLength = 24000;
+    private final int dayLength = 24000; // TODO: Config
+    private final int yearLengthInDays = 24000; // TODO: Config
+    private final int minDaysBetweenEvents = 5; // TODO: Config
     private final ArrayList<String> scrambledKeys = new ArrayList<>();
 
     public LunarContext(ServerWorld world) {
@@ -65,7 +67,7 @@ public class LunarContext {
         this.lunarForecast = getAndComputeLunarForecast(world).getForecast();
         assert lunarForecast != null;
         LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
-        this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / 24000)) <= 0 && world.isNightTime() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
+        this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / this.dayLength)) <= 0 && world.isNightTime() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
     }
 
     public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents) {
@@ -105,12 +107,12 @@ public class LunarContext {
             eventByLastTime.put(lunarEventInstance.getEvent(this.lunarEvents), lunarEventInstance.scheduledDay());
         }
 
-        for (; day < currentDay + 100 /*TODO: Add custom year length in days*/; day++) {
+        for (; day < currentDay + this.yearLengthInDays; day++) {
             Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day);
             Collections.shuffle(scrambledKeys, random);
             for (String key : scrambledKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
-                if ((day - eventByLastTime.getOrDefault(value, 0)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > 5/*TODO: Add min day count between events*/ && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime))) {
+                if ((day - eventByLastTime.getOrDefault(value, 0)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime))) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(key, day));
                     eventByLastTime.put(value, day);
@@ -125,7 +127,7 @@ public class LunarContext {
 
     public void tick(World world) {
         LunarEvent lastEvent = this.currentEvent;
-        int currentDay = (int) (world.getDayTime() / this.dayLength); // TODO: Allow custom day lengths
+        int currentDay = (int) (world.getDayTime() / this.dayLength);
         if (!world.isRemote) {
             LunarEventInstance nextEvent = this.getLunarForecast().getForecast().get(0);
             this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNightTime() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
