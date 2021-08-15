@@ -11,16 +11,17 @@ displayName="Enhanced Celestials" #mandatory
 #displayURL="http://example.com/" #optional
 #logoFile="examplemod.png" #optional
 authors="Corgi Taco"
+credits="LudoCrypt - Ambient sounds"
 description='''
 A minecraft mod adding new Lunar Events!
 '''
-[[dependencies.examplemod]]
+[[dependencies.enhancedcelestials]]
     modId="forge"
     mandatory=true
     versionRange="[33.0.22,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.examplemod]]
+[[dependencies.enhancedcelestials]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.16.2,)"

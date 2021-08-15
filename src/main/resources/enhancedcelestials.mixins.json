@@ -11,6 +11,7 @@
     "access.DimensionTypeAccess",
     "access.EffectInstanceAccess",
     "access.RegistryAccess",
+    "client.MixinClientPlayer",
     "client.MixinClientWorld",
     "client.MixinLightMapTexture",
     "client.MixinWorldRenderer"

@@ -7,17 +7,28 @@ import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import corgitaco.enhancedcelestials.lunarevent.client.settings.MoonClient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+
+import java.util.Optional;
 
 public class MoonClientSettings extends LunarEventClientSettings {
 
     public static final Codec<MoonClientSettings> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(ColorSettings.CODEC.fieldOf("colorSettings").forGetter((moonClientSettings) -> {
             return moonClientSettings.getColorSettings();
-        })).apply(builder, MoonClientSettings::new);
+        }), SoundEvent.CODEC.optionalFieldOf("soundTrack").orElse(Optional.empty()).forGetter((clientSettings -> {
+            return clientSettings.getSoundTrack() == null ? Optional.empty() : Optional.of(clientSettings.getSoundTrack());
+        }))).apply(builder, ((colorSettings, soundEvent) -> {
+            return new MoonClientSettings(colorSettings, soundEvent.orElse(null));
+        }));
     });
 
     public MoonClientSettings(ColorSettings colorSettings) {
-        super(colorSettings, new ResourceLocation("textures/environment/moon_phases.png"), null);
+        this(colorSettings, null);
+    }
+
+    public MoonClientSettings(ColorSettings colorSettings, SoundEvent soundEvent) {
+        super(colorSettings, new ResourceLocation("textures/environment/moon_phases.png"), soundEvent);
     }
 
     @Override
