@@ -169,12 +169,10 @@ public class LunarContext {
     }
 
     public void updateForecast(World world, long currentDay) {
-        if (!world.isRemote) {
-            LunarEventInstance nextEvent = this.lunarForecast.getForecast().get(0);
-            if (nextEvent.passed(currentDay)) {
-                this.lunarForecast.getForecast().remove(0);
-                NetworkHandler.sendToAllPlayers(((ServerWorld) world).getPlayers(), new LunarForecastChangedPacket(this.lunarForecast));
-            }
+        LunarEventInstance nextEvent = this.lunarForecast.getForecast().get(0);
+        if (nextEvent.passed(currentDay)) {
+            this.lunarForecast.getForecast().remove(0);
+            NetworkHandler.sendToAllPlayers(((ServerWorld) world).getPlayers(), new LunarForecastChangedPacket(this.lunarForecast));
         }
     }
 
