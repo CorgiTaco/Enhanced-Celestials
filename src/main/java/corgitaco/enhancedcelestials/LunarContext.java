@@ -14,6 +14,7 @@ import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -94,14 +95,14 @@ public class LunarContext {
         long lastCheckedTime = lunarForecast.getLastCheckedGameTime();
         List<LunarEventInstance> newLunarEvents = new ArrayList<>();
 
-        int currentDay = (int) (dayTime / dayLength);
-        int lastCheckedDay = (int) (lastCheckedTime / dayLength);
+        long currentDay = (dayTime / dayLength);
+        long lastCheckedDay = (lastCheckedTime / dayLength);
 
-        Object2IntArrayMap<LunarEvent> eventByLastTime = new Object2IntArrayMap<>();
+        Object2LongArrayMap<LunarEvent> eventByLastTime = new Object2LongArrayMap<>();
         List<LunarEventInstance> forecast = lunarForecast.getForecast();
-        int lastDay = !forecast.isEmpty() ? forecast.get(forecast.size() - 1).scheduledDay() : 0;
+        long lastDay = !forecast.isEmpty() ? forecast.get(forecast.size() - 1).scheduledDay() : 0;
 
-        int day = lastCheckedDay;
+        long day = lastCheckedDay;
 
         for (LunarEventInstance lunarEventInstance : forecast) {
             eventByLastTime.put(lunarEventInstance.getEvent(this.lunarEvents), lunarEventInstance.scheduledDay());
