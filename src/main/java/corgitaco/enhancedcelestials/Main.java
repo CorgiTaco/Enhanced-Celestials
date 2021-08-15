@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials;
 
+import com.google.common.collect.ImmutableSet;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.core.ECSounds;
@@ -24,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
+import java.util.Set;
 
 @Mod(Main.MOD_ID)
 public class Main {
@@ -48,8 +49,9 @@ public class Main {
         Registry.register(EnhancedCelestialsRegistry.LUNAR_EVENT, new ResourceLocation(MOD_ID, "harvest_moon"), HarvestMoon.CODEC);
         Registry.register(EnhancedCelestialsRegistry.LUNAR_CLIENT_EVENT_SETTINGS, new ResourceLocation(MOD_ID, "default"), MoonClientSettings.CODEC);
 
-        EnhancedCelestialsRegistry.DEFAULT_EVENTS.put(new ResourceLocation(MOD_ID, "blood_moon"), new BloodMoon(new MoonClientSettings(new ColorSettings("FF0000", 0.6, "FF0000", 0.4), ECSounds.BLOOD_MOON), false, 4, 1.0, Collections.singleton(0), new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.rise"), new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.set"), Util.make(new Object2DoubleArrayMap<>(), (map) -> map.put(EntityClassification.MONSTER, 3.0))));
-        EnhancedCelestialsRegistry.DEFAULT_EVENTS.put(new ResourceLocation(MOD_ID, "harvest_moon"), new HarvestMoon(new MoonClientSettings(new ColorSettings("FFDB63", 0.6, "FFDB63", 0.4), ECSounds.HARVEST_MOON), false, 4, 1.0, Collections.singleton(0), new CustomTranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise"), new CustomTranslationTextComponent("enhancedcelestials.notification.harvest_moon.set")));
-        EnhancedCelestialsRegistry.DEFAULT_EVENTS.put(new ResourceLocation(MOD_ID, "blue_moon"), new BlueMoon(new MoonClientSettings(new ColorSettings("00ffff", 0.6, "00ffff", 0.4), ECSounds.BLUE_MOON), false, 4, 1.0, Collections.singleton(0), new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.rise"), new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.set")));
+        Set<Integer> defaultMoonPhases = ImmutableSet.of(0, 1, 2, 3, 5, 6, 7);
+        EnhancedCelestialsRegistry.DEFAULT_EVENTS.put(new ResourceLocation(MOD_ID, "blood_moon"), new BloodMoon(new MoonClientSettings(new ColorSettings("FF0000", 0.6, "FF0000", 0.4), ECSounds.BLOOD_MOON), false, 4, 1.0, defaultMoonPhases, new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.rise"), new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.set"), Util.make(new Object2DoubleArrayMap<>(), (map) -> map.put(EntityClassification.MONSTER, 3.0))));
+        EnhancedCelestialsRegistry.DEFAULT_EVENTS.put(new ResourceLocation(MOD_ID, "harvest_moon"), new HarvestMoon(new MoonClientSettings(new ColorSettings("FFDB63", 0.6, "FFDB63", 0.4), ECSounds.HARVEST_MOON), false, 4, 1.0, defaultMoonPhases, new CustomTranslationTextComponent("enhancedcelestials.notification.harvest_moon.rise"), new CustomTranslationTextComponent("enhancedcelestials.notification.harvest_moon.set")));
+        EnhancedCelestialsRegistry.DEFAULT_EVENTS.put(new ResourceLocation(MOD_ID, "blue_moon"), new BlueMoon(new MoonClientSettings(new ColorSettings("00ffff", 0.6, "00ffff", 0.4), ECSounds.BLUE_MOON), false, 4, 1.0, defaultMoonPhases, new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.rise"), new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.set"), 1));
     }
 }

@@ -139,7 +139,7 @@ public class LunarContext {
             Collections.shuffle(scrambledKeys, random);
             for (String key : scrambledKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
-                if ((day - eventByLastTime.getOrDefault(value, currentDay)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime))) {
+                if ((day - eventByLastTime.getOrDefault(value, currentDay)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime - 1))) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(key, day));
                     eventByLastTime.put(value, day);

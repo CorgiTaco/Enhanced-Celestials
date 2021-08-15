@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -31,18 +32,22 @@ public class BlueMoon extends LunarEvent {
             return clientSettings.startNotification();
         }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
             return clientSettings.endNotification();
-        })).apply(builder, BlueMoon::new);
+        }), Codec.INT.fieldOf("luckStrength").forGetter((blueMoon -> {
+            return blueMoon.luckStrength;
+        }))).apply(builder, BlueMoon::new);
     });
+    private final int luckStrength;
 
-    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey) {
+    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, int luckStrength) {
         super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
+        this.luckStrength = MathHelper.clamp(luckStrength - 1, 0, 255);
     }
 
     @Override
     public void livingEntityTick(LivingEntity entity, World world) {
         if (!world.isRemote) {
             if (!(entity instanceof MonsterEntity)) {
-                entity.addPotionEffect(new EffectInstance(Effects.LUCK, 1200, this.isSuperMoon() ? 4 : 0, true, false, false));
+                entity.addPotionEffect(new EffectInstance(Effects.LUCK, 1200, this.luckStrength, true, false, false));
             }
         }
     }
