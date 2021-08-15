@@ -33,7 +33,7 @@ public class BlueMoon extends LunarEvent {
         }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
             return clientSettings.endNotification();
         }), Codec.INT.fieldOf("luckStrength").forGetter((blueMoon -> {
-            return blueMoon.luckStrength;
+            return blueMoon.luckStrength + 1;
         }))).apply(builder, BlueMoon::new);
     });
     private final int luckStrength;
