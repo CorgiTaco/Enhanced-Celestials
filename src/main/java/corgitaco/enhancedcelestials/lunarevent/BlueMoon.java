@@ -47,7 +47,7 @@ public class BlueMoon extends LunarEvent {
     public void livingEntityTick(LivingEntity entity, World world) {
         if (!world.isRemote) {
             if (!(entity instanceof MonsterEntity)) {
-                entity.addPotionEffect(new EffectInstance(Effects.LUCK, 1200, this.luckStrength, true, false, false));
+                entity.addPotionEffect(new EffectInstance(Effects.LUCK, 1210, this.luckStrength, true, false, false));
             }
         }
     }
