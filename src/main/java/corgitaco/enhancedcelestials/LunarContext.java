@@ -13,7 +13,6 @@ import corgitaco.enhancedcelestials.network.NetworkHandler;
 import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.save.LunarEventSavedData;
-import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
@@ -54,7 +53,7 @@ public class LunarContext {
     private final File lunarConfigFile;
     private LunarEvent currentEvent;
     private final int dayLength = 24000; // TODO: Config
-    private final int yearLengthInDays = 24000; // TODO: Config
+    private final int yearLengthInDays = 100; // TODO: Config
     private final int minDaysBetweenEvents = 5; // TODO: Config
     private final ArrayList<String> scrambledKeys = new ArrayList<>();
 
@@ -93,14 +92,26 @@ public class LunarContext {
     public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast) {
         long dayTime = world.getDayTime();
         long lastCheckedTime = lunarForecast.getLastCheckedGameTime();
-        List<LunarEventInstance> newLunarEvents = new ArrayList<>();
 
-        long currentDay = (dayTime / dayLength);
-        long lastCheckedDay = (lastCheckedTime / dayLength);
+        long currentDay = dayTime / dayLength;
+        long lastCheckedDay = lastCheckedTime / dayLength;
+
+        if (lastCheckedDay < currentDay) {
+            lunarForecast.getForecast().clear();
+            lunarForecast.setLastCheckedGameTime(currentDay * dayLength);
+            lastCheckedTime = lunarForecast.getLastCheckedGameTime();
+            lastCheckedDay = lastCheckedTime / dayLength;
+        }
+
+        if (currentDay + this.yearLengthInDays == lastCheckedDay) {
+            return lunarForecast;
+        }
+
+        List<LunarEventInstance> newLunarEvents = new ArrayList<>();
 
         Object2LongArrayMap<LunarEvent> eventByLastTime = new Object2LongArrayMap<>();
         List<LunarEventInstance> forecast = lunarForecast.getForecast();
-        long lastDay = !forecast.isEmpty() ? forecast.get(forecast.size() - 1).scheduledDay() : 0;
+        long lastDay = !forecast.isEmpty() ? forecast.get(forecast.size() - 1).scheduledDay() : currentDay;
 
         long day = lastCheckedDay;
 
@@ -108,12 +119,13 @@ public class LunarContext {
             eventByLastTime.put(lunarEventInstance.getEvent(this.lunarEvents), lunarEventInstance.scheduledDay());
         }
 
-        for (; day < currentDay + this.yearLengthInDays; day++) {
+        for (; day <= currentDay + this.yearLengthInDays; day++) {
+            dayTime += this.dayLength;
             Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day);
             Collections.shuffle(scrambledKeys, random);
             for (String key : scrambledKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
-                if ((day - eventByLastTime.getOrDefault(value, 0)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime))) {
+                if ((day - eventByLastTime.getOrDefault(value, currentDay)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime))) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(key, day));
                     eventByLastTime.put(value, day);
@@ -121,27 +133,20 @@ public class LunarContext {
             }
         }
         forecast.addAll(newLunarEvents);
-        lunarForecast.setLastCheckedGameTime((long) day * dayLength);
+        lunarForecast.setLastCheckedGameTime(day * dayLength);
         return lunarForecast;
     }
 
 
     public void tick(World world) {
         LunarEvent lastEvent = this.currentEvent;
-        int currentDay = (int) (world.getDayTime() / this.dayLength);
+        long currentDay = (world.getDayTime() / this.dayLength);
         if (!world.isRemote) {
-            LunarEventInstance nextEvent = this.getLunarForecast().getForecast().get(0);
-            this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNightTime() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
-            updateForecast(world, currentDay);
-            long lastCheckedGameTime = this.lunarForecast.getLastCheckedGameTime();
-            LunarForecast newLunarForecast = computeLunarForecast((ServerWorld) world, this.lunarForecast);
-
             List<ServerPlayerEntity> players = ((ServerWorld) world).getPlayers();
-            long newLastCheckedGameTime = newLunarForecast.getLastCheckedGameTime();
-            int newLastCheckedDay = (int) (newLastCheckedGameTime / this.dayLength);
-            int lastCheckedDay = (int) (lastCheckedGameTime / this.dayLength);
-            if (newLastCheckedDay != lastCheckedDay) {
-                NetworkHandler.sendToAllPlayers(players, new LunarForecastChangedPacket(this.lunarForecast));
+            updateForecast(world, currentDay, players);
+            LunarEventInstance nextEvent = this.getLunarForecast().getForecast().get(0);
+            if (!this.getLunarForecast().getForecast().isEmpty()) {
+                this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNightTime() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
             }
 
             if (this.currentEvent != lastEvent) {
@@ -150,7 +155,20 @@ public class LunarContext {
         }
     }
 
-    public void updateForecast(World world, int currentDay) {
+    private void updateForecast(World world, long currentDay, List<ServerPlayerEntity> players) {
+        updateForecast(world, currentDay);
+        long lastCheckedGameTime = this.lunarForecast.getLastCheckedGameTime();
+        LunarForecast newLunarForecast = computeLunarForecast((ServerWorld) world, this.lunarForecast);
+
+        long newLastCheckedGameTime = newLunarForecast.getLastCheckedGameTime();
+        long newLastCheckedDay = newLastCheckedGameTime / this.dayLength;
+        long lastCheckedDay = lastCheckedGameTime / this.dayLength;
+        if (newLastCheckedDay != lastCheckedDay) {
+            NetworkHandler.sendToAllPlayers(players, new LunarForecastChangedPacket(this.lunarForecast));
+        }
+    }
+
+    public void updateForecast(World world, long currentDay) {
         if (!world.isRemote) {
             LunarEventInstance nextEvent = this.lunarForecast.getForecast().get(0);
             if (nextEvent.passed(currentDay)) {

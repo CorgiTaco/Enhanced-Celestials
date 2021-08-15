@@ -3,6 +3,7 @@ package corgitaco.enhancedcelestials;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LunarForecast {
@@ -19,7 +20,7 @@ public class LunarForecast {
     private long lastCheckedGameTime;
 
     public LunarForecast(List<LunarEventInstance> forecast, long lastCheckedGameTime) {
-        this.forecast = forecast;
+        this.forecast = new ArrayList<>(forecast);
         this.lastCheckedGameTime = lastCheckedGameTime;
     }
 

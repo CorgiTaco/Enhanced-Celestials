@@ -41,7 +41,7 @@ public class LunarEventInstance {
        return this.scheduledDay - currentDay;
     }
 
-    public boolean passed(int currentDay) {
+    public boolean passed(long currentDay) {
         return this.scheduledDay - currentDay <= -1;
     }
 
