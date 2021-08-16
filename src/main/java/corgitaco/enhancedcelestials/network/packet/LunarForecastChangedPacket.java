@@ -44,7 +44,7 @@ public class LunarForecastChangedPacket {
                 ClientWorld world = minecraft.world;
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-                    if (lunarContext == null) {
+                    if (lunarContext != null) {
                         lunarContext.getLunarForecast().getForecast().clear();
                         lunarContext.getLunarForecast().getForecast().addAll(message.lunarForecast.getForecast());
                         lunarContext.getLunarForecast().setLastCheckedGameTime(message.lunarForecast.getLastCheckedGameTime());
