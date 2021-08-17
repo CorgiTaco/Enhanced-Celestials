@@ -16,19 +16,27 @@ public class MoonClientSettings extends LunarEventClientSettings {
     public static final Codec<MoonClientSettings> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(ColorSettings.CODEC.fieldOf("colorSettings").forGetter((moonClientSettings) -> {
             return moonClientSettings.getColorSettings();
-        }), SoundEvent.CODEC.optionalFieldOf("soundTrack").orElse(Optional.empty()).forGetter((clientSettings -> {
+        }), Codec.FLOAT.fieldOf("moonSize").orElse(20.0F).forGetter((clientSettings) -> {
+            return clientSettings.getMoonSize();
+        }), ResourceLocation.CODEC.fieldOf("moonTextureLocation").orElse(new ResourceLocation("textures/environment/moon_phases.png")).forGetter((clientSettings) -> {
+            return clientSettings.getMoonTextureLocation();
+        }), SoundEvent.CODEC.optionalFieldOf("soundTrack").orElse(Optional.empty()).forGetter((clientSettings) -> {
             return clientSettings.getSoundTrack() == null ? Optional.empty() : Optional.of(clientSettings.getSoundTrack());
-        }))).apply(builder, ((colorSettings, soundEvent) -> {
-            return new MoonClientSettings(colorSettings, soundEvent.orElse(null));
+        })).apply(builder, ((colorSettings, moonSize, moonTextureLocation, soundEvent) -> {
+            return new MoonClientSettings(colorSettings, moonSize, moonTextureLocation, soundEvent.orElse(null));
         }));
     });
 
     public MoonClientSettings(ColorSettings colorSettings) {
-        this(colorSettings, null);
+        this(colorSettings, 20.0F, null);
     }
 
-    public MoonClientSettings(ColorSettings colorSettings, SoundEvent soundEvent) {
-        super(colorSettings, new ResourceLocation("textures/environment/moon_phases.png"), soundEvent);
+    public MoonClientSettings(ColorSettings colorSettings, float moonSize, SoundEvent soundEvent) {
+        this(colorSettings, moonSize, new ResourceLocation("textures/environment/moon_phases.png"), soundEvent);
+    }
+
+    public MoonClientSettings(ColorSettings colorSettings, float moonSize, ResourceLocation moonTextureLocation, SoundEvent soundEvent) {
+        super(colorSettings, moonSize, moonTextureLocation, soundEvent);
     }
 
     @Override

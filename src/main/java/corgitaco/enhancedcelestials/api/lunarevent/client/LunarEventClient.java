@@ -14,12 +14,14 @@ import javax.annotation.Nullable;
 public abstract class LunarEventClient<T extends LunarEventClientSettings> implements SkyRenderable {
 
     private final ColorSettings colorSettings;
+    private final float moonSize;
     private final ResourceLocation moonTextureLocation;
     @Nullable
     private final SoundEvent soundTrack;
 
     public LunarEventClient(T clientSettings) {
         this.colorSettings = clientSettings.getColorSettings();
+        this.moonSize = clientSettings.getMoonSize();
         this.moonTextureLocation = clientSettings.getMoonTextureLocation();
         this.soundTrack = clientSettings.getSoundTrack();
     }
@@ -40,5 +42,9 @@ public abstract class LunarEventClient<T extends LunarEventClientSettings> imple
     @Nullable
     public SoundEvent getSoundTrack() {
         return soundTrack;
+    }
+
+    public float getMoonSize() {
+        return moonSize;
     }
 }

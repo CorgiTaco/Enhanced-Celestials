@@ -24,7 +24,6 @@ public abstract class LunarEvent {
     public static final Codec<LunarEvent> CODEC = EnhancedCelestialsRegistry.LUNAR_EVENT.dispatchStable(LunarEvent::codec, Function.identity());
 
     private LunarEventClientSettings clientSettings;
-    private final boolean superMoon;
     private final int minNumberOfNightsBetween;
     private final double chance;
     private final Set<Integer> validMoonPhases;
@@ -35,9 +34,8 @@ public abstract class LunarEvent {
     private LunarEventClient<?> lunarEventClient;
     private String name;
 
-    public LunarEvent(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotification, CustomTranslationTextComponent endNotification) {
+    public LunarEvent(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotification, CustomTranslationTextComponent endNotification) {
         this.clientSettings = clientSettings;
-        this.superMoon = superMoon;
         this.minNumberOfNightsBetween = minNumberOfNightsBetween;
         this.chance = chance;
         this.validMoonPhases = new IntArraySet(validMoonPhases);
@@ -98,8 +96,9 @@ public abstract class LunarEvent {
     public void livingEntityTick(LivingEntity entity, World world) {
     }
 
-    public boolean isSuperMoon() {
-        return superMoon;
+    @Nullable
+    public LunarMobSpawnInfo getLunarSpawner() {
+        return null;
     }
 
     public int getMinNumberOfNightsBetween() {

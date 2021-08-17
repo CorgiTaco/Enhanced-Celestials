@@ -20,8 +20,6 @@ public class BlueMoon extends LunarEvent {
     public static final Codec<BlueMoon> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(LunarEventClientSettings.CODEC.fieldOf("clientSettings").forGetter((clientSettings) -> {
             return clientSettings.getClientSettings();
-        }), Codec.BOOL.fieldOf("superMoon").forGetter((clientSettings) -> {
-            return clientSettings.isSuperMoon();
         }), Codec.INT.fieldOf("minNumberOfNightsBetween").forGetter((clientSettings) -> {
             return clientSettings.getMinNumberOfNightsBetween();
         }), Codec.DOUBLE.fieldOf("chance").forGetter((clientSettings) -> {
@@ -38,8 +36,8 @@ public class BlueMoon extends LunarEvent {
     });
     private final int luckStrength;
 
-    public BlueMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, int luckStrength) {
-        super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
+    public BlueMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, int luckStrength) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
         this.luckStrength = MathHelper.clamp(luckStrength - 1, 0, 255);
     }
 

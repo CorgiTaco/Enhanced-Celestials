@@ -14,8 +14,6 @@ public class HarvestMoon extends LunarEvent {
     public static final Codec<HarvestMoon> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(LunarEventClientSettings.CODEC.fieldOf("clientSettings").forGetter((clientSettings) -> {
             return clientSettings.getClientSettings();
-        }), Codec.BOOL.fieldOf("superMoon").forGetter((clientSettings) -> {
-            return clientSettings.isSuperMoon();
         }), Codec.INT.fieldOf("minNumberOfNightsBetween").forGetter((clientSettings) -> {
             return clientSettings.getMinNumberOfNightsBetween();
         }), Codec.DOUBLE.fieldOf("chance").forGetter((clientSettings) -> {
@@ -29,8 +27,8 @@ public class HarvestMoon extends LunarEvent {
         })).apply(builder, HarvestMoon::new);
     });
 
-    public HarvestMoon(LunarEventClientSettings clientSettings, boolean superMoon, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey) {
-        super(clientSettings, superMoon, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
+    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
     }
 
     @Override

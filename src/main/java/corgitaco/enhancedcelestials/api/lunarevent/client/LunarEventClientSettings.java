@@ -14,12 +14,14 @@ public abstract class LunarEventClientSettings {
     public static final Codec<LunarEventClientSettings> CODEC = EnhancedCelestialsRegistry.LUNAR_CLIENT_EVENT_SETTINGS.dispatchStable(LunarEventClientSettings::codec, Function.identity());
 
     private final ColorSettings colorSettings;
+    private final float moonSize;
     private final ResourceLocation moonTextureLocation;
     @Nullable
     private final SoundEvent soundTrack;
 
-    public LunarEventClientSettings(ColorSettings colorSettings, ResourceLocation moonTextureLocation, @Nullable SoundEvent soundTrack) {
+    public LunarEventClientSettings(ColorSettings colorSettings, float moonSize, ResourceLocation moonTextureLocation, @Nullable SoundEvent soundTrack) {
         this.colorSettings = colorSettings;
+        this.moonSize = moonSize;
         this.moonTextureLocation = moonTextureLocation;
         this.soundTrack = soundTrack;
     }
@@ -39,5 +41,9 @@ public abstract class LunarEventClientSettings {
     @Nullable
     public SoundEvent getSoundTrack() {
         return soundTrack;
+    }
+
+    public float getMoonSize() {
+        return moonSize;
     }
 }

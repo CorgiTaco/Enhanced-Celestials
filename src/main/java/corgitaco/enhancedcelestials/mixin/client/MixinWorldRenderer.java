@@ -33,7 +33,7 @@ public abstract class MixinWorldRenderer {
     private float getSuperMoonSize(float arg0) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.world).getLunarContext();
         if (lunarContext != null) {
-            return lunarContext.getCurrentEvent().isSuperMoon() ? 60.0F/*TODO: Add Super Moon Size config*/ : arg0;
+            return lunarContext.getCurrentEvent().getClient().getMoonSize();
         }
         return arg0;
     }

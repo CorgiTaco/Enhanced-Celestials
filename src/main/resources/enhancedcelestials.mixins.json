@@ -8,6 +8,8 @@
     "MixinLivingEntity",
     "MixinPlayerList",
     "MixinServerWorld",
+    "MixinWorldEntitySpawner",
+    "access.ChunkAccess",
     "access.ColorAccess",
     "access.DimensionTypeAccess",
     "access.EffectInstanceAccess",
