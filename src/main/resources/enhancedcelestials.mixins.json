@@ -13,6 +13,7 @@
     "access.ColorAccess",
     "access.DimensionTypeAccess",
     "access.EffectInstanceAccess",
+    "access.MobSpawnInfoAccess",
     "access.RegistryAccess",
     "access.StyleAccess",
     "client.MixinClientPlayer",
