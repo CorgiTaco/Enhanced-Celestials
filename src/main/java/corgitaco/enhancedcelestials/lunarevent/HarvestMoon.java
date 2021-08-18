@@ -49,25 +49,33 @@ public class HarvestMoon extends LunarEvent {
     private final double cropDropMultiplier;
 
     public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier) {
+        this(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping, cropTags, cropDropMultiplier, true);
+    }
+
+    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier, boolean serializeCrops) {
         super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping);
         this.cropTags = cropTags;
         this.cropDropMultiplier = cropDropMultiplier;
 
-        for (ResourceLocation tagID : cropTags) {
-            if (tagID.getPath().contains("item_tag_")) {
-                tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath().replace("item_tag_", ""));
-                if (ItemTags.getCollection().getRegisteredTags().contains(tagID)) {
-                    enhancedCrops.add(ItemTags.makeWrapperTag(tagID.toString()));
+        if (serializeCrops) {
+
+
+            for (ResourceLocation tagID : cropTags) {
+                if (tagID.getPath().contains("item_tag_")) {
+                    tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath().replace("item_tag_", ""));
+                    if (ItemTags.getCollection().getRegisteredTags().contains(tagID)) {
+                        enhancedCrops.add(ItemTags.makeWrapperTag(tagID.toString()));
+                    } else {
+                        Main.LOGGER.error("\"" + tagID + "\" is not a valid item tag!");
+                    }
                 } else {
-                    Main.LOGGER.error("\"" + tagID + "\" is not a valid item tag!");
-                }
-            } else {
-                tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath());
-                Optional<Item> optional = Registry.ITEM.getOptional(tagID);
-                if (optional.isPresent()) {
-                    enhancedCrops.add(optional.get());
-                } else {
-                    Main.LOGGER.error("\"" + tagID + "\" is not a valid item ID!");
+                    tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath());
+                    Optional<Item> optional = Registry.ITEM.getOptional(tagID);
+                    if (optional.isPresent()) {
+                        enhancedCrops.add(optional.get());
+                    } else {
+                        Main.LOGGER.error("\"" + tagID + "\" is not a valid item ID!");
+                    }
                 }
             }
         }
