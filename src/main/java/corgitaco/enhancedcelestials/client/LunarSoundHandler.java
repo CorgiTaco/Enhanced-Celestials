@@ -30,6 +30,7 @@ public class LunarSoundHandler implements IAmbientSoundHandler {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
         if (lunarContext == null) {
+            this.activeLunarSoundsMap.forEach(BiomeSoundHandler.Sound::fadeOutSound);
             return;
         }
 
