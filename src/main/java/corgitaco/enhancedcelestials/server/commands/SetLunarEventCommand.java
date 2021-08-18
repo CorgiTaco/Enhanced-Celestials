@@ -42,6 +42,9 @@ public class SetLunarEventCommand {
 
         if (lunarContext != null) {
             if (lunarContext.getLunarEvents().containsKey(lunarEventKey)) {
+                if (!world.isNightTime()) {
+                    world.setDayTime((currentDay * dayLength) + 13000L);
+                }
                 LunarEventInstance commandInstance = new LunarEventInstance(lunarEventKey, currentDay);
                 List<LunarEventInstance> forecast = lunarContext.getLunarForecast().getForecast();
                 if (forecast.get(0).active(currentDay)) {
@@ -51,9 +54,6 @@ public class SetLunarEventCommand {
             } else {
                 source.sendErrorMessage(new TranslationTextComponent("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
                 return 0;
-            }
-            if (!world.isNightTime()) {
-                world.setDayTime((currentDay * dayLength) + 13000L);
             }
         }
         return 1;
