@@ -1,6 +1,6 @@
 {
   "enhancedcelestials.commands.disabled": "Enhanced Celestials' lunar events are disabled for this world!",
-  "enhancedcelestials.commands.lunarevent_missing": "%s is not a valid lunar event!",
+  "enhancedcelestials.commands.lunarevent_missing": "\"%s\" is not a valid lunar event!",
   "enhancedcelestials.notification.blood_moon.rise": "The \"Blood Moon\" rises...",
   "enhancedcelestials.notification.blood_moon.set": "The \"Blood Moon\" sets...",
   "enhancedcelestials.notification.harvest_moon.rise": "The \"Harvest Moon\" rises...",
