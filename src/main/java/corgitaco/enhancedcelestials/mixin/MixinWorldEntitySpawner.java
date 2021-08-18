@@ -20,7 +20,9 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -80,13 +82,21 @@ public class MixinWorldEntitySpawner {
     }
 
     @Inject(method = "getRandomHeight", at = @At("RETURN"), cancellable = true)
-    private static void forceSurface(World worldIn, Chunk chunk, CallbackInfoReturnable<BlockPos> cir) {
-        BlockPos returnValue = cir.getReturnValue();
-        PlayerEntity closestPlayer = worldIn.getClosestPlayer(returnValue.getX(), returnValue.getY(), returnValue.getZ(), -1.0, false);
-        if (closestPlayer != null) {
-            BlockPos closestPlayerPosition = closestPlayer.getPosition();
-            if (closestPlayerPosition.getY() > worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, closestPlayerPosition.getX(), closestPlayerPosition.getZ())) {
-                cir.setReturnValue(new BlockPos(returnValue.getX(), worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, returnValue.getX(), returnValue.getZ()) + 1, returnValue.getZ()));
+    private static void forceSurface(World world, Chunk chunk, CallbackInfoReturnable<BlockPos> cir) {
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+        if (lunarContext != null) {
+            LunarMobSpawnInfo lunarSpawner = lunarContext.getCurrentEvent().getLunarSpawner();
+            if (lunarSpawner != null) {
+                if (lunarSpawner.isForceSurfaceSpawning()) {
+                    BlockPos returnValue = cir.getReturnValue();
+                    PlayerEntity closestPlayer = world.getClosestPlayer(returnValue.getX(), returnValue.getY(), returnValue.getZ(), -1.0, false);
+                    if (closestPlayer != null) {
+                        BlockPos closestPlayerPosition = closestPlayer.getPosition();
+                        if (closestPlayerPosition.getY() > world.getHeight(Heightmap.Type.WORLD_SURFACE, closestPlayerPosition.getX(), closestPlayerPosition.getZ())) {
+                            cir.setReturnValue(new BlockPos(returnValue.getX(), world.getHeight(Heightmap.Type.WORLD_SURFACE, returnValue.getX(), returnValue.getZ()) + 1, returnValue.getZ()));
+                        }
+                    }
+                }
             }
         }
     }
