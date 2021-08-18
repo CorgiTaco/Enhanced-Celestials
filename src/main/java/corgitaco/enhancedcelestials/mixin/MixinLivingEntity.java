@@ -37,7 +37,7 @@ public abstract class MixinLivingEntity extends Entity {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.world).getLunarContext();
         if (lunarContext != null) {
             if (lunarContext.getCurrentEvent().blockSleeping()) {
-                if (((ServerPlayerEntity) (Object) this) instanceof ServerPlayerEntity) {
+                if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity) {
                     ((ServerPlayerEntity) (Object) this).sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail").mergeStyle(TextFormatting.RED), true);
                 }
                 cir.setReturnValue(false);
