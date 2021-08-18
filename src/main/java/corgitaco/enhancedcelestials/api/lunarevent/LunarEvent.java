@@ -31,16 +31,18 @@ public abstract class LunarEvent {
     private final CustomTranslationTextComponent startNotification;
     @Nullable
     private final CustomTranslationTextComponent endNotification;
+    private final boolean blockSleeping;
     private LunarEventClient<?> lunarEventClient;
     private String name;
 
-    public LunarEvent(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotification, CustomTranslationTextComponent endNotification) {
+    public LunarEvent(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotification, CustomTranslationTextComponent endNotification, boolean blockSleeping) {
         this.clientSettings = clientSettings;
         this.minNumberOfNightsBetween = minNumberOfNightsBetween;
         this.chance = chance;
         this.validMoonPhases = new IntArraySet(validMoonPhases);
         this.startNotification = startNotification == CustomTranslationTextComponent.DEFAULT || startNotification.getKey().isEmpty() ? null : startNotification;
         this.endNotification = endNotification == CustomTranslationTextComponent.DEFAULT || endNotification.getKey().isEmpty() ? null : endNotification;
+        this.blockSleeping = blockSleeping;
     }
 
     public abstract Codec<? extends LunarEvent> codec();
@@ -111,5 +113,9 @@ public abstract class LunarEvent {
 
     public Set<Integer> getValidMoonPhases() {
         return validMoonPhases;
+    }
+
+    public boolean blockSleeping() {
+        return blockSleeping;
     }
 }

@@ -17,12 +17,14 @@ import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -52,11 +54,13 @@ public class LunarContext {
     private final Path lunarConfigPath;
     private final Path lunarEventsConfigPath;
     private final File lunarConfigFile;
-    private LunarEvent currentEvent;
     private final int dayLength = 24000; // TODO: Config
     private final int yearLengthInDays = 100; // TODO: Config
     private final int minDaysBetweenEvents = 5; // TODO: Config
     private final ArrayList<String> scrambledKeys = new ArrayList<>();
+    private LunarEvent currentEvent;
+    private LunarEvent lastEvent;
+    private float strength;
 
     public LunarContext(ServerWorld world) {
         this.worldID = world.getDimensionKey().getLocation();
@@ -89,6 +93,7 @@ public class LunarContext {
         if (serializeClientOnlyConfigs) {
             this.handleEventConfigs(true);
         }
+        this.lunarEvents.forEach((key, event) -> event.setName(key));
     }
 
     public LunarEventSavedData getAndComputeLunarForecast(ServerWorld world) {
@@ -164,6 +169,8 @@ public class LunarContext {
             }
 
             if (this.currentEvent != lastEvent) {
+                this.lastEvent = lastEvent;
+                this.strength = 0;
                 TranslationTextComponent endNotification = lastEvent.endNotification();
                 if (endNotification != null) {
                     for (ServerPlayerEntity player : players) {
@@ -180,6 +187,7 @@ public class LunarContext {
                 NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getName()));
             }
         }
+        this.strength = MathHelper.clamp(this.strength + 0.01F, 0, 1.0F);
     }
 
     private void updateForecast(World world, long currentDay, List<ServerPlayerEntity> players) {
@@ -207,6 +215,11 @@ public class LunarContext {
 
     public LunarEvent getCurrentEvent() {
         return currentEvent;
+    }
+
+    @Nullable
+    public LunarEvent getLastEvent() {
+        return lastEvent;
     }
 
     public void handleEventConfigs(boolean isClient) {
@@ -323,6 +336,19 @@ public class LunarContext {
 
     public Map<String, LunarEvent> getLunarEvents() {
         return lunarEvents;
+    }
+
+    public float getStrength() {
+        return strength;
+    }
+
+    public void setStrength(float strength) {
+        this.strength = strength;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void setLastEvent(LunarEvent lastEvent) {
+        this.lastEvent = lastEvent;
     }
 
     @OnlyIn(Dist.CLIENT)

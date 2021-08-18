@@ -34,7 +34,9 @@ public class LunarEventChangedPacket {
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext != null) {
+                        lunarContext.setLastEvent(lunarContext.getCurrentEvent());
                         lunarContext.setCurrentEvent(message.eventKey);
+                        lunarContext.setStrength(0);
                     }
                 }
             });

@@ -30,14 +30,16 @@ public class BlueMoon extends LunarEvent {
             return clientSettings.startNotification();
         }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
             return clientSettings.endNotification();
+        }), Codec.BOOL.fieldOf("blockSleeping").forGetter((clientSettings) -> {
+            return clientSettings.blockSleeping();
         }), Codec.INT.fieldOf("luckStrength").forGetter((blueMoon -> {
             return blueMoon.luckStrength + 1;
         }))).apply(builder, BlueMoon::new);
     });
     private final int luckStrength;
 
-    public BlueMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, int luckStrength) {
-        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
+    public BlueMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, int luckStrength) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping);
         this.luckStrength = MathHelper.clamp(luckStrength - 1, 0, 255);
     }
 

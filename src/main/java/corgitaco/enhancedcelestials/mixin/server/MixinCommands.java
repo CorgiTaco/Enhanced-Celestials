@@ -2,7 +2,6 @@ package corgitaco.enhancedcelestials.mixin.server;
 
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.server.commands.SetLunarEventCommand;
 import net.minecraft.command.CommandSource;
@@ -23,8 +22,8 @@ public abstract class MixinCommands {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void addEnhancedCelestialCommands(Commands.EnvironmentType envType, CallbackInfo ci) {
-        LiteralCommandNode<CommandSource> requires = dispatcher.register(Commands.literal(Main.MOD_ID).requires(commandSource -> commandSource.hasPermissionLevel(3)).then(SetLunarEventCommand.register(dispatcher)));
-        dispatcher.register(Commands.literal("ec").redirect(requires).requires((source) -> source.hasPermissionLevel(3))); // Create 'ec' alias.
+        dispatcher.register(Commands.literal(Main.MOD_ID).requires(commandSource -> commandSource.hasPermissionLevel(3)).then(SetLunarEventCommand.register(dispatcher)));
+        dispatcher.register(Commands.literal("ec").requires(commandSource -> commandSource.hasPermissionLevel(3)).then(SetLunarEventCommand.register(dispatcher)));
         Main.LOGGER.debug("Registered Enhanced Celestial Commands!");
     }
 }

@@ -35,6 +35,8 @@ public class HarvestMoon extends LunarEvent {
             return clientSettings.startNotification();
         }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
             return clientSettings.endNotification();
+        }), Codec.BOOL.fieldOf("blockSleeping").forGetter((clientSettings) -> {
+            return clientSettings.blockSleeping();
         }), Codec.list(ResourceLocation.CODEC).fieldOf("enhancedCrops").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.cropTags);
         }), Codec.DOUBLE.fieldOf("cropDropMultiplier").orElse(2.5).forGetter((clientSettings) -> {
@@ -46,8 +48,8 @@ public class HarvestMoon extends LunarEvent {
     private final Collection<ResourceLocation> cropTags;
     private final double cropDropMultiplier;
 
-    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, Collection<ResourceLocation> cropTags, double cropDropMultiplier) {
-        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey);
+    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping);
         this.cropTags = cropTags;
         this.cropDropMultiplier = cropDropMultiplier;
 
