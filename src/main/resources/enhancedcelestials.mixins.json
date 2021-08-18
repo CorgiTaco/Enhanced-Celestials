@@ -5,8 +5,10 @@
   "refmap": "enhancedcelestials.refmap.json",
   "mixins": [
     "MixinBlock",
+    "MixinEntityDensityManager",
     "MixinLivingEntity",
     "MixinPlayerList",
+    "MixinServerChunkProvider",
     "MixinServerWorld",
     "MixinWorldEntitySpawner",
     "access.ChunkAccess",
@@ -16,12 +18,13 @@
     "access.MobSpawnInfoAccess",
     "access.RegistryAccess",
     "access.StyleAccess",
+    "access.WorldEntitySpawnerAccess"
+  ],
+  "client": [
     "client.MixinClientPlayer",
     "client.MixinClientWorld",
     "client.MixinLightMapTexture",
     "client.MixinWorldRenderer"
-  ],
-  "client": [
   ],
   "injectors": {
     "defaultRequire": 1
