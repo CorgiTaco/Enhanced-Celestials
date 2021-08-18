@@ -35,12 +35,14 @@ import java.util.*;
 
 public class LunarContext {
 
-    public static final String CONFIG_NAME = "lunar-settings.toml";
+    public static final String CONFIG_NAME = "lunar-settings.json";
     private static final LunarEvent DEFAULT = Moon.MOON;
 
     public static final Codec<LunarContext> PACKET_CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(LunarForecast.CODEC.fieldOf("lunarForecast").forGetter((lunarContext) -> {
             return lunarContext.lunarForecast;
+        }), LunarTimeSettings.CODEC.fieldOf("lunarTimeSettings").forGetter((lunarContext) -> {
+            return lunarContext.lunarTimeSettings;
         }), ResourceLocation.CODEC.fieldOf("worldID").forGetter((weatherEventContext) -> {
             return weatherEventContext.worldID;
         }), Codec.unboundedMap(Codec.STRING, LunarEvent.CODEC).fieldOf("weatherEvents").forGetter((weatherEventContext) -> {
@@ -53,10 +55,11 @@ public class LunarContext {
     private final ResourceLocation worldID;
     private final Path lunarConfigPath;
     private final Path lunarEventsConfigPath;
-    private final File lunarConfigFile;
-    private final int dayLength = 24000; // TODO: Config
-    private final int yearLengthInDays = 100; // TODO: Config
-    private final int minDaysBetweenEvents = 5; // TODO: Config
+
+    private final LunarTimeSettings lunarTimeSettings;
+    private final long dayLength; // TODO: Config
+    private final long yearLengthInDays; // TODO: Config
+    private final long minDaysBetweenEvents; // TODO: Config
     private final ArrayList<String> scrambledKeys = new ArrayList<>();
     private LunarEvent currentEvent;
     private LunarEvent lastEvent;
@@ -66,7 +69,10 @@ public class LunarContext {
         this.worldID = world.getDimensionKey().getLocation();
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
-        this.lunarConfigFile = this.lunarConfigPath.resolve(CONFIG_NAME).toFile();
+        this.lunarTimeSettings = readOrCreateConfigJson(this.lunarConfigPath.resolve(CONFIG_NAME).toFile());
+        this.dayLength = lunarTimeSettings.dayLength;
+        this.yearLengthInDays = lunarTimeSettings.dayLength;
+        this.minDaysBetweenEvents = lunarTimeSettings.minDaysBetweenLunarEvents;
         handleEventConfigs(false);
         this.scrambledKeys.addAll(this.lunarEvents.keySet());
         this.lunarForecast = getAndComputeLunarForecast(world).getForecast();
@@ -76,20 +82,23 @@ public class LunarContext {
     }
 
     // Packet Codec Constructor
-    public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents) {
-        this(lunarForecast, worldID, lunarEvents, false);
+    public LunarContext(LunarForecast lunarForecast, LunarTimeSettings lunarTimeSettings, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents) {
+        this(lunarForecast, lunarTimeSettings, worldID, lunarEvents, false);
     }
 
     // Client Constructor
-    public LunarContext(LunarForecast lunarForecast, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents, boolean serializeClientOnlyConfigs) {
+    public LunarContext(LunarForecast lunarForecast, LunarTimeSettings lunarTimeSettings, ResourceLocation worldID, Map<String, LunarEvent> lunarEvents, boolean serializeClientOnlyConfigs) {
         this.worldID = worldID;
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
-        this.lunarConfigFile = this.lunarConfigPath.resolve(CONFIG_NAME).toFile();
         this.lunarEvents.putAll(lunarEvents);
         LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
         this.currentEvent = nextLunarEvent.scheduledDay() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
         this.lunarForecast = lunarForecast;
+        this.lunarTimeSettings = lunarTimeSettings;
+        this.dayLength = lunarTimeSettings.dayLength;
+        this.yearLengthInDays = lunarTimeSettings.dayLength;
+        this.minDaysBetweenEvents = lunarTimeSettings.minDaysBetweenLunarEvents;
         if (serializeClientOnlyConfigs) {
             this.handleEventConfigs(true);
         }
@@ -330,12 +339,35 @@ public class LunarContext {
         }
     }
 
+    private static LunarTimeSettings readOrCreateConfigJson(File configFile) {
+        if (!configFile.exists()) {
+            try {
+                Path path = configFile.toPath();
+                Files.createDirectories(path.getParent());
+                JsonElement jsonElement = LunarTimeSettings.CODEC.encodeStart(JsonOps.INSTANCE, LunarTimeSettings.DEFAULT).result().get();
+                Files.write(path, new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(jsonElement).getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            return LunarTimeSettings.CODEC.decode(JsonOps.INSTANCE, new JsonParser().parse(new FileReader(configFile))).result().orElseThrow(RuntimeException::new).getFirst();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public LunarForecast getLunarForecast() {
         return lunarForecast;
     }
 
     public Map<String, LunarEvent> getLunarEvents() {
         return lunarEvents;
+    }
+
+    public LunarTimeSettings getLunarTimeSettings() {
+        return lunarTimeSettings;
     }
 
     public float getStrength() {
@@ -357,6 +389,30 @@ public class LunarContext {
             this.currentEvent = DEFAULT;
         } else {
             this.currentEvent = this.lunarEvents.get(currentEvent);
+        }
+    }
+
+    public static class LunarTimeSettings {
+        public static final Codec<LunarTimeSettings> CODEC = RecordCodecBuilder.create((builder) -> {
+            return builder.group(Codec.LONG.fieldOf("daylength").forGetter((lunarTimeSettings) -> {
+                return lunarTimeSettings.dayLength;
+            }), Codec.LONG.fieldOf("yearLengthInDays").forGetter((lunarTimeSettings) -> {
+                return lunarTimeSettings.yearLength;
+            }), Codec.LONG.fieldOf("minDaysBetweenLunarEvents").forGetter((lunarTimeSettings) -> {
+                return lunarTimeSettings.minDaysBetweenLunarEvents;
+            })).apply(builder, LunarTimeSettings::new);
+        });
+
+        public static final LunarTimeSettings DEFAULT = new LunarTimeSettings(24000, 100, 5);
+
+        private final long dayLength;
+        private final long yearLength;
+        private final long minDaysBetweenLunarEvents;
+
+        public LunarTimeSettings(long dayLength, long yearLength, long minDaysBetweenLunarEvents) {
+            this.dayLength = dayLength;
+            this.yearLength = yearLength;
+            this.minDaysBetweenLunarEvents = minDaysBetweenLunarEvents;
         }
     }
 }

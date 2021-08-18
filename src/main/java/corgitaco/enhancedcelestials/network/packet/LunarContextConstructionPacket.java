@@ -44,7 +44,7 @@ public class LunarContextConstructionPacket {
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext == null) {
-                        ((EnhancedCelestialsWorldData) world).setLunarContext(new LunarContext(message.lunarContext.getLunarForecast(),
+                        ((EnhancedCelestialsWorldData) world).setLunarContext(new LunarContext(message.lunarContext.getLunarForecast(), message.lunarContext.getLunarTimeSettings(),
                                 world.getDimensionKey().getLocation(), message.lunarContext.getLunarEvents(), true));
                     }
                 }
