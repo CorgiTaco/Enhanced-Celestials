@@ -27,21 +27,17 @@ public abstract class LunarEvent {
     private final int minNumberOfNightsBetween;
     private final double chance;
     private final Set<Integer> validMoonPhases;
-    @Nullable
-    private final CustomTranslationTextComponent startNotification;
-    @Nullable
-    private final CustomTranslationTextComponent endNotification;
+    private final LunarTextComponents textComponents;
     private final boolean blockSleeping;
     private LunarEventClient<?> lunarEventClient;
-    private String name;
+    private String key;
 
-    public LunarEvent(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotification, CustomTranslationTextComponent endNotification, boolean blockSleeping) {
+    public LunarEvent(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents textComponents, boolean blockSleeping) {
         this.clientSettings = clientSettings;
         this.minNumberOfNightsBetween = minNumberOfNightsBetween;
         this.chance = chance;
         this.validMoonPhases = new IntArraySet(validMoonPhases);
-        this.startNotification = startNotification == CustomTranslationTextComponent.DEFAULT || startNotification.getKey().isEmpty() ? null : startNotification;
-        this.endNotification = endNotification == CustomTranslationTextComponent.DEFAULT || endNotification.getKey().isEmpty() ? null : endNotification;
+        this.textComponents = textComponents;
         this.blockSleeping = blockSleeping;
     }
 
@@ -53,23 +49,23 @@ public abstract class LunarEvent {
     public void onBlockItemDrop(ServerWorld world, ItemStack itemStack) {
     }
 
-    public String getName() {
-        return name;
+    public String getKey() {
+        return key;
     }
 
-    public LunarEvent setName(String name) {
-        this.name = name;
+    public LunarEvent setKey(String key) {
+        this.key = key;
         return this;
     }
 
     @Nullable
     public CustomTranslationTextComponent startNotification() {
-        return this.startNotification;
+        return this.textComponents.getRiseNotification();
     }
 
     @Nullable
     public CustomTranslationTextComponent endNotification() {
-        return this.endNotification;
+        return this.textComponents.getSetNotification();
     }
 
     public LunarEventClientSettings getClientSettings() {
@@ -117,5 +113,9 @@ public abstract class LunarEvent {
 
     public boolean blockSleeping() {
         return blockSleeping;
+    }
+
+    public LunarTextComponents getTextComponents() {
+        return textComponents;
     }
 }

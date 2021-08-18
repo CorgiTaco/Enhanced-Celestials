@@ -102,7 +102,7 @@ public class LunarContext {
         if (serializeClientOnlyConfigs) {
             this.handleEventConfigs(true);
         }
-        this.lunarEvents.forEach((key, event) -> event.setName(key));
+        this.lunarEvents.forEach((key, event) -> event.setKey(key));
     }
 
     public LunarEventSavedData getAndComputeLunarForecast(ServerWorld world) {
@@ -195,7 +195,7 @@ public class LunarContext {
                         player.sendStatusMessage(startNotification, false);
                     }
                 }
-                NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getName()));
+                NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getKey()));
             }
         }
         this.strength = MathHelper.clamp(this.strength + 0.01F, 0, 1.0F);
@@ -326,7 +326,7 @@ public class LunarContext {
     private void readJson(boolean isClient, File configFile) {
         try {
             String name = configFile.getName().replace(".json", "").toLowerCase();
-            LunarEvent decodedValue = LunarEvent.CODEC.decode(JsonOps.INSTANCE, new JsonParser().parse(new FileReader(configFile))).resultOrPartial(Main.LOGGER::error).get().getFirst().setName(name);
+            LunarEvent decodedValue = LunarEvent.CODEC.decode(JsonOps.INSTANCE, new JsonParser().parse(new FileReader(configFile))).resultOrPartial(Main.LOGGER::error).get().getFirst().setKey(name);
             if (isClient /*&& !BetterWeather.CLIENT_CONFIG.useServerClientSettings*/) {
                 if (this.lunarEvents.containsKey(name)) {
                     LunarEvent lunarEvent = this.lunarEvents.get(name);
@@ -387,7 +387,7 @@ public class LunarContext {
 
     @OnlyIn(Dist.CLIENT)
     public void setCurrentEvent(String currentEvent) {
-        if (currentEvent.equals(DEFAULT.getName())) {
+        if (currentEvent.equals(DEFAULT.getKey())) {
             this.currentEvent = DEFAULT;
         } else {
             this.currentEvent = this.lunarEvents.get(currentEvent);
@@ -415,6 +415,18 @@ public class LunarContext {
             this.dayLength = dayLength;
             this.yearLength = yearLength;
             this.minDaysBetweenLunarEvents = minDaysBetweenLunarEvents;
+        }
+
+        public long getDayLength() {
+            return dayLength;
+        }
+
+        public long getYearLength() {
+            return yearLength;
+        }
+
+        public long getMinDaysBetweenLunarEvents() {
+            return minDaysBetweenLunarEvents;
         }
     }
 }

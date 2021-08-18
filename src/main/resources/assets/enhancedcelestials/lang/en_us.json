@@ -1,11 +1,18 @@
 {
   "enhancedcelestials.commands.disabled": "Enhanced Celestials' lunar events are disabled for this world!",
   "enhancedcelestials.commands.lunarevent_missing": "\"%s\" is not a valid lunar event!",
+  "enhancedcelestials.lunarforecast.days_left": "(%s days until)",
+  "enhancedcelestials.lunarforecast.empty": "No upcoming lunar events.",
+  "enhancedcelestials.lunarforecast.header": "Current Lunar forecast:\n%s",
+  "enhancedcelestials.name.blood_moon": "Blood Moon",
+  "enhancedcelestials.name.blue_moon": "Blue Moon",
+  "enhancedcelestials.name.harvest_moon": "Harvest Moon",
+  "enhancedcelestials.name.moon": "Moon",
   "enhancedcelestials.notification.blood_moon.rise": "The \"Blood Moon\" rises...",
   "enhancedcelestials.notification.blood_moon.set": "The \"Blood Moon\" sets...",
-  "enhancedcelestials.notification.harvest_moon.rise": "The \"Harvest Moon\" rises...",
-  "enhancedcelestials.notification.harvest_moon.set": "The \"Harvest Moon\" sets...",
   "enhancedcelestials.notification.blue_moon.rise": "The \"Blue Moon\" rises...",
   "enhancedcelestials.notification.blue_moon.set": "The \"Blue Moon\" sets...",
+  "enhancedcelestials.notification.harvest_moon.rise": "The \"Harvest Moon\" rises...",
+  "enhancedcelestials.notification.harvest_moon.set": "The \"Harvest Moon\" sets...",
   "enhancedcelestials.sleep.fail": "You may not rest now because the current lunar event prevents it."
 }

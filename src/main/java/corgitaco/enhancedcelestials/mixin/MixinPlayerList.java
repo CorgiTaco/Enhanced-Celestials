@@ -21,7 +21,7 @@ public abstract class MixinPlayerList {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
         if (lunarContext != null) {
             NetworkHandler.sendToPlayer(playerIn, new LunarContextConstructionPacket(lunarContext));
-            NetworkHandler.sendToPlayer(playerIn, new LunarEventChangedPacket(lunarContext.getCurrentEvent().getName()));
+            NetworkHandler.sendToPlayer(playerIn, new LunarEventChangedPacket(lunarContext.getCurrentEvent().getKey()));
         }
     }
 }

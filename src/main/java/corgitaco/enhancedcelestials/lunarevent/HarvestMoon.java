@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
@@ -31,10 +31,8 @@ public class HarvestMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
-        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("startNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
-            return clientSettings.startNotification();
-        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
-            return clientSettings.endNotification();
+        }), LunarTextComponents.CODEC.fieldOf("textComponents").forGetter((blueMoon) -> {
+            return blueMoon.getTextComponents();
         }), Codec.BOOL.fieldOf("blockSleeping").forGetter((clientSettings) -> {
             return clientSettings.blockSleeping();
         }), Codec.list(ResourceLocation.CODEC).fieldOf("enhancedCrops").forGetter((clientSettings) -> {
@@ -48,12 +46,12 @@ public class HarvestMoon extends LunarEvent {
     private final Collection<ResourceLocation> cropTags;
     private final double cropDropMultiplier;
 
-    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier) {
-        this(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping, cropTags, cropDropMultiplier, true);
+    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents lunarTextComponents, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier) {
+        this(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, lunarTextComponents, blockSleeping, cropTags, cropDropMultiplier, true);
     }
 
-    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier, boolean serializeCrops) {
-        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping);
+    public HarvestMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents lunarTextComponents, boolean blockSleeping, Collection<ResourceLocation> cropTags, double cropDropMultiplier, boolean serializeCrops) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, lunarTextComponents, blockSleeping);
         this.cropTags = cropTags;
         this.cropDropMultiplier = cropDropMultiplier;
 

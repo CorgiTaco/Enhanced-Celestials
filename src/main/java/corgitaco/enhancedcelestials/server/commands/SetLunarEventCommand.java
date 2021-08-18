@@ -38,7 +38,7 @@ public class SetLunarEventCommand {
             return 0;
         }
 
-        long dayLength = 24000L;
+        long dayLength = lunarContext.getLunarTimeSettings().getDayLength();
         long currentDay = (world.getDayTime() / dayLength);
 
         if (lunarContext.getLunarEvents().containsKey(lunarEventKey)) {

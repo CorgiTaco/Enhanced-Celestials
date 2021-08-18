@@ -3,8 +3,8 @@ package corgitaco.enhancedcelestials.lunarevent;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.potion.EffectInstance;
@@ -26,10 +26,8 @@ public class BlueMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
-        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("startNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
-            return clientSettings.startNotification();
-        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
-            return clientSettings.endNotification();
+        }), LunarTextComponents.CODEC.fieldOf("textComponents").forGetter((blueMoon) -> {
+            return blueMoon.getTextComponents();
         }), Codec.BOOL.fieldOf("blockSleeping").forGetter((clientSettings) -> {
             return clientSettings.blockSleeping();
         }), Codec.INT.fieldOf("luckStrength").forGetter((blueMoon -> {
@@ -38,8 +36,8 @@ public class BlueMoon extends LunarEvent {
     });
     private final int luckStrength;
 
-    public BlueMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, int luckStrength) {
-        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping);
+    public BlueMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents lunarTextComponents, boolean blockSleeping, int luckStrength) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, lunarTextComponents, blockSleeping);
         this.luckStrength = MathHelper.clamp(luckStrength - 1, 0, 255);
     }
 

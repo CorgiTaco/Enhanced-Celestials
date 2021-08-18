@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarMobSpawnInfo;
+import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import net.minecraft.entity.EntityClassification;
 
@@ -24,10 +24,8 @@ public class BloodMoon extends LunarEvent {
             return clientSettings.getChance();
         }), Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((clientSettings) -> {
             return new ArrayList<>(clientSettings.getValidMoonPhases());
-        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("startNotification", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
-            return clientSettings.startNotification();
-        }), CustomTranslationTextComponent.CODEC.optionalFieldOf("endNotificationLangKey", CustomTranslationTextComponent.DEFAULT).forGetter((clientSettings) -> {
-            return clientSettings.endNotification();
+        }), LunarTextComponents.CODEC.fieldOf("textComponents").forGetter((blueMoon) -> {
+            return blueMoon.getTextComponents();
         }), Codec.BOOL.fieldOf("blockSleeping").forGetter((clientSettings) -> {
             return clientSettings.blockSleeping();
         }), Codec.unboundedMap(EntityClassification.CODEC, Codec.DOUBLE).fieldOf("spawnCategoryMultiplier").forGetter((clientSettings) -> {
@@ -39,8 +37,8 @@ public class BloodMoon extends LunarEvent {
     private final Object2DoubleArrayMap<EntityClassification> spawnCategoryMultiplier;
     private final LunarMobSpawnInfo lunarMobSpawnInfo;
 
-    public BloodMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, CustomTranslationTextComponent startNotificationLangKey, CustomTranslationTextComponent endNotificationLangKey, boolean blockSleeping, Map<EntityClassification, Double> spawnCategoryMultiplier, LunarMobSpawnInfo lunarMobSpawnInfo) {
-        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, startNotificationLangKey, endNotificationLangKey, blockSleeping);
+    public BloodMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents lunarTextComponents, boolean blockSleeping, Map<EntityClassification, Double> spawnCategoryMultiplier, LunarMobSpawnInfo lunarMobSpawnInfo) {
+        super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, lunarTextComponents, blockSleeping);
         this.spawnCategoryMultiplier = new Object2DoubleArrayMap<>(spawnCategoryMultiplier);
         this.lunarMobSpawnInfo = lunarMobSpawnInfo;
     }
