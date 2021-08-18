@@ -18,7 +18,8 @@
     "access.MobSpawnInfoAccess",
     "access.RegistryAccess",
     "access.StyleAccess",
-    "access.WorldEntitySpawnerAccess"
+    "access.WorldEntitySpawnerAccess",
+    "server.MixinCommands"
   ],
   "client": [
     "client.MixinClientPlayer",

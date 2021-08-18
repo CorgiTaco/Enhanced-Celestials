@@ -1,14 +1,11 @@
 {
-  "enhancedcelestials.commands.failed": "Could not set the lunar event: %s",
-  "enhancedcelestials.commands.failed.requiresnight": "Set the time to dusk or night (the value of daytime between 12000 and 24000) so as to use this command. The current time is %s",
-  "enhancedcelestials.commands.success.blood_moon": "Set the lunar event to \"Blood Moon\"",
-  "enhancedcelestials.commands.success.default": "Set the lunar event to \"Default\"",
-  "enhancedcelestials.commands.success.harvest_moon": "Set the lunar event to \"Harvest Moon\"",
+  "enhancedcelestials.commands.disabled": "Enhanced Celestials' lunar events are disabled for this world!",
+  "enhancedcelestials.commands.lunarevent_missing": "%s is not a valid lunar event!",
   "enhancedcelestials.notification.blood_moon.rise": "The \"Blood Moon\" rises...",
   "enhancedcelestials.notification.blood_moon.set": "The \"Blood Moon\" sets...",
   "enhancedcelestials.notification.harvest_moon.rise": "The \"Harvest Moon\" rises...",
   "enhancedcelestials.notification.harvest_moon.set": "The \"Harvest Moon\" sets...",
   "enhancedcelestials.notification.blue_moon.rise": "The \"Blue Moon\" rises...",
   "enhancedcelestials.notification.blue_moon.set": "The \"Blue Moon\" sets...",
-  "enhancedcelestials.sleep.fail.blood_moon": "You may not rest now; the current lunar event is \"Blood Moon\""
+  "enhancedcelestials.sleep.fail": "You may not rest now because the current lunar event prevents it."
 }

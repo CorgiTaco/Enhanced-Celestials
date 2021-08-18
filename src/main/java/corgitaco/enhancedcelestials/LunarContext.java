@@ -164,16 +164,17 @@ public class LunarContext {
             }
 
             if (this.currentEvent != lastEvent) {
-                TranslationTextComponent startNotification = this.currentEvent.startNotification();
                 TranslationTextComponent endNotification = lastEvent.endNotification();
-                if (startNotification != null) {
-                    for (ServerPlayerEntity player : players) {
-                        player.sendStatusMessage(startNotification, false);
-                    }
-                }
                 if (endNotification != null) {
                     for (ServerPlayerEntity player : players) {
                         player.sendStatusMessage(endNotification, false);
+                    }
+                }
+
+                TranslationTextComponent startNotification = this.currentEvent.startNotification();
+                if (startNotification != null) {
+                    for (ServerPlayerEntity player : players) {
+                        player.sendStatusMessage(startNotification, false);
                     }
                 }
                 NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getName()));

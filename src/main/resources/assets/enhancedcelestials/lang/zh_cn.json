@@ -1,12 +1,7 @@
 {
-  "enhancedcelestials.commands.failed": "无法设置月相: %s",
-  "enhancedcelestials.commands.failed.requiresnight": "需要将时间设置为黄昏或夜晚 (daytime 的值在 12000 至 24000 之间) 以使用此命令. 当前时间为 %s",
-  "enhancedcelestials.commands.success.blood_moon": "月相已设置为 \"血月\"",
-  "enhancedcelestials.commands.success.default": "月相已设置为 \"默认\"",
-  "enhancedcelestials.commands.success.harvest_moon": "月相已设置为 \"丰收之月\"",
   "enhancedcelestials.notification.blood_moon.rise": "注意: \"血月\" 正在升起...",
   "enhancedcelestials.notification.blood_moon.set": "注意: \"血月\" 正在落下...",
   "enhancedcelestials.notification.harvest_moon.rise": "注意: \"丰收之月\" 正在升起...",
   "enhancedcelestials.notification.harvest_moon.set": "注意: \"丰收之月\" 正在落下...",
-  "enhancedcelestials.sleep.fail.blood_moon": "你现在不能休息, 当前月相为 \"血月\""
+  "enhancedcelestials.sleep.fail": "你现在不能休息, 当前月相为 \"血月\""
 }

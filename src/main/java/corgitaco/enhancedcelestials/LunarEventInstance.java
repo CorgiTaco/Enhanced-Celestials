@@ -45,6 +45,10 @@ public class LunarEventInstance {
         return this.scheduledDay - currentDay <= -1;
     }
 
+    public boolean active(long currentDay) {
+        return this.scheduledDay - currentDay == 0;
+    }
+
     public void setScheduledDay(int scheduledDay) {
         this.scheduledDay = scheduledDay;
     }
