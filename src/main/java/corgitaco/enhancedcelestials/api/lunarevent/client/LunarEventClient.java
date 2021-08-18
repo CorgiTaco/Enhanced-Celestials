@@ -10,7 +10,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
 public abstract class LunarEventClient<T extends LunarEventClientSettings> implements SkyRenderable {
 
     private final ColorSettings colorSettings;
