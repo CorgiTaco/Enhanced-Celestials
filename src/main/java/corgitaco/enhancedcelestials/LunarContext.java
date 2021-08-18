@@ -71,7 +71,7 @@ public class LunarContext {
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
         this.lunarTimeSettings = readOrCreateConfigJson(this.lunarConfigPath.resolve(CONFIG_NAME).toFile());
         this.dayLength = lunarTimeSettings.dayLength;
-        this.yearLengthInDays = lunarTimeSettings.dayLength;
+        this.yearLengthInDays = lunarTimeSettings.yearLength;
         this.minDaysBetweenEvents = lunarTimeSettings.minDaysBetweenLunarEvents;
         handleEventConfigs(false);
         this.scrambledKeys.addAll(this.lunarEvents.keySet());
@@ -97,7 +97,7 @@ public class LunarContext {
         this.lunarForecast = lunarForecast;
         this.lunarTimeSettings = lunarTimeSettings;
         this.dayLength = lunarTimeSettings.dayLength;
-        this.yearLengthInDays = lunarTimeSettings.dayLength;
+        this.yearLengthInDays = lunarTimeSettings.yearLength;
         this.minDaysBetweenEvents = lunarTimeSettings.minDaysBetweenLunarEvents;
         if (serializeClientOnlyConfigs) {
             this.handleEventConfigs(true);
@@ -110,6 +110,8 @@ public class LunarContext {
         if (lunarEventSavedData.getForecast() == null) {
             lunarEventSavedData.setForecast(computeLunarForecast(world, new LunarForecast(new ArrayList<>(), world.getDayTime())));
         }
+        lunarEventSavedData.getForecast().getForecast().removeIf(lunarEventInstance -> !this.lunarEvents.containsKey(lunarEventInstance.getLunarEventKey()));
+        lunarEventSavedData.setForecast(lunarEventSavedData.getForecast());
         return lunarEventSavedData;
     }
 
@@ -296,7 +298,7 @@ public class LunarContext {
             if (optionalKey.isPresent()) {
                 if (!tomlFile.exists() && !jsonFile.exists()) {
 //                    if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
-                        createJsonEventConfig(event, key);
+                    createJsonEventConfig(event, key);
 //                    } else {
 //                        createTomlEventConfig(event, key);
 //                    }
