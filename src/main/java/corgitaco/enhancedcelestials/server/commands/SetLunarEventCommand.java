@@ -30,31 +30,30 @@ public class SetLunarEventCommand {
     }
 
     public static int betterWeatherSetSeason(CommandSource source, String lunarEventKey) {
-        if (lunarEventKey.equals(EC_NOT_ENABLED)) {
+        ServerWorld world = source.getWorld();
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+
+        if (lunarEventKey.equals(EC_NOT_ENABLED) || lunarContext == null) {
             source.sendErrorMessage(new TranslationTextComponent("enhancedcelestials.commands.disabled"));
             return 0;
         }
-        long dayLength = 24000L;
 
-        ServerWorld world = source.getWorld();
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+        long dayLength = 24000L;
         long currentDay = (world.getDayTime() / dayLength);
 
-        if (lunarContext != null) {
-            if (lunarContext.getLunarEvents().containsKey(lunarEventKey)) {
-                if (!world.isNightTime()) {
-                    world.setDayTime((currentDay * dayLength) + 13000L);
-                }
-                LunarEventInstance commandInstance = new LunarEventInstance(lunarEventKey, currentDay);
-                List<LunarEventInstance> forecast = lunarContext.getLunarForecast().getForecast();
-                if (forecast.get(0).active(currentDay)) {
-                    forecast.remove(0);
-                }
-                forecast.add(0, commandInstance);
-            } else {
-                source.sendErrorMessage(new TranslationTextComponent("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
-                return 0;
+        if (lunarContext.getLunarEvents().containsKey(lunarEventKey)) {
+            if (!world.isNightTime()) {
+                world.setDayTime((currentDay * dayLength) + 13000L);
             }
+            LunarEventInstance commandInstance = new LunarEventInstance(lunarEventKey, currentDay);
+            List<LunarEventInstance> forecast = lunarContext.getLunarForecast().getForecast();
+            if (forecast.get(0).active(currentDay)) {
+                forecast.remove(0);
+            }
+            forecast.add(0, commandInstance);
+        } else {
+            source.sendErrorMessage(new TranslationTextComponent("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
+            return 0;
         }
         return 1;
     }
