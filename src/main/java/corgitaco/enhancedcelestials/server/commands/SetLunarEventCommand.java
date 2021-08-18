@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.LunarEventInstance;
+import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -51,6 +52,8 @@ public class SetLunarEventCommand {
                 forecast.remove(0);
             }
             forecast.add(0, commandInstance);
+
+            LunarEventSavedData.get(world).setForecast(lunarContext.getLunarForecast());
         } else {
             source.sendErrorMessage(new TranslationTextComponent("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
             return 0;

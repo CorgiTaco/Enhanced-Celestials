@@ -7,12 +7,14 @@ import corgitaco.enhancedcelestials.mixin.access.ChunkAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobSpawnInfoAccess;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.*;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
@@ -73,6 +75,18 @@ public class MixinWorldEntitySpawner {
                     fakeBiome.withGenerationSettings(BiomeGenerationSettings.DEFAULT_SETTINGS);
                     cir.setReturnValue(fakeBiome.build());
                 }
+            }
+        }
+    }
+
+    @Inject(method = "getRandomHeight", at = @At("RETURN"), cancellable = true)
+    private static void forceSurface(World worldIn, Chunk chunk, CallbackInfoReturnable<BlockPos> cir) {
+        BlockPos returnValue = cir.getReturnValue();
+        PlayerEntity closestPlayer = worldIn.getClosestPlayer(returnValue.getX(), returnValue.getY(), returnValue.getZ(), -1.0, false);
+        if (closestPlayer != null) {
+            BlockPos closestPlayerPosition = closestPlayer.getPosition();
+            if (closestPlayerPosition.getY() > worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, closestPlayerPosition.getX(), closestPlayerPosition.getZ())) {
+                cir.setReturnValue(new BlockPos(returnValue.getX(), worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, returnValue.getX(), returnValue.getZ()) + 1, returnValue.getZ()));
             }
         }
     }
