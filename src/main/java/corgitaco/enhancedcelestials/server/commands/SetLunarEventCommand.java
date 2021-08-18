@@ -25,11 +25,11 @@ public class SetLunarEventCommand {
                         .suggests((ctx, sb) -> {
                             LunarContext weatherEventContext = ((EnhancedCelestialsWorldData) ctx.getSource().getWorld()).getLunarContext();
                             return ISuggestionProvider.suggest(weatherEventContext != null ? weatherEventContext.getLunarEvents().keySet().stream() : Arrays.stream(new String[]{EC_NOT_ENABLED}), sb);
-                        }).executes(cs -> betterWeatherSetSeason(cs.getSource(), cs.getArgument("lunarEvent", String.class)))
+                        }).executes(cs -> setLunarEvent(cs.getSource(), cs.getArgument("lunarEvent", String.class)))
         );
     }
 
-    public static int betterWeatherSetSeason(CommandSource source, String lunarEventKey) {
+    public static int setLunarEvent(CommandSource source, String lunarEventKey) {
         ServerWorld world = source.getWorld();
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
