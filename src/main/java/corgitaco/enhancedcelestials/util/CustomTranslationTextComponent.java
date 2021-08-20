@@ -2,14 +2,14 @@ package corgitaco.enhancedcelestials.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CustomTranslationTextComponent extends TranslationTextComponent {
+public class CustomTranslationTextComponent extends TranslatableComponent {
 
     public static final CustomTranslationTextComponent DEFAULT = new CustomTranslationTextComponent("", Style.EMPTY);
 

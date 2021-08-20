@@ -14,15 +14,15 @@ import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -65,8 +65,8 @@ public class LunarContext {
     private LunarEvent lastEvent;
     private float strength;
 
-    public LunarContext(ServerWorld world) {
-        this.worldID = world.getDimensionKey().getLocation();
+    public LunarContext(ServerLevel world) {
+        this.worldID = world.dimension().location();
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
         this.lunarTimeSettings = readOrCreateConfigJson(this.lunarConfigPath.resolve(CONFIG_NAME).toFile());
@@ -78,7 +78,7 @@ public class LunarContext {
         this.lunarForecast = getAndComputeLunarForecast(world).getForecast();
         assert lunarForecast != null;
         LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
-        this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / this.dayLength)) <= 0 && world.isNightTime() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
+        this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / this.dayLength)) <= 0 && world.isNight() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
     }
 
     // Packet Codec Constructor
@@ -105,7 +105,7 @@ public class LunarContext {
         this.lunarEvents.forEach((key, event) -> event.setKey(key));
     }
 
-    public LunarEventSavedData getAndComputeLunarForecast(ServerWorld world) {
+    public LunarEventSavedData getAndComputeLunarForecast(ServerLevel world) {
         LunarEventSavedData lunarEventSavedData = LunarEventSavedData.get(world);
         if (lunarEventSavedData.getForecast() == null) {
             lunarEventSavedData.setForecast(computeLunarForecast(world, new LunarForecast(new ArrayList<>(), world.getDayTime())));
@@ -115,11 +115,11 @@ public class LunarContext {
         return lunarEventSavedData;
     }
 
-    public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast) {
+    public LunarForecast computeLunarForecast(ServerLevel world, LunarForecast lunarForecast) {
         return computeLunarForecast(world, lunarForecast, 0L);
     }
 
-    public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast, long seedModifier) {
+    public LunarForecast computeLunarForecast(ServerLevel world, LunarForecast lunarForecast, long seedModifier) {
         long dayTime = world.getDayTime();
         long lastCheckedTime = lunarForecast.getLastCheckedGameTime();
 
@@ -151,11 +151,11 @@ public class LunarContext {
 
         for (; day <= currentDay + this.yearLengthInDays; day++) {
             dayTime += this.dayLength;
-            Random random = new Random(world.getSeed() + world.getDimensionKey().getLocation().hashCode() + day + seedModifier);
+            Random random = new Random(world.getSeed() + world.dimension().location().hashCode() + day + seedModifier);
             Collections.shuffle(scrambledKeys, random);
             for (String key : scrambledKeys) {
                 LunarEvent value = this.lunarEvents.get(key);
-                if ((day - eventByLastTime.getOrDefault(value, currentDay)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.getDimensionType().getMoonPhase(dayTime - 1))) {
+                if ((day - eventByLastTime.getOrDefault(value, currentDay)) > value.getMinNumberOfNightsBetween() && (day - lastDay) > this.minDaysBetweenEvents && value.getChance() > random.nextDouble() && value.getValidMoonPhases().contains(world.dimensionType().moonPhase(dayTime - 1))) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(key, day));
                     eventByLastTime.put(value, day);
@@ -168,43 +168,43 @@ public class LunarContext {
     }
 
 
-    public void tick(World world) {
+    public void tick(Level world) {
         LunarEvent lastEvent = this.currentEvent;
         long currentDay = (world.getDayTime() / this.dayLength);
-        if (!world.isRemote) {
-            List<ServerPlayerEntity> players = ((ServerWorld) world).getPlayers();
+        if (!world.isClientSide) {
+            List<ServerPlayer> players = ((ServerLevel) world).players();
             updateForecast(world, currentDay, players);
             LunarEventInstance nextEvent = this.getLunarForecast().getForecast().get(0);
             if (!this.getLunarForecast().getForecast().isEmpty()) {
-                this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNightTime() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
+                this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNight() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
             }
 
             if (this.currentEvent != lastEvent) {
                 this.lastEvent = lastEvent;
                 this.strength = 0;
-                TranslationTextComponent endNotification = lastEvent.endNotification();
+                TranslatableComponent endNotification = lastEvent.endNotification();
                 if (endNotification != null) {
-                    for (ServerPlayerEntity player : players) {
-                        player.sendStatusMessage(endNotification, false);
+                    for (ServerPlayer player : players) {
+                        player.displayClientMessage(endNotification, false);
                     }
                 }
 
-                TranslationTextComponent startNotification = this.currentEvent.startNotification();
+                TranslatableComponent startNotification = this.currentEvent.startNotification();
                 if (startNotification != null) {
-                    for (ServerPlayerEntity player : players) {
-                        player.sendStatusMessage(startNotification, false);
+                    for (ServerPlayer player : players) {
+                        player.displayClientMessage(startNotification, false);
                     }
                 }
                 NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getKey()));
             }
         }
-        this.strength = MathHelper.clamp(this.strength + 0.01F, 0, 1.0F);
+        this.strength = Mth.clamp(this.strength + 0.01F, 0, 1.0F);
     }
 
-    private void updateForecast(World world, long currentDay, List<ServerPlayerEntity> players) {
+    private void updateForecast(Level world, long currentDay, List<ServerPlayer> players) {
         updateForecast(world, currentDay);
         long lastCheckedGameTime = this.lunarForecast.getLastCheckedGameTime();
-        LunarForecast newLunarForecast = computeLunarForecast((ServerWorld) world, this.lunarForecast);
+        LunarForecast newLunarForecast = computeLunarForecast((ServerLevel) world, this.lunarForecast);
 
         long newLastCheckedGameTime = newLunarForecast.getLastCheckedGameTime();
         long newLastCheckedDay = newLastCheckedGameTime / this.dayLength;
@@ -215,11 +215,11 @@ public class LunarContext {
         }
     }
 
-    public void updateForecast(World world, long currentDay) {
+    public void updateForecast(Level world, long currentDay) {
         LunarEventInstance nextEvent = this.lunarForecast.getForecast().get(0);
         if (nextEvent.passed(currentDay)) {
             this.lunarForecast.getForecast().remove(0);
-            NetworkHandler.sendToAllPlayers(((ServerWorld) world).getPlayers(), new LunarForecastChangedPacket(this.lunarForecast));
+            NetworkHandler.sendToAllPlayers(((ServerLevel) world).players(), new LunarForecastChangedPacket(this.lunarForecast));
             LunarEventSavedData.get(world).setForecast(lunarForecast);
         }
     }
@@ -272,7 +272,7 @@ public class LunarContext {
         for (Map.Entry<ResourceLocation, LunarEvent> entry : EnhancedCelestialsRegistry.DEFAULT_EVENTS.entrySet()) {
             ResourceLocation location = entry.getKey();
             LunarEvent event = entry.getValue();
-            Optional<RegistryKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getOptionalKey(event.codec());
+            Optional<ResourceKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getResourceKey(event.codec());
 
             if (optionalKey.isPresent()) {
 //                if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
@@ -286,14 +286,14 @@ public class LunarContext {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void addSettingsIfMissing() {
         for (Map.Entry<String, LunarEvent> entry : this.lunarEvents.entrySet()) {
             LunarEvent event = entry.getValue();
             String key = entry.getKey();
             File tomlFile = this.lunarEventsConfigPath.resolve(key + ".toml").toFile();
             File jsonFile = this.lunarEventsConfigPath.resolve(key + ".json").toFile();
-            Optional<RegistryKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getOptionalKey(event.codec());
+            Optional<ResourceKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getResourceKey(event.codec());
 
             if (optionalKey.isPresent()) {
                 if (!tomlFile.exists() && !jsonFile.exists()) {
@@ -380,12 +380,12 @@ public class LunarContext {
         this.strength = strength;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setLastEvent(LunarEvent lastEvent) {
         this.lastEvent = lastEvent;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setCurrentEvent(String currentEvent) {
         if (currentEvent.equals(DEFAULT.getKey())) {
             this.currentEvent = DEFAULT;

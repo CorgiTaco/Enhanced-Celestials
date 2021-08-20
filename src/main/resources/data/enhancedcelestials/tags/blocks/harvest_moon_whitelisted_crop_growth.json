@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#minecraft:crops",
-    "#minecraft:bee_growables",
-    "#minecraft:saplings"
-  ]
-}

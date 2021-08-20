@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "enhancedcelestials",
+  "version": "${version}",
+  "name": "Enhanced Celestials",
+  "description": "A minecraft mod adding new Lunar Events!",
+  "authors": [
+    "Corgi Taco"
+  ],
+  "contributors": [
+    "LudoCrypt - Moon Ambience"
+  ],
+  "contact": {
+    "sources": "https://github.com/CorgiTaco/Enhanced-Celestials"
+  },
+  "license": "LGPLv3",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "corgitaco.enhancedcelestials.FabricEntryPoint"
+    ]
+  },
+  "mixins": [
+    "enhancedcelestials.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}

@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.util;
 
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.phys.Vec3;
 
 public class ColorUtil {
     private static final long BIT_MASK = 0xFF; // 255
@@ -20,8 +20,8 @@ public class ColorUtil {
         );
     }
 
-    public static int[] transformFloatColor(Vector3d floatColor) {
-        return new int[]{255, (int) (floatColor.getX() * 255), (int) (floatColor.getY() * 255), (int) (floatColor.getZ() * 255)};
+    public static int[] transformFloatColor(Vec3 floatColor) {
+        return new int[]{255, (int) (floatColor.x() * 255), (int) (floatColor.y() * 255), (int) (floatColor.z() * 255)};
     }
 
     public static Vector3f glColor(int[] packedColor) {

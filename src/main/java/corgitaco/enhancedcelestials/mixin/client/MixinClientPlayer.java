@@ -1,13 +1,13 @@
 package corgitaco.enhancedcelestials.mixin.client;
 
 import corgitaco.enhancedcelestials.client.LunarSoundHandler;
+import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.IAmbientSoundHandler;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.client.util.ClientRecipeBook;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.stats.StatisticsManager;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.AmbientSoundHandler;
+import net.minecraft.stats.StatsCounter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,13 +17,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(ClientPlayerEntity.class)
+@Mixin(LocalPlayer.class)
 public class MixinClientPlayer {
 
-    @Shadow @Final private List<IAmbientSoundHandler> ambientSoundHandlers;
+    @Shadow @Final private List<AmbientSoundHandler> ambientSoundHandlers;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void addLunarSoundHandler(Minecraft mc, ClientWorld world, ClientPlayNetHandler connection, StatisticsManager stats, ClientRecipeBook recipeBook, boolean clientSneakState, boolean clientSprintState, CallbackInfo ci) {
+    private void addLunarSoundHandler(Minecraft mc, ClientLevel world, ClientPacketListener connection, StatsCounter stats, ClientRecipeBook recipeBook, boolean clientSneakState, boolean clientSprintState, CallbackInfo ci) {
         this.ambientSoundHandlers.add(new LunarSoundHandler(world));
     }
 }

@@ -9,9 +9,9 @@ import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.mixin.access.ColorAccess;
 import corgitaco.enhancedcelestials.mixin.access.StyleAccess;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Style;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -38,17 +38,17 @@ public class CodecUtil {
 
     public static final Codec<Style> STYLE_CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(Codec.STRING.optionalFieldOf("color", "").forGetter((style) -> {
-            return style.getColor() != null ? Integer.toHexString(style.getColor().getColor()) : Integer.toHexString(TextFormatting.WHITE.getColor());
+            return style.getColor() != null ? Integer.toHexString(style.getColor().getValue()) : Integer.toHexString(ChatFormatting.WHITE.getColor());
         }), Codec.BOOL.optionalFieldOf("bold", false).forGetter((style) -> {
-            return style.getBold();
+            return style.isBold();
         }), Codec.BOOL.optionalFieldOf("italic", false).forGetter((style) -> {
-            return style.getItalic();
+            return style.isItalic();
         }), Codec.BOOL.optionalFieldOf("underlined", false).forGetter((style) -> {
-            return style.getUnderlined();
+            return style.isUnderlined();
         }), Codec.BOOL.optionalFieldOf("strikethrough", false).forGetter((style) -> {
-            return style.getStrikethrough();
+            return style.isStrikethrough();
         }), Codec.BOOL.optionalFieldOf("obfuscated", false).forGetter((style) -> {
-            return style.getObfuscated();
+            return style.isObfuscated();
         }), CLICK_EVENT_CODEC.optionalFieldOf("clickEvent").forGetter((style) -> {
             return Optional.of(style.getClickEvent());
         } )).apply(builder, (color, bold, italic, underlined, strikethrough, obfuscated, clickEvent) -> StyleAccess.create(ColorAccess.create(ColorSettings.tryParseColor(color)), bold, italic, underlined, strikethrough, obfuscated, clickEvent.orElse(null), null, null, null));

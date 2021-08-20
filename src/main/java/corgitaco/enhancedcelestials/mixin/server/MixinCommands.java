@@ -6,8 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.server.commands.LunarForecastCommand;
 import corgitaco.enhancedcelestials.server.commands.SetLunarEventCommand;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,16 +20,16 @@ public abstract class MixinCommands {
 
     @Shadow
     @Final
-    private CommandDispatcher<CommandSource> dispatcher;
+    private CommandDispatcher<CommandSourceStack> dispatcher;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void addEnhancedCelestialCommands(Commands.EnvironmentType envType, CallbackInfo ci) {
-        LiteralArgumentBuilder<CommandSource> requires = Commands.literal(Main.MOD_ID).requires(commandSource -> commandSource.hasPermissionLevel(3));
+    private void addEnhancedCelestialCommands(Commands.CommandSelection envType, CallbackInfo ci) {
+        LiteralArgumentBuilder<CommandSourceStack> requires = Commands.literal(Main.MOD_ID).requires(commandSource -> commandSource.hasPermission(3));
         requires.then(SetLunarEventCommand.register(dispatcher));
         requires.then(LunarForecastCommand.register(dispatcher));
         dispatcher.register(requires);
 
-        LiteralArgumentBuilder<CommandSource> ecAlias = Commands.literal("ec").requires(commandSource -> commandSource.hasPermissionLevel(3));
+        LiteralArgumentBuilder<CommandSourceStack> ecAlias = Commands.literal("ec").requires(commandSource -> commandSource.hasPermission(3));
         ecAlias.then(SetLunarEventCommand.register(dispatcher));
         ecAlias.then(LunarForecastCommand.register(dispatcher));
         dispatcher.register(ecAlias);

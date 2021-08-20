@@ -1,9 +1,9 @@
 package corgitaco.enhancedcelestials.api.client;
 
+import com.mojang.math.Vector3f;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.util.ColorUtil;
-import net.minecraft.util.math.vector.Vector3f;
 
 public class ColorSettings {
 

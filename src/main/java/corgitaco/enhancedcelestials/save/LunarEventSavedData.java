@@ -2,33 +2,33 @@ package corgitaco.enhancedcelestials.save;
 
 import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.Main;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import javax.annotation.Nullable;
 
-public class LunarEventSavedData extends WorldSavedData {
+public class LunarEventSavedData extends SavedData {
     public static final String DATA_NAME = new ResourceLocation(Main.MOD_ID, "lunar_event_data").toString();
 
     private static LunarEventSavedData clientCache = new LunarEventSavedData();
-    private static ClientWorld worldCache = null;
+    private static ClientLevel worldCache = null;
 
-    public static LunarEventSavedData get(IWorld world) {
-        if (!(world instanceof ServerWorld)) {
+    public static LunarEventSavedData get(LevelAccessor world) {
+        if (!(world instanceof ServerLevel)) {
             if (worldCache != world) {
-                worldCache = (ClientWorld) world;
+                worldCache = (ClientLevel) world;
                 clientCache = new LunarEventSavedData();
             }
             return clientCache;
         }
-        DimensionSavedDataManager data = ((ServerWorld) world).getSavedData();
-        LunarEventSavedData weatherData = data.getOrCreate(LunarEventSavedData::new, DATA_NAME);
+        DimensionDataStorage data = ((ServerLevel) world).getDataStorage();
+        LunarEventSavedData weatherData = data.computeIfAbsent(LunarEventSavedData::new, DATA_NAME);
 
         if (weatherData == null) {
             weatherData = new LunarEventSavedData();
@@ -49,13 +49,13 @@ public class LunarEventSavedData extends WorldSavedData {
     }
 
     @Override
-    public void read(CompoundNBT nbt) {
-        forecast = LunarForecast.CODEC.decode(NBTDynamicOps.INSTANCE, nbt.get("forecast")).result().get().getFirst();
+    public void load(CompoundTag nbt) {
+        forecast = LunarForecast.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().get().getFirst();
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        compound.put("forecast", LunarForecast.CODEC.encodeStart(NBTDynamicOps.INSTANCE, forecast).result().get());
+    public CompoundTag save(CompoundTag compound) {
+        compound.put("forecast", LunarForecast.CODEC.encodeStart(NbtOps.INSTANCE, forecast).result().get());
         return compound;
     }
 
@@ -66,6 +66,6 @@ public class LunarEventSavedData extends WorldSavedData {
 
     public void setForecast(LunarForecast forecast) {
         this.forecast = forecast;
-        markDirty();
+        setDirty();
     }
 }

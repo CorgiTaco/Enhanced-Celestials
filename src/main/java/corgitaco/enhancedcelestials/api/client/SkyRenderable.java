@@ -1,8 +1,8 @@
 package corgitaco.enhancedcelestials.api.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public interface SkyRenderable {
 
-    void renderSky(MatrixStack matrixStackIn, float partialTicks);
+    void renderSky(PoseStack matrixStackIn, float partialTicks);
 }

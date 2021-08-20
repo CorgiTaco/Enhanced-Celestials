@@ -4,40 +4,91 @@ import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.network.packet.LunarContextConstructionPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class NetworkHandler {
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel SIMPLE_CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(Main.MOD_ID, "network"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+
+    private static final String PACKET_LOCATION = Main.MOD_ID;
+
+    private static final Map<Class<?>, BiConsumer<?, FriendlyByteBuf>> ENCODERS = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, ResourceLocation> PACKET_IDS = new ConcurrentHashMap<>();
 
     public static void init() {
-        SIMPLE_CHANNEL.registerMessage(0, LunarContextConstructionPacket.class, LunarContextConstructionPacket::writeToPacket, LunarContextConstructionPacket::readFromPacket, LunarContextConstructionPacket::handle);
-        SIMPLE_CHANNEL.registerMessage(1, LunarEventChangedPacket.class, LunarEventChangedPacket::writeToPacket, LunarEventChangedPacket::readFromPacket, LunarEventChangedPacket::handle);
-        SIMPLE_CHANNEL.registerMessage(2, LunarForecastChangedPacket.class, LunarForecastChangedPacket::writeToPacket, LunarForecastChangedPacket::readFromPacket, LunarForecastChangedPacket::handle);
+        registerMessage("forecastchanged", LunarForecastChangedPacket.class, LunarForecastChangedPacket::writeToPacket, LunarForecastChangedPacket::readFromPacket, (message, level) -> LunarForecastChangedPacket.handle(message));
+        registerMessage("eventchanged", LunarEventChangedPacket.class,  LunarEventChangedPacket::writeToPacket, LunarEventChangedPacket::readFromPacket, (message, level) -> LunarEventChangedPacket.handle(message));
+        registerMessage("contextconstruction", LunarContextConstructionPacket.class,  LunarContextConstructionPacket::writeToPacket, LunarContextConstructionPacket::readFromPacket, (message, level) -> LunarContextConstructionPacket.handle(message));
     }
 
-    public static void sendToPlayer(ServerPlayerEntity playerEntity, Object objectToSend) {
-        SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
-    }
+    private static <T> void registerMessage(String id, Class<T> clazz,
+                                            BiConsumer<T, FriendlyByteBuf> encode,
+                                            Function<FriendlyByteBuf, T> decode,
+                                            BiConsumer<T, Level> handler) {
+        ENCODERS.put(clazz, encode);
+        PACKET_IDS.put(clazz, new ResourceLocation(PACKET_LOCATION, id));
 
-    public static void sendToAllPlayers(List<ServerPlayerEntity> playerEntities, Object objectToSend) {
-        for (ServerPlayerEntity playerEntity : playerEntities) {
-            SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            ClientProxy.registerClientReceiver(id, decode, handler);
         }
     }
 
-    public static void sendToServer(Object objectToSend) {
-        SIMPLE_CHANNEL.sendToServer(objectToSend);
+    public static <MSG> void sendToPlayer(ServerPlayer player, MSG packet) {
+        ResourceLocation packetId = PACKET_IDS.get(packet.getClass());
+        @SuppressWarnings("unchecked")
+        BiConsumer<MSG, FriendlyByteBuf> encoder = (BiConsumer<MSG, FriendlyByteBuf>) ENCODERS.get(packet.getClass());
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        encoder.accept(packet, buf);
+        ServerPlayNetworking.send(player, packetId, buf);
+    }
+
+    public static <MSG> void sendToAllPlayers(List<ServerPlayer> players, MSG packet) {
+        ResourceLocation packetId = PACKET_IDS.get(packet.getClass());
+        @SuppressWarnings("unchecked")
+        BiConsumer<MSG, FriendlyByteBuf> encoder = (BiConsumer<MSG, FriendlyByteBuf>) ENCODERS.get(packet.getClass());
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        encoder.accept(packet, buf);
+
+        players.forEach(player -> {
+            ServerPlayNetworking.send(player, packetId, buf);
+        });
+    }
+
+    public static class ClientProxy {
+
+        public static <T> void registerClientReceiver(String id, Function<FriendlyByteBuf, T> decode,
+                                                      BiConsumer<T, Level> handler) {
+            ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation(PACKET_LOCATION, id), (client, listener, buf, responseSender) -> {
+                buf.retain();
+                client.execute(() -> {
+                    T packet = decode.apply(buf);
+                    ClientLevel level = client.level;
+                    if (level != null) {
+                        try {
+                            handler.accept(packet, level);
+                        } catch (Throwable throwable) {
+                            Main.LOGGER.error("Packet failed: ", throwable);
+                            throw throwable;
+                        }
+                    }
+                    buf.release();
+                });
+            });
+        }
+
     }
 }

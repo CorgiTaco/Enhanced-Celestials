@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin.access;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface DimensionTypeAccess {
 
 
-    @Accessor("effects")
+    @Accessor("effectsLocation")
     ResourceLocation getEffectsServerSafe();
 }

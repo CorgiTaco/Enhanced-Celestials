@@ -5,32 +5,32 @@ import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.BiomeSoundHandler;
-import net.minecraft.client.audio.IAmbientSoundHandler;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.TickableSound;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.AmbientSoundHandler;
+import net.minecraft.client.resources.sounds.BiomeAmbientSoundsHandler;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.sounds.SoundEvent;
 
-public class LunarSoundHandler implements IAmbientSoundHandler {
+public class LunarSoundHandler implements AmbientSoundHandler {
 
-    private final ObjectOpenHashSet<BiomeSoundHandler.Sound> activeLunarSoundsMap = new ObjectOpenHashSet<>();
-    private final SoundHandler soundHandler;
-    private final ClientWorld world;
+    private final ObjectOpenHashSet<BiomeAmbientSoundsHandler.LoopSoundInstance> activeLunarSoundsMap = new ObjectOpenHashSet<>();
+    private final SoundManager soundHandler;
+    private final ClientLevel world;
     private LunarEvent lunarEvent;
 
-    public LunarSoundHandler(ClientWorld world) {
+    public LunarSoundHandler(ClientLevel world) {
         this.world = world;
-        this.soundHandler = Minecraft.getInstance().getSoundHandler();
+        this.soundHandler = Minecraft.getInstance().getSoundManager();
     }
 
     @Override
     public void tick() {
-        this.activeLunarSoundsMap.removeIf(TickableSound::isDonePlaying);
+        this.activeLunarSoundsMap.removeIf(AbstractTickableSoundInstance::isStopped);
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
         if (lunarContext == null) {
-            this.activeLunarSoundsMap.forEach(BiomeSoundHandler.Sound::fadeOutSound);
+            this.activeLunarSoundsMap.forEach(BiomeAmbientSoundsHandler.LoopSoundInstance::fadeOut);
             return;
         }
 
@@ -38,12 +38,12 @@ public class LunarSoundHandler implements IAmbientSoundHandler {
         SoundEvent soundTrack = currentEvent.getClient().getSoundTrack(); // Use client directly here.
         if (currentEvent != this.lunarEvent || this.activeLunarSoundsMap.isEmpty()) {
             this.lunarEvent = currentEvent;
-            this.activeLunarSoundsMap.forEach(BiomeSoundHandler.Sound::fadeOutSound);
+            this.activeLunarSoundsMap.forEach(BiomeAmbientSoundsHandler.LoopSoundInstance::fadeOut);
             if (soundTrack != null) {
-                BiomeSoundHandler.Sound sound = new BiomeSoundHandler.Sound(soundTrack);
+                BiomeAmbientSoundsHandler.LoopSoundInstance sound = new BiomeAmbientSoundsHandler.LoopSoundInstance(soundTrack);
                 this.activeLunarSoundsMap.add(sound);
                 this.soundHandler.play(sound);
-                sound.fadeInSound();
+                sound.fadeIn();
             }
         }
     }
