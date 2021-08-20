@@ -19,7 +19,7 @@ public class LunarContextConstructionPacket {
     public static void writeToPacket(LunarContextConstructionPacket packet, FriendlyByteBuf buf) {
         try {
             buf.writeWithCodec(LunarContext.PACKET_CODEC, packet.lunarContext);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Lunar Context packet could not be written to. This is really really bad...\n\n" + e.getMessage());
 
         }
@@ -28,7 +28,7 @@ public class LunarContextConstructionPacket {
     public static LunarContextConstructionPacket readFromPacket(FriendlyByteBuf buf) {
         try {
             return new LunarContextConstructionPacket(buf.readWithCodec(LunarContext.PACKET_CODEC));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Lunar Context packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
     }

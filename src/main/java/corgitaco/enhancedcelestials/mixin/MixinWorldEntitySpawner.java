@@ -7,6 +7,7 @@ import corgitaco.enhancedcelestials.mixin.access.ChunkAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobSpawnInfoAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
@@ -31,15 +32,15 @@ import java.util.List;
 public class MixinWorldEntitySpawner {
 
     @Inject(method = "mobsAt", at = @At("RETURN"), cancellable = true)
-    private static void useLunarSpawner(ServerLevel world, StructureFeatureManager structureManager, ChunkGenerator generator, MobCategory classification, BlockPos pos, Biome biome, CallbackInfoReturnable<List<MobSpawnSettings.SpawnerData>> cir) {
+    private static void useLunarSpawner(ServerLevel world, StructureFeatureManager structureManager, ChunkGenerator generator, MobCategory classification, BlockPos pos, Biome biome, CallbackInfoReturnable<WeightedRandomList<MobSpawnSettings.SpawnerData>> cir) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
         if (lunarContext != null) {
             LunarMobSpawnInfo lunarSpawner = lunarContext.getCurrentEvent().getLunarSpawner();
             if (lunarSpawner != null) {
                 MobSpawnSettings mobSpawnInfo = lunarSpawner.getSpawnInfo();
                 if (lunarSpawner.useBiomeSpawnSettings()) {
-                    ArrayList<MobSpawnSettings.SpawnerData> spawners = new ArrayList<>(mobSpawnInfo.getMobs(classification));
-                    spawners.addAll(cir.getReturnValue());
+                    WeightedRandomList<MobSpawnSettings.SpawnerData> spawners = WeightedRandomList.create(mobSpawnInfo.getMobs(classification).unwrap());
+                    spawners.unwrap().addAll(cir.getReturnValue().unwrap());
                     cir.setReturnValue(spawners);
                 } else {
                     cir.setReturnValue(mobSpawnInfo.getMobs(classification));

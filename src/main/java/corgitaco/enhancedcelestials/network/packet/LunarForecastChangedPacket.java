@@ -20,7 +20,7 @@ public class LunarForecastChangedPacket {
     public static void writeToPacket(LunarForecastChangedPacket packet, FriendlyByteBuf buf) {
         try {
             buf.writeWithCodec(LunarForecast.CODEC, packet.lunarForecast);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Lunar Forecast packet could not be written to. This is really really bad...\n\n" + e.getMessage());
 
         }
@@ -29,7 +29,7 @@ public class LunarForecastChangedPacket {
     public static LunarForecastChangedPacket readFromPacket(FriendlyByteBuf buf) {
         try {
             return new LunarForecastChangedPacket(buf.readWithCodec(LunarForecast.CODEC));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Lunar Forecast packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
     }

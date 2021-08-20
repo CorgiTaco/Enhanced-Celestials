@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
@@ -24,21 +25,21 @@ public abstract class MixinWorldRenderer {
     @Shadow @Final private static ResourceLocation MOON_LOCATION;
 
     @Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getMoonPhase()I"))
-    private void changeMoonColor(PoseStack matrixStackIn, float partialTicks, CallbackInfo ci) {
+    private void changeMoonColor(PoseStack poseStack, Matrix4f matrix4f, float partialTicks, Runnable runnable, CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
             Vector3f glColor = lunarContext.getCurrentEvent().getClientSettings().getColorSettings().getGLMoonColor();
-            RenderSystem.color4f(glColor.x(), glColor.y(), glColor.z(), 1.0F - this.level.getRainLevel(partialTicks));
+            RenderSystem.setShaderColor(glColor.x(), glColor.y(), glColor.z(), 1.0F - this.level.getRainLevel(partialTicks));
         }
     }
 
-    @Redirect(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bind(Lnet/minecraft/resources/ResourceLocation;)V", ordinal = 1))
-    private void bindCustomMoonTexture(TextureManager textureManager, ResourceLocation resource) {
+    @Redirect(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/resources/ResourceLocation;)V", ordinal = 1))
+    private void bindCustomMoonTexture(int i, ResourceLocation resourceLocation) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            textureManager.bind(lunarContext.getCurrentEvent().getClient().getMoonTextureLocation());
+            RenderSystem.setShaderTexture(i, lunarContext.getCurrentEvent().getClient().getMoonTextureLocation());
         } else {
-            textureManager.bind(MOON_LOCATION);
+            RenderSystem.setShaderTexture(i, MOON_LOCATION);
         }
     }
 

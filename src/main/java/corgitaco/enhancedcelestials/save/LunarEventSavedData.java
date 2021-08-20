@@ -12,12 +12,15 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
 
 public class LunarEventSavedData extends SavedData {
     public static final String DATA_NAME = new ResourceLocation(Main.MOD_ID, "lunar_event_data").toString();
 
     private static LunarEventSavedData clientCache = new LunarEventSavedData();
     private static ClientLevel worldCache = null;
+
 
     public static LunarEventSavedData get(LevelAccessor world) {
         if (!(world instanceof ServerLevel)) {
@@ -28,11 +31,10 @@ public class LunarEventSavedData extends SavedData {
             return clientCache;
         }
         DimensionDataStorage data = ((ServerLevel) world).getDataStorage();
-        LunarEventSavedData weatherData = data.computeIfAbsent(LunarEventSavedData::new, DATA_NAME);
-
+        LunarEventSavedData weatherData = data.computeIfAbsent(LunarEventSavedData::load, LunarEventSavedData::new, DATA_NAME);
         if (weatherData == null) {
             weatherData = new LunarEventSavedData();
-            data.set(weatherData);
+            data.set(DATA_NAME, weatherData);
         }
         return weatherData;
     }
@@ -40,17 +42,16 @@ public class LunarEventSavedData extends SavedData {
     @Nullable
     private LunarForecast forecast;
 
-    public LunarEventSavedData(String name) {
-        super(name);
+    public LunarEventSavedData(LunarForecast lunarForecast) {
+        this.forecast = lunarForecast;
     }
 
     public LunarEventSavedData() {
-        super(DATA_NAME);
+        this(null);
     }
 
-    @Override
-    public void load(CompoundTag nbt) {
-        forecast = LunarForecast.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().get().getFirst();
+    public static LunarEventSavedData load(CompoundTag nbt) {
+       return new LunarEventSavedData(LunarForecast.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().get().getFirst());
     }
 
     @Override
