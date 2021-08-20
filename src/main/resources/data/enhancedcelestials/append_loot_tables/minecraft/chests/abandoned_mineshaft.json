@@ -8,24 +8,18 @@
         {
           "name": "minecraft:diamond",
           "type": "minecraft:item",
-          "weight": 20,
+          "weight": 1,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 1.0,
-                "max": 3.0,
+                "min": 0.0,
+                "max": 1.0,
                 "type": "minecraft:uniform"
               }
             }
           ]
-        }
-      ]
-    },
-    {
-      "rolls": 0,
-      "bonus_rolls": 1,
-      "entries": [
+        },
         {
           "name": "minecraft:iron_ingot",
           "type": "minecraft:item",
@@ -34,8 +28,8 @@
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 1.0,
-                "max": 4.0,
+                "min": 0.0,
+                "max": 10.0,
                 "type": "minecraft:uniform"
               }
             }
