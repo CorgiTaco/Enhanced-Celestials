@@ -33,21 +33,20 @@ public abstract class MixinLootTableManager extends JsonReloadListener {
     }
 
     private void appendTable(IResourceManager resourceManager, ResourceLocation id, JsonElement element) {
-        try (IResource appendedTable = resourceManager.getResource(getAppendedPath(id))) {
-            InputStream inputstream = appendedTable.getInputStream();
+        for (String resourceNamespace : resourceManager.getResourceNamespaces()) {
+            try (IResource appendedTable = resourceManager.getResource(getAppendedPath(resourceNamespace, id))) {
+                InputStream inputstream = appendedTable.getInputStream();
+                Reader reader = new BufferedReader(new InputStreamReader(inputstream, StandardCharsets.UTF_8));
+                JsonElement appendedElement = JSONUtils.fromJson(((JsonReloadListenerAccess) this).getGson(), reader, JsonElement.class);
+                JsonArray pools = element.getAsJsonObject().getAsJsonArray("pools");
+                pools.addAll(appendedElement.getAsJsonObject().getAsJsonArray("pools"));
+            } catch (IOException e) {
 
-            Reader reader = new BufferedReader(new InputStreamReader(inputstream, StandardCharsets.UTF_8));
-            JsonElement appendedElement = JSONUtils.fromJson(((JsonReloadListenerAccess) this).getGson(), reader, JsonElement.class);
-
-            JsonArray pools = element.getAsJsonObject().getAsJsonArray("pools");
-
-            pools.addAll(appendedElement.getAsJsonObject().getAsJsonArray("pools"));
-        } catch (IOException e) {
-
+            }
         }
     }
 
-    private static ResourceLocation getAppendedPath(ResourceLocation rl) {
-        return new ResourceLocation(rl.getNamespace(), "appendedloottables/" + rl.getPath() + ".json");
+    private static ResourceLocation getAppendedPath(String s, ResourceLocation resourceLocation) {
+        return new ResourceLocation(s, "append_loot_tables/" + resourceLocation.toString().replace(":", "/") + ".json");
     }
 }
