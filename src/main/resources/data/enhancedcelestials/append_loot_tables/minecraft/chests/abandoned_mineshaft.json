@@ -3,7 +3,7 @@
   "pools": [
     {
       "rolls": 0,
-      "bonus_rolls": 2,
+      "bonus_rolls": 1,
       "entries": [
         {
           "name": "minecraft:diamond",
@@ -24,7 +24,7 @@
     },
     {
       "rolls": 0,
-      "bonus_rolls": 2,
+      "bonus_rolls": 1,
       "entries": [
         {
           "name": "minecraft:iron_ingot",
