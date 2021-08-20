@@ -6,6 +6,7 @@ import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarMobSpawnInfo;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.core.ECSounds;
+import corgitaco.enhancedcelestials.loot.ECNumberProviders;
 import corgitaco.enhancedcelestials.lunarevent.BloodMoon;
 import corgitaco.enhancedcelestials.lunarevent.BlueMoon;
 import corgitaco.enhancedcelestials.lunarevent.HarvestMoon;
@@ -44,6 +45,11 @@ public class Main {
     public void commonSetup(FMLCommonSetupEvent commonSetupEvent) {
         NetworkHandler.init();
         registerDefaults();
+        commonSetupEvent.enqueueWork(this::threadSafeCommonSetup);
+    }
+
+    public void threadSafeCommonSetup() {
+        ECNumberProviders.registerNumberProviders();
     }
 
     public static void registerDefaults() {
