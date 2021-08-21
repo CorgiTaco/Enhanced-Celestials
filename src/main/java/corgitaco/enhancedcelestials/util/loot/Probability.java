@@ -3,6 +3,7 @@ package corgitaco.enhancedcelestials.util.loot;
 import com.google.gson.*;
 import corgitaco.enhancedcelestials.loot.ECNumberProviders;
 import net.minecraft.loot.IRandomRange;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,18 +11,17 @@ import java.lang.reflect.Type;
 import java.util.Random;
 
 public class Probability implements IRandomRange {
-
     final float probability;
-    final int resultCount;
+    private final RandomValueRange randomValueRange;
 
-    public Probability(float probability, int resultCount) {
+    public Probability(float probability, RandomValueRange randomValueRange) {
         this.probability = probability;
-        this.resultCount = resultCount;
+        this.randomValueRange = randomValueRange;
     }
 
     @Override
     public int generateInt(Random rand) {
-        return rand.nextFloat() <= this.probability ? this.resultCount : 0;
+        return rand.nextFloat() <= this.probability ? this.randomValueRange.generateInt(rand) : 0;
     }
 
     @Override
@@ -33,15 +33,19 @@ public class Probability implements IRandomRange {
         public JsonElement serialize(Probability probabilityValue, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("probability", probabilityValue.probability);
-            jsonObject.addProperty("result_count", probabilityValue.resultCount);
+            jsonObject.addProperty("min", probabilityValue.randomValueRange.getMin());
+            jsonObject.addProperty("max", probabilityValue.randomValueRange.getMax());
             return jsonObject;
         }
 
         public Probability deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonobject = JSONUtils.getJsonObject(jsonElement, "value");
             float probability = JSONUtils.getFloat(jsonobject, "probability");
-            int resultCount = JSONUtils.getInt(jsonobject, "result_count");
-            return new Probability(probability, resultCount);
+            float min = JSONUtils.getFloat(jsonobject, "min");
+            float max = JSONUtils.getFloat(jsonobject, "max");
+            RandomValueRange randomValueRange = new RandomValueRange(min, max);
+
+            return new Probability(probability, randomValueRange);
         }
     }
 }

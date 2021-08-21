@@ -13,9 +13,10 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "probability": 0.3,
                 "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
+                "max": 4.0,
+                "type": "enhancedcelestials:probability"
               }
             }
           ]
@@ -34,9 +35,10 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "probability": 0.3,
                 "min": 1.0,
                 "max": 4.0,
-                "type": "minecraft:uniform"
+                "type": "enhancedcelestials:probability"
               }
             }
           ]
