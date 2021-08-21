@@ -36,16 +36,6 @@
           ]
         },
         {
-          "type": "minecraft:item",
-          "weight": 5,
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:book"
-        },
-        {
           "name": "minecraft:iron_axe",
           "type": "minecraft:item",
           "weight": 10,

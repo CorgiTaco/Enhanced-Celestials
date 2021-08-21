@@ -43,7 +43,7 @@
           ]
         },
         {
-          "name": "minecraft:iron_chestpiece",
+          "name": "minecraft:iron_chestplate",
           "type": "minecraft:item",
           "weight": 2,
           "functions": [
