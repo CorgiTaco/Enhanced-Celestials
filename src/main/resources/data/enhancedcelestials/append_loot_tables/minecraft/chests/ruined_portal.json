@@ -6,9 +6,9 @@
       "bonus_rolls": 1,
       "entries": [
         {
-          "name": "minecraft:diamond",
+          "name": "minecraft:obsidian",
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 5,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -36,28 +36,23 @@
           ]
         },
         {
+          "name": "minecraft:ancient_debris",
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 1,
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:book"
-        },
-        {
-          "name": "minecraft:diamond_pickaxe",
-          "type": "minecraft:item",
-          "weight": 5,
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
             }
           ]
         },
         {
           "type": "minecraft:empty",
-          "weight": 60
+          "weight": 75
         }
       ]
     }

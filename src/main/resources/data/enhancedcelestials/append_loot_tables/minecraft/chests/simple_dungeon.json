@@ -36,6 +36,28 @@
           ]
         },
         {
+          "name": "minecraft:diamond_sword",
+          "type": "minecraft:item",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.3,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 1.0,
+                "max": 14.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ]
+        },
+        {
           "type": "minecraft:item",
           "weight": 5,
           "functions": [
@@ -44,16 +66,6 @@
             }
           ],
           "name": "minecraft:book"
-        },
-        {
-          "name": "minecraft:diamond_pickaxe",
-          "type": "minecraft:item",
-          "weight": 5,
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ]
         },
         {
           "type": "minecraft:empty",

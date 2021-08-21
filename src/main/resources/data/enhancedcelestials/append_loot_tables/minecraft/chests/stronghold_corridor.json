@@ -13,7 +13,7 @@
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 2.0,
+                "min": 1.0,
                 "max": 5.0,
                 "type": "minecraft:uniform"
               }
@@ -44,16 +44,6 @@
             }
           ],
           "name": "minecraft:book"
-        },
-        {
-          "name": "minecraft:diamond_pickaxe",
-          "type": "minecraft:item",
-          "weight": 5,
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ]
         },
         {
           "type": "minecraft:empty",
