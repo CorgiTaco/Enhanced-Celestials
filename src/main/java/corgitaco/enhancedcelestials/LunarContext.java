@@ -275,11 +275,7 @@ public class LunarContext {
             Optional<RegistryKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getOptionalKey(event.codec());
 
             if (optionalKey.isPresent()) {
-//                if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
                 createJsonEventConfig(event, location.toString());
-//                } else {
-//                    createTomlEventConfig(event, location.toString());
-//                }
             } else {
                 throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
             }
@@ -297,11 +293,7 @@ public class LunarContext {
 
             if (optionalKey.isPresent()) {
                 if (!tomlFile.exists() && !jsonFile.exists()) {
-//                    if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
                     createJsonEventConfig(event, key);
-//                    } else {
-//                        createTomlEventConfig(event, key);
-//                    }
                 }
             } else {
                 throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
