@@ -1,0 +1,12 @@
+{
+  "enhancedcelestials.commands.failed": "Impossible de définir l'événement lunaire: %s",
+  "enhancedcelestials.commands.failed.requiresnight": "Réglez l'heure sur crépuscule ou nuit (la valeur de jour entre 12000 et 24000) afin d'utiliser cette commande. L'heure actuelle est %s",
+  "enhancedcelestials.commands.success.blood_moon": "Réglez l'événement lunaire sur \"Lune de Sang\"",
+  "enhancedcelestials.commands.success.default": "Réglez l'événement lunaire sur \"Par Défaut\"",
+  "enhancedcelestials.commands.success.harvest_moon": "Réglez l'événement lunaire sur \"Lune de Récolte\"",
+  "enhancedcelestials.notification.blood_moon.rise": "La \"Lune de Sang\" arrive...",
+  "enhancedcelestials.notification.blood_moon.set": "La \"Lune de Sang\" se couche...",
+  "enhancedcelestials.notification.harvest_moon.rise": "La \"Lune de Récolte\" arrive...",
+  "enhancedcelestials.notification.harvest_moon.set": "La \"Lune de Récolte\" se couche...",
+  "enhancedcelestials.sleep.fail.blood_moon": "Vous ne pouvez pas vous reposer maintenant ; l'événement lunaire actuel est la \"Lune de Sang\""
+}
