@@ -38,7 +38,7 @@ public class CodecUtil {
 
     public static final Codec<Style> STYLE_CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(Codec.STRING.optionalFieldOf("color", "").forGetter((style) -> {
-            return style.getColor() != null ? Integer.toHexString(style.getColor().getColor()) : Integer.toHexString(TextFormatting.WHITE.getColor());
+            return style.getColor() != null ? Integer.toHexString(((ColorAccess)(Object) style.getColor()).getColorRaw()) : Integer.toHexString(TextFormatting.WHITE.getColor());
         }), Codec.BOOL.optionalFieldOf("bold", false).forGetter((style) -> {
             return style.getBold();
         }), Codec.BOOL.optionalFieldOf("italic", false).forGetter((style) -> {

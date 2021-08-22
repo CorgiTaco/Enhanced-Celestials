@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.mixin.access;
 
 import net.minecraft.util.text.Color;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Color.class)
@@ -11,4 +12,7 @@ public interface ColorAccess {
     static Color create(int hex) {
         throw new Error("Mixin did not apply");
     }
+
+    @Accessor("color")
+    int getColorRaw();
 }
