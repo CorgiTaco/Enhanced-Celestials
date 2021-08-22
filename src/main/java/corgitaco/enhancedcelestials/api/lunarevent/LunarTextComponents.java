@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.api.lunarevent;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
@@ -22,9 +23,9 @@ public class LunarTextComponents {
     public static final Codec<LunarTextComponents> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(CustomTranslationTextComponent.CODEC.fieldOf("name").forGetter((textComponents) -> {
             return textComponents.name;
-        }), Notification.CODEC.optionalFieldOf("startNotification", Notification.DEFAULT).forGetter((clientSettings) -> {
+        }), Codec.either(CustomTranslationTextComponent.CODEC, Notification.CODEC).xmap(e -> e.map((textComponent) -> new Notification(textComponent, NotificationType.CHAT), notification -> notification), Either::right).optionalFieldOf("startNotification", Notification.DEFAULT).forGetter((clientSettings) -> {
             return clientSettings.riseNotification;
-        }), Notification.CODEC.optionalFieldOf("endNotification", Notification.DEFAULT).forGetter((clientSettings) -> {
+        }), Codec.either(CustomTranslationTextComponent.CODEC, Notification.CODEC).xmap(e -> e.map((textComponent) -> new Notification(textComponent, NotificationType.CHAT), notification -> notification), Either::right).optionalFieldOf("endNotification", Notification.DEFAULT).forGetter((clientSettings) -> {
             return clientSettings.setNotification;
         })).apply(builder, LunarTextComponents::new);
     });

@@ -325,8 +325,13 @@ public class LunarContext {
 
     private void readJson(boolean isClient, File configFile) {
         try {
-            String name = configFile.getName().replace(".json", "").toLowerCase();
+            String noTypeFileName = configFile.getName().replace(".json", "");
+            String name = noTypeFileName.toLowerCase();
             LunarEvent decodedValue = LunarEvent.CODEC.decode(JsonOps.INSTANCE, new JsonParser().parse(new FileReader(configFile))).resultOrPartial(Main.LOGGER::error).get().getFirst().setKey(name);
+
+            // We need to recreate the json each time to ensure we're taking into account any config fixing.
+            createJsonEventConfig(decodedValue, noTypeFileName);
+
             if (isClient /*&& !BetterWeather.CLIENT_CONFIG.useServerClientSettings*/) {
                 if (this.lunarEvents.containsKey(name)) {
                     LunarEvent lunarEvent = this.lunarEvents.get(name);
