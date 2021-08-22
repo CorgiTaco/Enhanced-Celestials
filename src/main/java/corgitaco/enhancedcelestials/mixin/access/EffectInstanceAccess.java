@@ -10,5 +10,5 @@ public interface EffectInstanceAccess {
 
 
     @Accessor
-    Effect getPotion();
+    Effect getEffect();
 }

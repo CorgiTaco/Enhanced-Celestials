@@ -25,11 +25,11 @@ public class LunarForecastCommand {
     };
 
     public static int setLunarEvent(CommandSource source) {
-        ServerWorld world = source.getWorld();
+        ServerWorld world = source.getLevel();
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
         if (lunarContext == null) {
-            source.sendErrorMessage(new TranslationTextComponent("enhancedcelestials.commands.disabled"));
+            source.sendFailure(new TranslationTextComponent("enhancedcelestials.commands.disabled"));
             return 0;
         }
 
@@ -49,15 +49,15 @@ public class LunarForecastCommand {
             if (textComponent == null) {
                 textComponent = new TranslationTextComponent(name.getKey());
             } else {
-                textComponent.appendString(", ").append(new TranslationTextComponent(name.getKey()));
+                textComponent.append(", ").append(new TranslationTextComponent(name.getKey()));
             }
             textComponent.append(new TranslationTextComponent("enhancedcelestials.lunarforecast.days_left", lunarEventInstance.getDaysUntil(currentDay)));
         }
 
         if (textComponent != null) {
-            source.sendFeedback(new TranslationTextComponent("enhancedcelestials.lunarforecast.header", textComponent.appendString(".")), true);
+            source.sendSuccess(new TranslationTextComponent("enhancedcelestials.lunarforecast.header", textComponent.append(".")), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("enhancedcelestials.lunarforecast.empty", textComponent).mergeStyle(TextFormatting.YELLOW), true);
+            source.sendSuccess(new TranslationTextComponent("enhancedcelestials.lunarforecast.empty", textComponent).withStyle(TextFormatting.YELLOW), true);
         }
 
         return 1;

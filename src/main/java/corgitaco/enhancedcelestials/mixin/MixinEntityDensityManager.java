@@ -19,8 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(WorldEntitySpawner.EntityDensityManager.class)
 public class MixinEntityDensityManager implements LevelGetter {
 
-    @Shadow @Final private int field_234981_a_;
-    @Shadow @Final private Object2IntMap<EntityClassification> field_234984_d_;
+    @Shadow @Final private int spawnableChunkCount;
+    @Shadow @Final private Object2IntMap<EntityClassification> unmodifiableMobCategoryCounts;
     ServerWorld level;
 
     @Override
@@ -33,13 +33,13 @@ public class MixinEntityDensityManager implements LevelGetter {
         return this.level;
     }
 
-    @Inject(method = "func_234991_a_", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canSpawnForCategory", at = @At("HEAD"), cancellable = true)
     private void modifySpawnCapByCategory(EntityClassification entityClassification, CallbackInfoReturnable<Boolean> cir) {
         if (this.level != null) {
             LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
             if (lunarContext != null) {
-                int i = (int) (entityClassification.getMaxNumberOfCreature() * (this.field_234981_a_ * lunarContext.getCurrentEvent().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
-                cir.setReturnValue(this.field_234984_d_.getInt(entityClassification) < i);
+                int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * lunarContext.getCurrentEvent().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
+                cir.setReturnValue(this.unmodifiableMobCategoryCounts.getInt(entityClassification) < i);
             }
         }
     }

@@ -24,12 +24,12 @@ public abstract class MixinCommands {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void addEnhancedCelestialCommands(Commands.EnvironmentType envType, CallbackInfo ci) {
-        LiteralArgumentBuilder<CommandSource> requires = Commands.literal(Main.MOD_ID).requires(commandSource -> commandSource.hasPermissionLevel(3));
+        LiteralArgumentBuilder<CommandSource> requires = Commands.literal(Main.MOD_ID).requires(commandSource -> commandSource.hasPermission(3));
         requires.then(SetLunarEventCommand.register(dispatcher));
         requires.then(LunarForecastCommand.register(dispatcher));
         dispatcher.register(requires);
 
-        LiteralArgumentBuilder<CommandSource> ecAlias = Commands.literal("ec").requires(commandSource -> commandSource.hasPermissionLevel(3));
+        LiteralArgumentBuilder<CommandSource> ecAlias = Commands.literal("ec").requires(commandSource -> commandSource.hasPermission(3));
         ecAlias.then(SetLunarEventCommand.register(dispatcher));
         ecAlias.then(LunarForecastCommand.register(dispatcher));
         dispatcher.register(ecAlias);

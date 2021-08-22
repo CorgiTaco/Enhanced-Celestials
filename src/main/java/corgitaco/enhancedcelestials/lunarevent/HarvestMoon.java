@@ -61,8 +61,8 @@ public class HarvestMoon extends LunarEvent {
             for (ResourceLocation tagID : cropTags) {
                 if (tagID.getPath().contains("item_tag_")) {
                     tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath().replace("item_tag_", ""));
-                    if (ItemTags.getCollection().getRegisteredTags().contains(tagID)) {
-                        enhancedCrops.add(ItemTags.makeWrapperTag(tagID.toString()));
+                    if (ItemTags.getAllTags().getAvailableTags().contains(tagID)) {
+                        enhancedCrops.add(ItemTags.bind(tagID.toString()));
                     } else {
                         Main.LOGGER.error("\"" + tagID + "\" is not a valid item tag!");
                     }

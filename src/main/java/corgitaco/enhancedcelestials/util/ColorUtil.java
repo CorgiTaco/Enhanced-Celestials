@@ -21,7 +21,7 @@ public class ColorUtil {
     }
 
     public static int[] transformFloatColor(Vector3d floatColor) {
-        return new int[]{255, (int) (floatColor.getX() * 255), (int) (floatColor.getY() * 255), (int) (floatColor.getZ() * 255)};
+        return new int[]{255, (int) (floatColor.x() * 255), (int) (floatColor.y() * 255), (int) (floatColor.z() * 255)};
     }
 
     public static Vector3f glColor(int[] packedColor) {

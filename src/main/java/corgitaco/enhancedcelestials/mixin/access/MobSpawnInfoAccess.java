@@ -19,7 +19,7 @@ public interface MobSpawnInfoAccess {
     }
 
     @Accessor
-    Map<EntityType<?>, MobSpawnInfo.SpawnCosts> getSpawnCosts();
+    Map<EntityType<?>, MobSpawnInfo.SpawnCosts> getMobSpawnCosts();
 
     @Accessor
     Map<EntityClassification, List<MobSpawnInfo.Spawners>> getSpawners();

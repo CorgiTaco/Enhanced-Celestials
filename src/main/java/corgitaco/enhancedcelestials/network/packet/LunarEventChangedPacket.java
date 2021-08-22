@@ -18,11 +18,11 @@ public class LunarEventChangedPacket {
     }
 
     public static void writeToPacket(LunarEventChangedPacket packet, PacketBuffer buf) {
-        buf.writeString(packet.eventKey);
+        buf.writeUtf(packet.eventKey);
     }
 
     public static LunarEventChangedPacket readFromPacket(PacketBuffer buf) {
-        return new LunarEventChangedPacket(buf.readString());
+        return new LunarEventChangedPacket(buf.readUtf());
     }
 
     public static void handle(LunarEventChangedPacket message, Supplier<NetworkEvent.Context> ctx) {
@@ -30,7 +30,7 @@ public class LunarEventChangedPacket {
             ctx.get().enqueueWork(() -> {
                 Minecraft minecraft = Minecraft.getInstance();
 
-                ClientWorld world = minecraft.world;
+                ClientWorld world = minecraft.level;
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext != null) {

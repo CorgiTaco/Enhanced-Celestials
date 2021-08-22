@@ -10,5 +10,5 @@ public interface ChunkAccess {
 
 
     @Accessor
-    World getWorld();
+    World getLevel();
 }

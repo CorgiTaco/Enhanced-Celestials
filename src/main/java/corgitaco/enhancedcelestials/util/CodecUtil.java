@@ -40,15 +40,15 @@ public class CodecUtil {
         return builder.group(Codec.STRING.optionalFieldOf("color", "").forGetter((style) -> {
             return style.getColor() != null ? Integer.toHexString(((ColorAccess)(Object) style.getColor()).getColorRaw()) : Integer.toHexString(TextFormatting.WHITE.getColor());
         }), Codec.BOOL.optionalFieldOf("bold", false).forGetter((style) -> {
-            return style.getBold();
+            return style.isBold();
         }), Codec.BOOL.optionalFieldOf("italic", false).forGetter((style) -> {
-            return style.getItalic();
+            return style.isItalic();
         }), Codec.BOOL.optionalFieldOf("underlined", false).forGetter((style) -> {
-            return style.getUnderlined();
+            return style.isUnderlined();
         }), Codec.BOOL.optionalFieldOf("strikethrough", false).forGetter((style) -> {
-            return style.getStrikethrough();
+            return style.isStrikethrough();
         }), Codec.BOOL.optionalFieldOf("obfuscated", false).forGetter((style) -> {
-            return style.getObfuscated();
+            return style.isObfuscated();
         }), CLICK_EVENT_CODEC.optionalFieldOf("clickEvent").forGetter((style) -> {
             return style.getClickEvent() != null ? Optional.of(style.getClickEvent()) : Optional.empty();
         } )).apply(builder, (color, bold, italic, underlined, strikethrough, obfuscated, clickEvent) -> StyleAccess.create(ColorAccess.create(ColorSettings.tryParseColor(color)), bold, italic, underlined, strikethrough, obfuscated, clickEvent.orElse(null), null, null, null));

@@ -31,7 +31,7 @@ public class MixinServerWorld implements EnhancedCelestialsWorldData {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectLunarContext(MinecraftServer server, Executor executor, SaveFormat.LevelSave save, IServerWorldInfo worldInfo, RegistryKey<World> key, DimensionType dimensionType, IChunkStatusListener statusListener, ChunkGenerator generator, boolean b, long seed, List<ISpecialSpawner> specialSpawners, boolean b1, CallbackInfo ci) {
-        if (((DimensionTypeAccess) dimensionType).getEffectsServerSafe().equals(DimensionType.OVERWORLD_ID)) {
+        if (((DimensionTypeAccess) dimensionType).getEffectsServerSafe().equals(DimensionType.OVERWORLD_EFFECTS)) {
             lunarContext = new LunarContext((ServerWorld) (Object) this);
         }
     }

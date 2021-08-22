@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerList.class)
 public abstract class MixinPlayerList {
 
-    @Inject(method = "sendWorldInfo", at = @At(value = "HEAD"))
+    @Inject(method = "sendLevelInfo", at = @At(value = "HEAD"))
     private void sendContext(ServerPlayerEntity playerIn, ServerWorld worldIn, CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
         if (lunarContext != null) {

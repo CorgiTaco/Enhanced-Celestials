@@ -20,7 +20,7 @@ public class LunarContextConstructionPacket {
 
     public static void writeToPacket(LunarContextConstructionPacket packet, PacketBuffer buf) {
         try {
-            buf.func_240629_a_(LunarContext.PACKET_CODEC, packet.lunarContext);
+            buf.writeWithCodec(LunarContext.PACKET_CODEC, packet.lunarContext);
         } catch (IOException e) {
             throw new IllegalStateException("Lunar Context packet could not be written to. This is really really bad...\n\n" + e.getMessage());
 
@@ -29,7 +29,7 @@ public class LunarContextConstructionPacket {
 
     public static LunarContextConstructionPacket readFromPacket(PacketBuffer buf) {
         try {
-            return new LunarContextConstructionPacket(buf.func_240628_a_(LunarContext.PACKET_CODEC));
+            return new LunarContextConstructionPacket(buf.readWithCodec(LunarContext.PACKET_CODEC));
         } catch (IOException e) {
             throw new IllegalStateException("Lunar Context packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
@@ -40,12 +40,12 @@ public class LunarContextConstructionPacket {
             ctx.get().enqueueWork(() -> {
                 Minecraft minecraft = Minecraft.getInstance();
 
-                ClientWorld world = minecraft.world;
+                ClientWorld world = minecraft.level;
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext == null) {
                         ((EnhancedCelestialsWorldData) world).setLunarContext(new LunarContext(message.lunarContext.getLunarForecast(), message.lunarContext.getLunarTimeSettings(),
-                                world.getDimensionKey().getLocation(), message.lunarContext.getLunarEvents(), true));
+                                world.dimension().location(), message.lunarContext.getLunarEvents(), true));
                     }
                 }
             });

@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface DimensionTypeAccess {
 
 
-    @Accessor("effects")
+    @Accessor("effectsLocation")
     ResourceLocation getEffectsServerSafe();
 }

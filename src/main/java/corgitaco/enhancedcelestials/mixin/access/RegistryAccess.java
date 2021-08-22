@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public interface RegistryAccess {
 
     @Invoker
-    static <T> Registry<T> invokeCreateRegistry(RegistryKey<? extends Registry<T>> registryKey, Supplier<T> supplier) {
+    static <T> Registry<T> invokeRegisterSimple(RegistryKey<? extends Registry<T>> registryKey, Supplier<T> supplier) {
         throw new Error("Mixin did not apply!");
     }
 }

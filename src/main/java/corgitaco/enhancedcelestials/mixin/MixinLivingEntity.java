@@ -26,19 +26,19 @@ public abstract class MixinLivingEntity extends Entity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void lunarEntityTick(CallbackInfo ci) {
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.world).getLunarContext();
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            lunarContext.getCurrentEvent().livingEntityTick((LivingEntity) (Object) this, this.world);
+            lunarContext.getCurrentEvent().livingEntityTick((LivingEntity) (Object) this, this.level);
         }
     }
 
-    @Inject(method = "isInValidBed", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "checkBedExists", at = @At("HEAD"), cancellable = true)
     private void blockSleeping(CallbackInfoReturnable<Boolean> cir) {
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.world).getLunarContext();
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
             if (lunarContext.getCurrentEvent().blockSleeping()) {
                 if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity) {
-                    ((ServerPlayerEntity) (Object) this).sendStatusMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail").mergeStyle(TextFormatting.RED), true);
+                    ((ServerPlayerEntity) (Object) this).displayClientMessage(new TranslationTextComponent("enhancedcelestials.sleep.fail").withStyle(TextFormatting.RED), true);
                 }
                 cir.setReturnValue(false);
             }

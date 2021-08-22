@@ -13,6 +13,6 @@ public interface ColorAccess {
         throw new Error("Mixin did not apply");
     }
 
-    @Accessor("color")
+    @Accessor("value")
     int getColorRaw();
 }

@@ -27,8 +27,8 @@ public class LunarEventSavedData extends WorldSavedData {
             }
             return clientCache;
         }
-        DimensionSavedDataManager data = ((ServerWorld) world).getSavedData();
-        LunarEventSavedData weatherData = data.getOrCreate(LunarEventSavedData::new, DATA_NAME);
+        DimensionSavedDataManager data = ((ServerWorld) world).getDataStorage();
+        LunarEventSavedData weatherData = data.computeIfAbsent(LunarEventSavedData::new, DATA_NAME);
 
         if (weatherData == null) {
             weatherData = new LunarEventSavedData();
@@ -49,12 +49,12 @@ public class LunarEventSavedData extends WorldSavedData {
     }
 
     @Override
-    public void read(CompoundNBT nbt) {
+    public void load(CompoundNBT nbt) {
         forecast = LunarForecast.CODEC.decode(NBTDynamicOps.INSTANCE, nbt.get("forecast")).result().get().getFirst();
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT save(CompoundNBT compound) {
         compound.put("forecast", LunarForecast.CODEC.encodeStart(NBTDynamicOps.INSTANCE, forecast).result().get());
         return compound;
     }
@@ -66,6 +66,6 @@ public class LunarEventSavedData extends WorldSavedData {
 
     public void setForecast(LunarForecast forecast) {
         this.forecast = forecast;
-        markDirty();
+        setDirty();
     }
 }

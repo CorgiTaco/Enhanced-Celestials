@@ -28,12 +28,12 @@ public class NetworkHandler {
     }
 
     public static void sendToPlayer(ServerPlayerEntity playerEntity, Object objectToSend) {
-        SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+        SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     public static void sendToAllPlayers(List<ServerPlayerEntity> playerEntities, Object objectToSend) {
         for (ServerPlayerEntity playerEntity : playerEntities) {
-            SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+            SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 

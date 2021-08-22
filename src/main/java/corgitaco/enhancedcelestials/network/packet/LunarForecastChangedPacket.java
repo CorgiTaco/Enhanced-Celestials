@@ -21,7 +21,7 @@ public class LunarForecastChangedPacket {
 
     public static void writeToPacket(LunarForecastChangedPacket packet, PacketBuffer buf) {
         try {
-            buf.func_240629_a_(LunarForecast.CODEC, packet.lunarForecast);
+            buf.writeWithCodec(LunarForecast.CODEC, packet.lunarForecast);
         } catch (IOException e) {
             throw new IllegalStateException("Lunar Forecast packet could not be written to. This is really really bad...\n\n" + e.getMessage());
 
@@ -30,7 +30,7 @@ public class LunarForecastChangedPacket {
 
     public static LunarForecastChangedPacket readFromPacket(PacketBuffer buf) {
         try {
-            return new LunarForecastChangedPacket(buf.func_240628_a_(LunarForecast.CODEC));
+            return new LunarForecastChangedPacket(buf.readWithCodec(LunarForecast.CODEC));
         } catch (IOException e) {
             throw new IllegalStateException("Lunar Forecast packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
@@ -41,7 +41,7 @@ public class LunarForecastChangedPacket {
             ctx.get().enqueueWork(() -> {
                 Minecraft minecraft = Minecraft.getInstance();
 
-                ClientWorld world = minecraft.world;
+                ClientWorld world = minecraft.level;
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext != null) {

@@ -16,12 +16,12 @@ import javax.annotation.Nullable;
 @Mixin(ServerChunkProvider.class)
 public class MixinServerChunkProvider {
 
-    @Shadow @Nullable private WorldEntitySpawner.EntityDensityManager field_241097_p_;
+    @Shadow @Nullable private WorldEntitySpawner.EntityDensityManager lastSpawnState;
 
-    @Shadow @Final public ServerWorld world;
+    @Shadow @Final public ServerWorld level;
 
-    @Inject(method = "tickChunks", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/IProfiler;endSection()V", ordinal = 0))
+    @Inject(method = "tickChunks", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/IProfiler;pop()V", ordinal = 0))
     private void setDensityManagerLevel(CallbackInfo ci) {
-        ((LevelGetter) this.field_241097_p_).setLevel(this.world);
+        ((LevelGetter) this.lastSpawnState).setLevel(this.level);
     }
 }

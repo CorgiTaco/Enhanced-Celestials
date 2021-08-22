@@ -33,7 +33,7 @@ public abstract class MixinLootTableManager extends JsonReloadListener {
     }
 
     private void appendTable(IResourceManager resourceManager, ResourceLocation id, JsonElement element) {
-        for (String resourceNamespace : resourceManager.getResourceNamespaces()) {
+        for (String resourceNamespace : resourceManager.getNamespaces()) {
             try (IResource appendedTable = resourceManager.getResource(getAppendedPath(resourceNamespace, id))) {
                 InputStream inputstream = appendedTable.getInputStream();
                 Reader reader = new BufferedReader(new InputStreamReader(inputstream, StandardCharsets.UTF_8));
