@@ -50,7 +50,7 @@ public class CodecUtil {
         }), Codec.BOOL.optionalFieldOf("obfuscated", false).forGetter((style) -> {
             return style.isObfuscated();
         }), CLICK_EVENT_CODEC.optionalFieldOf("clickEvent").forGetter((style) -> {
-            return Optional.of(style.getClickEvent());
+            return style.getClickEvent() != null ? Optional.of(style.getClickEvent()) : Optional.empty();
         } )).apply(builder, (color, bold, italic, underlined, strikethrough, obfuscated, clickEvent) -> StyleAccess.create(ColorAccess.create(ColorSettings.tryParseColor(color)), bold, italic, underlined, strikethrough, obfuscated, clickEvent.orElse(null), null, null, null));
     });
 
