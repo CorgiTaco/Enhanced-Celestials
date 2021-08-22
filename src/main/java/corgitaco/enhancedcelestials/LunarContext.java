@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.lunarevent.Moon;
 import corgitaco.enhancedcelestials.network.NetworkHandler;
 import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
@@ -16,7 +17,6 @@ import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -182,17 +182,17 @@ public class LunarContext {
             if (this.currentEvent != lastEvent) {
                 this.lastEvent = lastEvent;
                 this.strength = 0;
-                TranslatableComponent endNotification = lastEvent.endNotification();
+                LunarTextComponents.Notification endNotification = lastEvent.endNotification();
                 if (endNotification != null) {
                     for (ServerPlayer player : players) {
-                        player.displayClientMessage(endNotification, false);
+                        player.displayClientMessage(endNotification.getCustomTranslationTextComponent(), endNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
                     }
                 }
 
-                TranslatableComponent startNotification = this.currentEvent.startNotification();
+                LunarTextComponents.Notification startNotification = this.currentEvent.startNotification();
                 if (startNotification != null) {
                     for (ServerPlayer player : players) {
-                        player.displayClientMessage(startNotification, false);
+                        player.displayClientMessage(startNotification.getCustomTranslationTextComponent(), startNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
                     }
                 }
                 NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getKey()));

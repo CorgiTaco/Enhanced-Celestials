@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -59,12 +58,12 @@ public abstract class LunarEvent {
     }
 
     @Nullable
-    public CustomTranslationTextComponent startNotification() {
+    public LunarTextComponents.Notification startNotification() {
         return this.textComponents.getRiseNotification();
     }
 
     @Nullable
-    public CustomTranslationTextComponent endNotification() {
+    public LunarTextComponents.Notification endNotification() {
         return this.textComponents.getSetNotification();
     }
 
