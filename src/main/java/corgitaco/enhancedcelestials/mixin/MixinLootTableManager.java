@@ -46,7 +46,7 @@ public abstract class MixinLootTableManager extends SimpleJsonResourceReloadList
     }
 
     @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(method = "lambda$apply$0(Lnet/minecraft/resources/IResourceManager;Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/util/ResourceLocation;Lcom/google/gson/JsonElement;)V", at = @At("HEAD"), remap = false)
+    @Inject(method = "lambda$apply$0(Lnet/minecraft/resources/IResourceManager;Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/util/ResourceLocation;Lcom/google/gson/JsonElement;)V", at = @At("HEAD"))
     private static void appendTables(ImmutableMap.Builder builder, ResourceLocation location, JsonElement element, CallbackInfo ci) {
         appendTable(RESOURCE_MANAGER.get(), location, element);
     }
