@@ -39,9 +39,9 @@ public class MixinWorldEntitySpawner {
             if (lunarSpawner != null) {
                 MobSpawnSettings mobSpawnInfo = lunarSpawner.getSpawnInfo();
                 if (lunarSpawner.useBiomeSpawnSettings()) {
-                    WeightedRandomList<MobSpawnSettings.SpawnerData> spawners = WeightedRandomList.create(mobSpawnInfo.getMobs(classification).unwrap());
-                    spawners.unwrap().addAll(cir.getReturnValue().unwrap());
-                    cir.setReturnValue(spawners);
+                    List<MobSpawnSettings.SpawnerData> unwrap = new ArrayList<>(mobSpawnInfo.getMobs(classification).unwrap());
+                    unwrap.addAll(cir.getReturnValue().unwrap());
+                    cir.setReturnValue(WeightedRandomList.create(unwrap));
                 } else {
                     cir.setReturnValue(mobSpawnInfo.getMobs(classification));
                 }

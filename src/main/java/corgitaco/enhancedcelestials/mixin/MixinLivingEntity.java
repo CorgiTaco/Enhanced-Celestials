@@ -32,7 +32,7 @@ public abstract class MixinLivingEntity extends Entity {
         }
     }
 
-    @Inject(method = "isSleeping", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "checkBedExists", at = @At("HEAD"), cancellable = true)
     private void blockSleeping(CallbackInfoReturnable<Boolean> cir) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
