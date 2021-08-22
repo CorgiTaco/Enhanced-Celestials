@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.api.lunarevent.client;
 
 import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
+import corgitaco.enhancedcelestials.api.JsonFixerUpper;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -9,7 +10,7 @@ import net.minecraft.util.SoundEvent;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public abstract class LunarEventClientSettings {
+public abstract class LunarEventClientSettings implements JsonFixerUpper<LunarEventClientSettings> {
 
     public static final Codec<LunarEventClientSettings> CODEC = EnhancedCelestialsRegistry.LUNAR_CLIENT_EVENT_SETTINGS.dispatchStable(LunarEventClientSettings::codec, Function.identity());
 

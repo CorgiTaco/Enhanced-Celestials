@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.lunarevent.client;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
@@ -37,6 +38,11 @@ public class MoonClientSettings extends LunarEventClientSettings {
 
     public MoonClientSettings(ColorSettings colorSettings, float moonSize, ResourceLocation moonTextureLocation, SoundEvent soundEvent) {
         super(colorSettings, moonSize, moonTextureLocation, soundEvent);
+    }
+
+    @Override
+    public LunarEventClientSettings fixerUpper(JsonElement element) {
+        return this;
     }
 
     @Override

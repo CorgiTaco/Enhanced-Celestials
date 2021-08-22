@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.lunarevent;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
@@ -46,6 +47,11 @@ public class BloodMoon extends LunarEvent {
     @Override
     public double getSpawnMultiplierForMonsterCategory(EntityClassification classification) {
         return this.spawnCategoryMultiplier.getDouble(classification);
+    }
+
+    @Override
+    public LunarEvent fixerUpper(JsonElement element) {
+        return new BloodMoon(getClientSettings().fixerUpper(element), this.getMinNumberOfNightsBetween(), getChance(), getValidMoonPhases(),this.getTextComponents().fixerUpper(element.getAsJsonObject().get("textComponents")), blockSleeping(), this.spawnCategoryMultiplier, this.lunarMobSpawnInfo);
     }
 
     @Override

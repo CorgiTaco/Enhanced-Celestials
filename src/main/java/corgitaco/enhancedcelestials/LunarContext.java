@@ -2,8 +2,11 @@ package corgitaco.enhancedcelestials;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
@@ -318,10 +321,17 @@ public class LunarContext {
     private void readJson(boolean isClient, File configFile) {
         try {
             String name = configFile.getName().replace(".json", "").toLowerCase();
-            LunarEvent decodedValue = LunarEvent.CODEC.decode(JsonOps.INSTANCE, new JsonParser().parse(new FileReader(configFile))).resultOrPartial(Main.LOGGER::error).get().getFirst().setKey(name);
+            Pair<LunarEvent, JsonElement> lunarEventJsonElementPair = LunarEvent.CODEC.decode(JsonOps.INSTANCE, new JsonParser().parse(new FileReader(configFile))).resultOrPartial(Main.LOGGER::error).get();
+            LunarEvent decodedValue = lunarEventJsonElementPair.getFirst().setKey(name);
+
+            decodedValue = decodedValue.fixerUpper(lunarEventJsonElementPair.getSecond());
+
+            createJsonEventConfig(decodedValue, configFile.getName().replace(".json", ""));
+
             if (isClient /*&& !BetterWeather.CLIENT_CONFIG.useServerClientSettings*/) {
                 if (this.lunarEvents.containsKey(name)) {
                     LunarEvent lunarEvent = this.lunarEvents.get(name);
+
                     lunarEvent.setClientSettings(decodedValue.getClientSettings());
                     lunarEvent.setLunarEventClient(lunarEvent.getClientSettings().createClient());
                 }
@@ -332,6 +342,7 @@ public class LunarContext {
             Main.LOGGER.error(e.toString());
         }
     }
+
 
     private static LunarTimeSettings readOrCreateConfigJson(File configFile) {
         if (!configFile.exists()) {

@@ -1,5 +1,7 @@
 package corgitaco.enhancedcelestials.lunarevent;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
@@ -48,6 +50,11 @@ public class BlueMoon extends LunarEvent {
                 entity.addEffect(new EffectInstance(Effects.LUCK, 1210, this.luckStrength, true, false, false));
             }
         }
+    }
+
+    @Override
+    public LunarEvent fixerUpper(JsonElement element) {
+        return new BlueMoon(getClientSettings().fixerUpper(element), this.getMinNumberOfNightsBetween(), getChance(), getValidMoonPhases(),this.getTextComponents().fixerUpper(element.getAsJsonObject().get("textComponents")), blockSleeping(), luckStrength);
     }
 
     @Override

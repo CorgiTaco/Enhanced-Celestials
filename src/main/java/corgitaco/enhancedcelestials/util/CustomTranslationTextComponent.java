@@ -1,7 +1,11 @@
 package corgitaco.enhancedcelestials.util;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import corgitaco.enhancedcelestials.api.JsonFixerUpper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -9,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CustomTranslationTextComponent extends TranslationTextComponent {
+public class CustomTranslationTextComponent extends TranslationTextComponent implements JsonFixerUpper<CustomTranslationTextComponent> {
 
     public static final CustomTranslationTextComponent DEFAULT = new CustomTranslationTextComponent("", Style.EMPTY);
 
@@ -39,5 +43,19 @@ public class CustomTranslationTextComponent extends TranslationTextComponent {
         super(translationKey, args.toArray());
         this.args = args;
         this.setStyle(style);
+    }
+
+    @Override
+    public CustomTranslationTextComponent fixerUpper(JsonElement element) {
+        JsonObject asJsonObject = element.getAsJsonObject();
+        String key = "";
+        Style style = Style.EMPTY;
+        if (asJsonObject.has("key")) {
+            key = asJsonObject.get("key").getAsString();
+        }
+        if (asJsonObject.has("style")) {
+            style = CodecUtil.STYLE_CODEC.decode(JsonOps.INSTANCE, asJsonObject.get("style")).result().get().getFirst();
+        }
+        return new CustomTranslationTextComponent(key, style);
     }
 }

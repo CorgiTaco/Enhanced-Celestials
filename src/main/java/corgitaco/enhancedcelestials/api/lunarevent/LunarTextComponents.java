@@ -1,13 +1,17 @@
 package corgitaco.enhancedcelestials.api.lunarevent;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import corgitaco.enhancedcelestials.api.JsonFixerUpper;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import net.minecraft.util.IStringSerializable;
 
 import javax.annotation.Nullable;
 
-public class LunarTextComponents {
+public class LunarTextComponents implements JsonFixerUpper<LunarTextComponents> {
 
     public static final Codec<LunarTextComponents> LEGACY_CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(CustomTranslationTextComponent.CODEC.fieldOf("name").forGetter((textComponents) -> {
@@ -59,7 +63,23 @@ public class LunarTextComponents {
         return setNotification;
     }
 
-    public static class Notification {
+    @Override
+    public LunarTextComponents fixerUpper(JsonElement element) {
+        return new LunarTextComponents(name == null ? CustomTranslationTextComponent.DEFAULT : name, riseNotification != null ? riseNotification.fixerUpper(element) : createNotificationFixer(element, "startNotification"), setNotification != null ? setNotification.fixerUpper(element) : createNotificationFixer(element, "endNotification"));
+    }
+
+    public static Notification createNotificationFixer(JsonElement element, String... textComponentKeys) {
+        JsonObject asJsonObject = element.getAsJsonObject();
+        CustomTranslationTextComponent textComponent = null;
+        for (String textComponentKey : textComponentKeys) {
+            if (asJsonObject.has(textComponentKey)) {
+                textComponent = CustomTranslationTextComponent.CODEC.decode(JsonOps.INSTANCE, asJsonObject.get(textComponentKey)).get().left().get().getFirst();
+            }
+        }
+        return new Notification(textComponent == null ? CustomTranslationTextComponent.DEFAULT : textComponent, NotificationType.CHAT);
+    }
+
+    public static class Notification implements JsonFixerUpper<Notification> {
         public static final Notification DEFAULT = new Notification(CustomTranslationTextComponent.DEFAULT, NotificationType.CHAT);
         public static final Codec<Notification> CODEC = RecordCodecBuilder.create((builder) -> {
             return builder.group(CustomTranslationTextComponent.CODEC.fieldOf("component").forGetter((notification) -> {
@@ -82,6 +102,11 @@ public class LunarTextComponents {
 
         public NotificationType getNotificationType() {
             return notificationType;
+        }
+
+        @Override
+        public Notification fixerUpper(JsonElement element) {
+            return new Notification(customTranslationTextComponent == null ? CustomTranslationTextComponent.DEFAULT : customTranslationTextComponent, this.notificationType == null ? NotificationType.CHAT : notificationType);
         }
     }
 

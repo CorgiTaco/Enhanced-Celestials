@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.lunarevent;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
@@ -25,5 +26,10 @@ public class Moon extends LunarEvent {
     @Override
     public Codec<? extends LunarEvent> codec() {
         return CODEC;
+    }
+
+    @Override
+    public LunarEvent fixerUpper(JsonElement element) {
+        return this;
     }
 }

@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.lunarevent;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.Main;
@@ -97,6 +98,11 @@ public class HarvestMoon extends LunarEvent {
             }
         }
         super.onBlockItemDrop(world, itemStack);
+    }
+
+    @Override
+    public LunarEvent fixerUpper(JsonElement element) {
+        return new HarvestMoon(getClientSettings().fixerUpper(element), this.getMinNumberOfNightsBetween(), getChance(), getValidMoonPhases(),this.getTextComponents().fixerUpper(element.getAsJsonObject().get("textComponents")), blockSleeping(), this.cropTags, this.cropDropMultiplier);
     }
 
     @Override

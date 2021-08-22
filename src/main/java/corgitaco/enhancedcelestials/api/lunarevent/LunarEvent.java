@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.api.lunarevent;
 
 import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
+import corgitaco.enhancedcelestials.api.JsonFixerUpper;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
@@ -18,7 +19,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
 
-public abstract class LunarEvent {
+public abstract class LunarEvent implements JsonFixerUpper<LunarEvent> {
 
     public static final Codec<LunarEvent> CODEC = EnhancedCelestialsRegistry.LUNAR_EVENT.dispatchStable(LunarEvent::codec, Function.identity());
 
