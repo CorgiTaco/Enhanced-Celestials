@@ -6,7 +6,6 @@ import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
-import corgitaco.enhancedcelestials.mixin.access.ItemTagsAccess;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -15,10 +14,7 @@ import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class HarvestMoon extends LunarEvent {
@@ -57,13 +53,12 @@ public class HarvestMoon extends LunarEvent {
         this.cropDropMultiplier = cropDropMultiplier;
 
         if (serializeCrops) {
-
-
             for (ResourceLocation tagID : cropTags) {
                 if (tagID.getPath().contains("item_tag_")) {
                     tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath().replace("item_tag_", ""));
-                    if (ItemTags.getAllTags().getAvailableTags().contains(tagID)) {
-                        enhancedCrops.add(ItemTagsAccess.invokeBind(tagID.toString()));
+                    Map<ResourceLocation, Tag<Item>> allTags = ItemTags.getAllTags().getAllTags();
+                    if (allTags.containsKey(tagID)) {
+                        enhancedCrops.add(allTags.get(tagID));
                     } else {
                         Main.LOGGER.error("\"" + tagID + "\" is not a valid item tag!");
                     }
@@ -85,8 +80,8 @@ public class HarvestMoon extends LunarEvent {
     public void onBlockItemDrop(ServerLevel world, ItemStack itemStack) {
         Item item = itemStack.getItem();
         for (Object enhancedCrop : this.enhancedCrops) {
-            if (enhancedCrop instanceof Tag.Named) {
-                if (((Tag.Named) enhancedCrop).contains(item)) {
+            if (enhancedCrop instanceof Tag) {
+                if (((Tag) enhancedCrop).contains(item)) {
                     itemStack.setCount((int) (itemStack.getCount() * this.cropDropMultiplier));
                     break;
                 }
