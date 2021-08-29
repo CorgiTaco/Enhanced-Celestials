@@ -48,8 +48,10 @@ public class SetLunarEventCommand {
             }
             LunarEventInstance commandInstance = new LunarEventInstance(lunarEventKey, currentDay);
             List<LunarEventInstance> forecast = lunarContext.getLunarForecast().getForecast();
-            if (forecast.get(0).active(currentDay)) {
-                forecast.remove(0);
+            if (!forecast.isEmpty()) {
+                if (forecast.get(0).active(currentDay)) {
+                    forecast.remove(0);
+                }
             }
             forecast.add(0, commandInstance);
 
