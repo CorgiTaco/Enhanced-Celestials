@@ -14,10 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class HarvestMoon extends LunarEvent {
@@ -56,13 +53,12 @@ public class HarvestMoon extends LunarEvent {
         this.cropDropMultiplier = cropDropMultiplier;
 
         if (serializeCrops) {
-
-
             for (ResourceLocation tagID : cropTags) {
                 if (tagID.getPath().contains("item_tag_")) {
                     tagID = new ResourceLocation(tagID.getNamespace(), tagID.getPath().replace("item_tag_", ""));
-                    if (ItemTags.getAllTags().getAvailableTags().contains(tagID)) {
-                        enhancedCrops.add(ItemTags.bind(tagID.toString()));
+                    Map<ResourceLocation, ITag<Item>> allTags = ItemTags.getAllTags().getAllTags();
+                    if (allTags.containsKey(tagID)) {
+                        enhancedCrops.add(allTags.get(tagID));
                     } else {
                         Main.LOGGER.error("\"" + tagID + "\" is not a valid item tag!");
                     }
@@ -84,8 +80,8 @@ public class HarvestMoon extends LunarEvent {
     public void onBlockItemDrop(ServerWorld world, ItemStack itemStack) {
         Item item = itemStack.getItem();
         for (Object enhancedCrop : this.enhancedCrops) {
-            if (enhancedCrop instanceof ITag.INamedTag) {
-                if (((ITag.INamedTag) enhancedCrop).contains(item)) {
+            if (enhancedCrop instanceof ITag) {
+                if (((ITag) enhancedCrop).contains(item)) {
                     itemStack.setCount((int) (itemStack.getCount() * this.cropDropMultiplier));
                     break;
                 }
