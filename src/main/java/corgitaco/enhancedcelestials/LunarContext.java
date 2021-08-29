@@ -77,8 +77,9 @@ public class LunarContext {
         this.scrambledKeys.addAll(this.lunarEvents.keySet());
         this.lunarForecast = getAndComputeLunarForecast(world).getForecast();
         assert lunarForecast != null;
-        LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
-        this.currentEvent = nextLunarEvent.getDaysUntil((int) (world.getDayTime() / this.dayLength)) <= 0 && world.isNight() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
+        @Nullable
+        LunarEventInstance nextLunarEvent = this.lunarForecast.getForecast().isEmpty() ? null : this.lunarForecast.getForecast().get(0);
+        this.currentEvent = nextLunarEvent == null ? DEFAULT : nextLunarEvent.getDaysUntil((int) (world.getDayTime() / this.dayLength)) <= 0 && world.isNight() ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
     }
 
     // Packet Codec Constructor
@@ -92,8 +93,9 @@ public class LunarContext {
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
         this.lunarEvents.putAll(lunarEvents);
-        LunarEventInstance nextLunarEvent = lunarForecast.getForecast().get(0);
-        this.currentEvent = nextLunarEvent.scheduledDay() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
+        @Nullable
+        LunarEventInstance nextLunarEvent = lunarForecast.getForecast().isEmpty() ? null : lunarForecast.getForecast().get(0);
+        this.currentEvent = nextLunarEvent == null ? DEFAULT : nextLunarEvent.scheduledDay() == 0 ? nextLunarEvent.getEvent(this.lunarEvents) : DEFAULT;
         this.lunarForecast = lunarForecast;
         this.lunarTimeSettings = lunarTimeSettings;
         this.dayLength = lunarTimeSettings.dayLength;
@@ -174,8 +176,11 @@ public class LunarContext {
         if (!world.isClientSide) {
             List<ServerPlayer> players = ((ServerLevel) world).players();
             updateForecast(world, currentDay, players);
-            LunarEventInstance nextEvent = this.getLunarForecast().getForecast().get(0);
-            if (!this.getLunarForecast().getForecast().isEmpty()) {
+            List<LunarEventInstance> forecast = this.getLunarForecast().getForecast();
+            if (forecast.isEmpty()) {
+                this.currentEvent = DEFAULT;
+            } else {
+                LunarEventInstance nextEvent = forecast.get(0);
                 this.currentEvent = nextEvent.getDaysUntil(currentDay) <= 0 && world.isNight() ? nextEvent.getEvent(this.lunarEvents) : DEFAULT;
             }
 
@@ -216,10 +221,16 @@ public class LunarContext {
     }
 
     public void updateForecast(Level world, long currentDay) {
-        LunarEventInstance nextEvent = this.lunarForecast.getForecast().get(0);
+        List<LunarEventInstance> forecast = this.lunarForecast.getForecast();
+        if (forecast.isEmpty()) {
+            return;
+        }
+
+        LunarEventInstance nextEvent = forecast.get(0);
         if (nextEvent.passed(currentDay)) {
-            this.lunarForecast.getForecast().remove(0);
+            forecast.remove(0);
             NetworkHandler.sendToAllPlayers(((ServerLevel) world).players(), new LunarForecastChangedPacket(this.lunarForecast));
+            NetworkHandler.sendToAllPlayers(((ServerLevel) world).players(), new LunarEventChangedPacket(this.currentEvent.getKey()));
             LunarEventSavedData.get(world).setForecast(lunarForecast);
         }
     }
