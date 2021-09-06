@@ -7,6 +7,7 @@ import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.LunarEventInstance;
 import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -16,13 +17,33 @@ import net.minecraft.world.server.ServerWorld;
 
 public class LunarForecastCommand {
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
-        return Commands.literal("lunarForecast").executes(cs -> setLunarEvent(cs.getSource()));
+        return Commands.literal("lunarForecast").executes(cs -> setLunarEvent(cs.getSource())).then(Commands.literal("recompute").executes(cs -> recompute(cs.getSource())));
     }
 
-    public static final TextFormatting[] TEXT_FORMATTINGS = new TextFormatting[] {
+    public static final TextFormatting[] TEXT_FORMATTINGS = new TextFormatting[]{
             TextFormatting.WHITE,
             TextFormatting.BLUE,
     };
+
+
+    public static int recompute(CommandSource source) {
+        ServerWorld world = source.getLevel();
+
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+
+        if (lunarContext == null) {
+            source.sendFailure(new TranslationTextComponent("enhancedcelestials.commands.disabled"));
+            return 0;
+        }
+        LunarForecast lunarForecast = lunarContext.getLunarForecast();
+        lunarForecast.getForecast().clear();
+        lunarForecast.setLastCheckedGameTime(Long.MIN_VALUE);
+        lunarContext.computeLunarForecast(world, lunarForecast, world.getGameTime());
+        LunarEventSavedData.get(world).setForecast(lunarContext.getLunarForecast());
+        source.sendSuccess(new TranslationTextComponent("enhancedcelestials.lunarforecast.recompute"), true);
+        return 1;
+    }
+
 
     public static int setLunarEvent(CommandSource source) {
         ServerWorld world = source.getLevel();
@@ -40,7 +61,7 @@ public class LunarForecastCommand {
 
         LunarForecast lunarForecast = lunarContext.getLunarForecast();
 
-        for (int i = Math.min(100, lunarForecast.getForecast().size() - 1); i > 0 ; i--) {
+        for (int i = Math.min(100, lunarForecast.getForecast().size() - 1); i > 0; i--) {
             LunarEventInstance lunarEventInstance = lunarForecast.getForecast().get(i);
             LunarEvent event = lunarEventInstance.getEvent(lunarContext.getLunarEvents());
             CustomTranslationTextComponent name = event.getTextComponents().getName();
