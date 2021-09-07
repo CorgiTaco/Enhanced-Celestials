@@ -41,7 +41,7 @@ public abstract class MixinWorldRenderer {
         }
     }
 
-    @ModifyConstant(method = "renderSky(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V", constant = @Constant(floatValue = 20.0F))
+    @ModifyConstant(method = "renderSky(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V", constant = @Constant(floatValue = 20.0F), require = 0)
     private float getSuperMoonSize(float arg0) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
