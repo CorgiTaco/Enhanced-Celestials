@@ -9,9 +9,9 @@ import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.mixin.access.ColorAccess;
 import corgitaco.enhancedcelestials.mixin.access.StyleAccess;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Style;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -38,7 +38,7 @@ public class CodecUtil {
 
     public static final Codec<Style> STYLE_CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(Codec.STRING.optionalFieldOf("color", "").forGetter((style) -> {
-            return style.getColor() != null ? Integer.toHexString(((ColorAccess)(Object) style.getColor()).getColorRaw()) : Integer.toHexString(TextFormatting.WHITE.getColor());
+            return style.getColor() != null ? Integer.toHexString(((ColorAccess)(Object) style.getColor()).getColorRaw()) : Integer.toHexString(ChatFormatting.WHITE.getColor());
         }), Codec.BOOL.optionalFieldOf("bold", false).forGetter((style) -> {
             return style.isBold();
         }), Codec.BOOL.optionalFieldOf("italic", false).forGetter((style) -> {

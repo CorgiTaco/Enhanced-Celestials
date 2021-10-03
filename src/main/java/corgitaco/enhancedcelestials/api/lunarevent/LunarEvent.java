@@ -5,13 +5,13 @@ import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -45,7 +45,7 @@ public abstract class LunarEvent {
     public void onBlockTick() {
     }
 
-    public void onBlockItemDrop(ServerWorld world, ItemStack itemStack) {
+    public void onBlockItemDrop(ServerLevel world, ItemStack itemStack) {
     }
 
     public String getKey() {
@@ -86,11 +86,11 @@ public abstract class LunarEvent {
         return this.lunarEventClient;
     }
 
-    public double getSpawnMultiplierForMonsterCategory(EntityClassification classification) {
+    public double getSpawnMultiplierForMonsterCategory(MobCategory classification) {
         return 1.0;
     }
 
-    public void livingEntityTick(LivingEntity entity, World world) {
+    public void livingEntityTick(LivingEntity entity, Level world) {
     }
 
     @Nullable

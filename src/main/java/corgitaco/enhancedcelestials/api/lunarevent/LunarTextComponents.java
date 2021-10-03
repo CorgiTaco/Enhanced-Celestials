@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 import javax.annotation.Nullable;
 
@@ -86,11 +86,11 @@ public class LunarTextComponents {
         }
     }
 
-    public enum NotificationType implements IStringSerializable {
+    public enum NotificationType implements StringRepresentable {
         CHAT,
         HOT_BAR;
 
-        public static final Codec<NotificationType> CODEC = IStringSerializable.fromEnum(NotificationType::values, NotificationType::byName);
+        public static final Codec<NotificationType> CODEC = StringRepresentable.fromEnum(NotificationType::values, NotificationType::byName);
 
         public static NotificationType byName(String name) {
             return NotificationType.valueOf(name.toUpperCase());

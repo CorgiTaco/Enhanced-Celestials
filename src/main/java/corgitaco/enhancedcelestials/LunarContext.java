@@ -15,14 +15,14 @@ import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -65,7 +65,7 @@ public class LunarContext {
     private LunarEvent lastEvent;
     private float strength;
 
-    public LunarContext(ServerWorld world) {
+    public LunarContext(ServerLevel world) {
         this.worldID = world.dimension().location();
         this.lunarConfigPath = Main.CONFIG_PATH.resolve(worldID.getNamespace()).resolve(worldID.getPath()).resolve("lunar");
         this.lunarEventsConfigPath = this.lunarConfigPath.resolve("events");
@@ -107,7 +107,7 @@ public class LunarContext {
         this.lunarEvents.forEach((key, event) -> event.setKey(key));
     }
 
-    public LunarEventSavedData getAndComputeLunarForecast(ServerWorld world) {
+    public LunarEventSavedData getAndComputeLunarForecast(ServerLevel world) {
         LunarEventSavedData lunarEventSavedData = LunarEventSavedData.get(world);
         if (lunarEventSavedData.getForecast() == null) {
             lunarEventSavedData.setForecast(computeLunarForecast(world, new LunarForecast(new ArrayList<>(), world.getDayTime())));
@@ -117,11 +117,11 @@ public class LunarContext {
         return lunarEventSavedData;
     }
 
-    public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast) {
+    public LunarForecast computeLunarForecast(ServerLevel world, LunarForecast lunarForecast) {
         return computeLunarForecast(world, lunarForecast, 0L);
     }
 
-    public LunarForecast computeLunarForecast(ServerWorld world, LunarForecast lunarForecast, long seedModifier) {
+    public LunarForecast computeLunarForecast(ServerLevel world, LunarForecast lunarForecast, long seedModifier) {
         long dayTime = world.getDayTime();
         long lastCheckedTime = lunarForecast.getLastCheckedGameTime();
 
@@ -170,11 +170,11 @@ public class LunarContext {
     }
 
 
-    public void tick(World world) {
+    public void tick(Level world) {
         LunarEvent lastEvent = this.currentEvent;
         long currentDay = (world.getDayTime() / this.dayLength);
         if (!world.isClientSide) {
-            List<ServerPlayerEntity> players = ((ServerWorld) world).players();
+            List<ServerPlayer> players = ((ServerLevel) world).players();
             updateForecast(world, currentDay, players);
             List<LunarEventInstance> forecast = this.getLunarForecast().getForecast();
             if (forecast.isEmpty()) {
@@ -189,27 +189,27 @@ public class LunarContext {
                 this.strength = 0;
                 LunarTextComponents.Notification endNotification = lastEvent.endNotification();
                 if (endNotification != null) {
-                    for (ServerPlayerEntity player : players) {
+                    for (ServerPlayer player : players) {
                         player.displayClientMessage(endNotification.getCustomTranslationTextComponent(), endNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
                     }
                 }
 
                 LunarTextComponents.Notification startNotification = this.currentEvent.startNotification();
                 if (startNotification != null) {
-                    for (ServerPlayerEntity player : players) {
+                    for (ServerPlayer player : players) {
                         player.displayClientMessage(startNotification.getCustomTranslationTextComponent(), startNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
                     }
                 }
                 NetworkHandler.sendToAllPlayers(players, new LunarEventChangedPacket(this.currentEvent.getKey()));
             }
         }
-        this.strength = MathHelper.clamp(this.strength + 0.01F, 0, 1.0F);
+        this.strength = Mth.clamp(this.strength + 0.01F, 0, 1.0F);
     }
 
-    private void updateForecast(World world, long currentDay, List<ServerPlayerEntity> players) {
+    private void updateForecast(Level world, long currentDay, List<ServerPlayer> players) {
         updateForecast(world, currentDay);
         long lastCheckedGameTime = this.lunarForecast.getLastCheckedGameTime();
-        LunarForecast newLunarForecast = computeLunarForecast((ServerWorld) world, this.lunarForecast);
+        LunarForecast newLunarForecast = computeLunarForecast((ServerLevel) world, this.lunarForecast);
 
         long newLastCheckedGameTime = newLunarForecast.getLastCheckedGameTime();
         long newLastCheckedDay = newLastCheckedGameTime / this.dayLength;
@@ -220,7 +220,7 @@ public class LunarContext {
         }
     }
 
-    public void updateForecast(World world, long currentDay) {
+    public void updateForecast(Level world, long currentDay) {
         List<LunarEventInstance> forecast = this.lunarForecast.getForecast();
         if (forecast.isEmpty()) {
             return;
@@ -229,8 +229,8 @@ public class LunarContext {
         LunarEventInstance nextEvent = forecast.get(0);
         if (nextEvent.passed(currentDay)) {
             forecast.remove(0);
-            NetworkHandler.sendToAllPlayers(((ServerWorld) world).players(), new LunarForecastChangedPacket(this.lunarForecast));
-            NetworkHandler.sendToAllPlayers(((ServerWorld) world).players(), new LunarEventChangedPacket(this.currentEvent.getKey()));
+            NetworkHandler.sendToAllPlayers(((ServerLevel) world).players(), new LunarForecastChangedPacket(this.lunarForecast));
+            NetworkHandler.sendToAllPlayers(((ServerLevel) world).players(), new LunarEventChangedPacket(this.currentEvent.getKey()));
             LunarEventSavedData.get(world).setForecast(lunarForecast);
         }
     }
@@ -283,10 +283,14 @@ public class LunarContext {
         for (Map.Entry<ResourceLocation, LunarEvent> entry : EnhancedCelestialsRegistry.DEFAULT_EVENTS.entrySet()) {
             ResourceLocation location = entry.getKey();
             LunarEvent event = entry.getValue();
-            Optional<RegistryKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getResourceKey(event.codec());
+            Optional<ResourceKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getResourceKey(event.codec());
 
             if (optionalKey.isPresent()) {
+//                if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
                 createJsonEventConfig(event, location.toString());
+//                } else {
+//                    createTomlEventConfig(event, location.toString());
+//                }
             } else {
                 throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
             }
@@ -300,11 +304,15 @@ public class LunarContext {
             String key = entry.getKey();
             File tomlFile = this.lunarEventsConfigPath.resolve(key + ".toml").toFile();
             File jsonFile = this.lunarEventsConfigPath.resolve(key + ".json").toFile();
-            Optional<RegistryKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getResourceKey(event.codec());
+            Optional<ResourceKey<Codec<? extends LunarEvent>>> optionalKey = EnhancedCelestialsRegistry.LUNAR_EVENT.getResourceKey(event.codec());
 
             if (optionalKey.isPresent()) {
                 if (!tomlFile.exists() && !jsonFile.exists()) {
+//                    if (BetterWeatherConfig.SERIALIZE_AS_JSON) {
                     createJsonEventConfig(event, key);
+//                    } else {
+//                        createTomlEventConfig(event, key);
+//                    }
                 }
             } else {
                 throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());

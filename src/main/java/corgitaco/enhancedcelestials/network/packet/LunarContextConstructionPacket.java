@@ -3,9 +3,9 @@ package corgitaco.enhancedcelestials.network.packet;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -18,19 +18,19 @@ public class LunarContextConstructionPacket {
         this.lunarContext = lunarContext;
     }
 
-    public static void writeToPacket(LunarContextConstructionPacket packet, PacketBuffer buf) {
+    public static void writeToPacket(LunarContextConstructionPacket packet, FriendlyByteBuf buf) {
         try {
             buf.writeWithCodec(LunarContext.PACKET_CODEC, packet.lunarContext);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Lunar Context packet could not be written to. This is really really bad...\n\n" + e.getMessage());
 
         }
     }
 
-    public static LunarContextConstructionPacket readFromPacket(PacketBuffer buf) {
+    public static LunarContextConstructionPacket readFromPacket(FriendlyByteBuf buf) {
         try {
             return new LunarContextConstructionPacket(buf.readWithCodec(LunarContext.PACKET_CODEC));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Lunar Context packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
     }
@@ -40,7 +40,7 @@ public class LunarContextConstructionPacket {
             ctx.get().enqueueWork(() -> {
                 Minecraft minecraft = Minecraft.getInstance();
 
-                ClientWorld world = minecraft.level;
+                ClientLevel world = minecraft.level;
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext == null) {

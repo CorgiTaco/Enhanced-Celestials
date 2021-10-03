@@ -3,8 +3,8 @@ package corgitaco.enhancedcelestials.api.lunarevent.client;
 import com.mojang.serialization.Codec;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;

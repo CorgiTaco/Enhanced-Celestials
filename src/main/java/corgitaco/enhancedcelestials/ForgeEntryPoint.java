@@ -1,13 +1,27 @@
 package corgitaco.enhancedcelestials;
 
 import corgitaco.enhancedcelestials.core.ECSounds;
-import net.minecraft.util.SoundEvent;
+import corgitaco.enhancedcelestials.network.NetworkHandler;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod(Main.MOD_ID)
 public class ForgeEntryPoint {
+
+    public ForgeEntryPoint() {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::commonSetup);
+    }
+
+    public void commonSetup(FMLCommonSetupEvent commonSetupEvent) {
+        NetworkHandler.init();
+        Main.commonSetup();
+    }
 
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {

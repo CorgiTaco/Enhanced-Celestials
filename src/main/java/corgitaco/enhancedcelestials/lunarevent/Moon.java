@@ -7,7 +7,7 @@ import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.lunarevent.client.MoonClientSettings;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 
 import java.util.stream.IntStream;
 

@@ -4,11 +4,11 @@ import corgitaco.enhancedcelestials.Main;
 import corgitaco.enhancedcelestials.network.packet.LunarContextConstructionPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.packet.LunarForecastChangedPacket;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 import java.util.List;
 
@@ -27,12 +27,12 @@ public class NetworkHandler {
         SIMPLE_CHANNEL.registerMessage(2, LunarForecastChangedPacket.class, LunarForecastChangedPacket::writeToPacket, LunarForecastChangedPacket::readFromPacket, LunarForecastChangedPacket::handle);
     }
 
-    public static void sendToPlayer(ServerPlayerEntity playerEntity, Object objectToSend) {
+    public static void sendToPlayer(ServerPlayer playerEntity, Object objectToSend) {
         SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    public static void sendToAllPlayers(List<ServerPlayerEntity> playerEntities, Object objectToSend) {
-        for (ServerPlayerEntity playerEntity : playerEntities) {
+    public static void sendToAllPlayers(List<ServerPlayer> playerEntities, Object objectToSend) {
+        for (ServerPlayer playerEntity : playerEntities) {
             SIMPLE_CHANNEL.sendTo(objectToSend, playerEntity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
     }

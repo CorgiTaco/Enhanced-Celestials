@@ -1,9 +1,9 @@
 package corgitaco.enhancedcelestials.helper;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public interface LevelGetter {
-    void setLevel(World world);
+    void setLevel(Level world);
 
-    World getLevel();
+    Level getLevel();
 }

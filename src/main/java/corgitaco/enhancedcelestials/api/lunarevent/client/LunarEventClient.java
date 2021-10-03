@@ -1,12 +1,10 @@
 package corgitaco.enhancedcelestials.api.lunarevent.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.client.SkyRenderable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +24,7 @@ public abstract class LunarEventClient<T extends LunarEventClientSettings> imple
     }
 
     @Override
-    public void renderSky(MatrixStack matrixStackIn, float partialTicks) {
+    public void renderSky(PoseStack matrixStackIn, float partialTicks) {
 
     }
 

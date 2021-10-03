@@ -1,10 +1,10 @@
 package corgitaco.enhancedcelestials.mixin.access;
 
-import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.world.level.NaturalSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(WorldEntitySpawner.class)
+@Mixin(NaturalSpawner.class)
 public interface WorldEntitySpawnerAccess {
 
     @Accessor("MAGIC_NUMBER")

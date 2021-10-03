@@ -4,11 +4,11 @@ import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.helper.LevelGetter;
 import corgitaco.enhancedcelestials.mixin.access.WorldEntitySpawnerAccess;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.spawner.WorldEntitySpawner;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.NaturalSpawner;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,30 +16,30 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(WorldEntitySpawner.EntityDensityManager.class)
+@Mixin(NaturalSpawner.SpawnState.class)
 public class MixinEntityDensityManager implements LevelGetter {
 
+    @Shadow @Final private Object2IntOpenHashMap<MobCategory> mobCategoryCounts;
     @Shadow @Final private int spawnableChunkCount;
-    @Shadow @Final private Object2IntMap<EntityClassification> unmodifiableMobCategoryCounts;
-    ServerWorld level;
+    private ServerLevel level;
 
     @Override
-    public void setLevel(World world) {
-        this.level = (ServerWorld) world;
+    public void setLevel(Level world) {
+        this.level = (ServerLevel) world;
     }
 
     @Override
-    public World getLevel() {
+    public Level getLevel() {
         return this.level;
     }
 
     @Inject(method = "canSpawnForCategory", at = @At("HEAD"), cancellable = true)
-    private void modifySpawnCapByCategory(EntityClassification entityClassification, CallbackInfoReturnable<Boolean> cir) {
+    private void modifySpawnCapByCategory(MobCategory entityClassification, CallbackInfoReturnable<Boolean> cir) {
         if (this.level != null) {
             LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
             if (lunarContext != null) {
                 int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * lunarContext.getCurrentEvent().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
-                cir.setReturnValue(this.unmodifiableMobCategoryCounts.getInt(entityClassification) < i);
+                cir.setReturnValue(this.mobCategoryCounts.getInt(entityClassification) < i);
             }
         }
     }

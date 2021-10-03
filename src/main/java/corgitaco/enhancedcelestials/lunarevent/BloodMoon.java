@@ -7,7 +7,7 @@ import corgitaco.enhancedcelestials.api.lunarevent.LunarMobSpawnInfo;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
-import net.minecraft.entity.EntityClassification;
+import net.minecraft.world.entity.MobCategory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,23 +28,23 @@ public class BloodMoon extends LunarEvent {
             return blueMoon.getTextComponents();
         }), Codec.BOOL.fieldOf("blockSleeping").forGetter((clientSettings) -> {
             return clientSettings.blockSleeping();
-        }), Codec.unboundedMap(EntityClassification.CODEC, Codec.DOUBLE).fieldOf("spawnCategoryMultiplier").forGetter((clientSettings) -> {
+        }), Codec.unboundedMap(MobCategory.CODEC, Codec.DOUBLE).fieldOf("spawnCategoryMultiplier").forGetter((clientSettings) -> {
             return clientSettings.spawnCategoryMultiplier;
         }), LunarMobSpawnInfo.CODEC.fieldOf("lunarSpawnSettings").forGetter((clientSettings) -> {
             return clientSettings.lunarMobSpawnInfo;
         })).apply(builder, BloodMoon::new);
     });
-    private final Object2DoubleArrayMap<EntityClassification> spawnCategoryMultiplier;
+    private final Object2DoubleArrayMap<MobCategory> spawnCategoryMultiplier;
     private final LunarMobSpawnInfo lunarMobSpawnInfo;
 
-    public BloodMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents lunarTextComponents, boolean blockSleeping, Map<EntityClassification, Double> spawnCategoryMultiplier, LunarMobSpawnInfo lunarMobSpawnInfo) {
+    public BloodMoon(LunarEventClientSettings clientSettings, int minNumberOfNightsBetween, double chance, Collection<Integer> validMoonPhases, LunarTextComponents lunarTextComponents, boolean blockSleeping, Map<MobCategory, Double> spawnCategoryMultiplier, LunarMobSpawnInfo lunarMobSpawnInfo) {
         super(clientSettings, minNumberOfNightsBetween, chance, validMoonPhases, lunarTextComponents, blockSleeping);
         this.spawnCategoryMultiplier = new Object2DoubleArrayMap<>(spawnCategoryMultiplier);
         this.lunarMobSpawnInfo = lunarMobSpawnInfo;
     }
 
     @Override
-    public double getSpawnMultiplierForMonsterCategory(EntityClassification classification) {
+    public double getSpawnMultiplierForMonsterCategory(MobCategory classification) {
         return this.spawnCategoryMultiplier.getDouble(classification);
     }
 

@@ -6,8 +6,8 @@ import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClient;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import corgitaco.enhancedcelestials.lunarevent.client.settings.MoonClient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.Optional;
 

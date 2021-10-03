@@ -3,9 +3,9 @@ package corgitaco.enhancedcelestials.network.packet;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -17,11 +17,11 @@ public class LunarEventChangedPacket {
         this.eventKey = eventKey;
     }
 
-    public static void writeToPacket(LunarEventChangedPacket packet, PacketBuffer buf) {
+    public static void writeToPacket(LunarEventChangedPacket packet, FriendlyByteBuf buf) {
         buf.writeUtf(packet.eventKey);
     }
 
-    public static LunarEventChangedPacket readFromPacket(PacketBuffer buf) {
+    public static LunarEventChangedPacket readFromPacket(FriendlyByteBuf buf) {
         return new LunarEventChangedPacket(buf.readUtf());
     }
 
@@ -30,7 +30,7 @@ public class LunarEventChangedPacket {
             ctx.get().enqueueWork(() -> {
                 Minecraft minecraft = Minecraft.getInstance();
 
-                ClientWorld world = minecraft.level;
+                ClientLevel world = minecraft.level;
                 if (world != null && minecraft.player != null) {
                     LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
                     if (lunarContext != null) {
