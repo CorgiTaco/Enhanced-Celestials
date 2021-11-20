@@ -81,7 +81,10 @@ public abstract class LunarEvent {
     }
 
     @Environment(EnvType.CLIENT)
-    public LunarEventClient<?> setLunarEventClient(LunarEventClient<?> lunarEventClient) {
+    public LunarEventClient<?> setLunarEventClient(LunarEventClient<?> lunarEventClient, String path) {
+        if (lunarEventClient == null) {
+            throw new NullPointerException("Client settings for file \"" + path + "\" are incomplete/broken. The fastest solution is to copy this file to a separate directory and update the settings in the new file for all relevant fields.");
+        }
         this.lunarEventClient = lunarEventClient;
         return this.lunarEventClient;
     }
