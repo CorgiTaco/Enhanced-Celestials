@@ -11,6 +11,7 @@
     "MixinPlayerList",
     "MixinServerChunkProvider",
     "MixinServerWorld",
+    "MixinWorld",
     "MixinWorldEntitySpawner",
     "access.ChunkAccess",
     "access.ColorAccess",
