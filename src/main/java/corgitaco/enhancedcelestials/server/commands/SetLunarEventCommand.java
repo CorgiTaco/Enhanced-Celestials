@@ -24,8 +24,8 @@ public class SetLunarEventCommand {
         return Commands.literal("setLunarEvent").then(
                 Commands.argument("lunarEvent", StringArgumentType.string())
                         .suggests((ctx, sb) -> {
-                            LunarContext weatherEventContext = ((EnhancedCelestialsWorldData) ctx.getSource().getLevel()).getLunarContext();
-                            return SharedSuggestionProvider.suggest(weatherEventContext != null ? weatherEventContext.getLunarEvents().keySet().stream() : Arrays.stream(new String[]{EC_NOT_ENABLED}), sb);
+                            LunarContext lunarEventContext = ((EnhancedCelestialsWorldData) ctx.getSource().getLevel()).getLunarContext();
+                            return SharedSuggestionProvider.suggest(lunarEventContext != null ? lunarEventContext.getLunarEvents().keySet().stream() : Arrays.stream(new String[]{EC_NOT_ENABLED}), sb);
                         }).executes(cs -> setLunarEvent(cs.getSource(), cs.getArgument("lunarEvent", String.class)))
         );
     }

@@ -12,8 +12,6 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
 
 public class LunarEventSavedData extends SavedData {
     public static final String DATA_NAME = new ResourceLocation(Main.MOD_ID, "lunar_event_data").toString();
@@ -31,12 +29,12 @@ public class LunarEventSavedData extends SavedData {
             return clientCache;
         }
         DimensionDataStorage data = ((ServerLevel) world).getDataStorage();
-        LunarEventSavedData weatherData = data.computeIfAbsent(LunarEventSavedData::load, LunarEventSavedData::new, DATA_NAME);
-        if (weatherData == null) {
-            weatherData = new LunarEventSavedData();
-            data.set(DATA_NAME, weatherData);
+        LunarEventSavedData lunarData = data.computeIfAbsent(LunarEventSavedData::load, LunarEventSavedData::new, DATA_NAME);
+        if (lunarData == null) {
+            lunarData = new LunarEventSavedData();
+            data.set(DATA_NAME, lunarData);
         }
-        return weatherData;
+        return lunarData;
     }
 
     @Nullable
@@ -51,7 +49,7 @@ public class LunarEventSavedData extends SavedData {
     }
 
     public static LunarEventSavedData load(CompoundTag nbt) {
-       return new LunarEventSavedData(LunarForecast.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().get().getFirst());
+        return new LunarEventSavedData(LunarForecast.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().get().getFirst());
     }
 
     @Override

@@ -43,10 +43,10 @@ public class LunarContext {
             return lunarContext.lunarForecast;
         }), LunarTimeSettings.CODEC.fieldOf("lunarTimeSettings").forGetter((lunarContext) -> {
             return lunarContext.lunarTimeSettings;
-        }), ResourceLocation.CODEC.fieldOf("worldID").forGetter((weatherEventContext) -> {
-            return weatherEventContext.worldID;
-        }), Codec.unboundedMap(Codec.STRING, LunarEvent.CODEC).fieldOf("weatherEvents").forGetter((weatherEventContext) -> {
-            return weatherEventContext.lunarEvents;
+        }), ResourceLocation.CODEC.fieldOf("worldID").forGetter((lunarEventContext) -> {
+            return lunarEventContext.worldID;
+        }), Codec.unboundedMap(Codec.STRING, LunarEvent.CODEC).fieldOf("lunarEvents").forGetter((lunarEventContext) -> {
+            return lunarEventContext.lunarEvents;
         })).apply(builder, LunarContext::new);
     });
 
@@ -292,7 +292,7 @@ public class LunarContext {
 //                    createTomlEventConfig(event, location.toString());
 //                }
             } else {
-                throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
+                throw new IllegalStateException("Lunar Event Key for codec not there when requested: " + event.getClass().getSimpleName());
             }
         }
     }
@@ -315,15 +315,15 @@ public class LunarContext {
 //                    }
                 }
             } else {
-                throw new IllegalStateException("Weather Event Key for codec not there when requested: " + event.getClass().getSimpleName());
+                throw new IllegalStateException("Lunar Event Key for codec not there when requested: " + event.getClass().getSimpleName());
             }
         }
     }
 
 
-    private void createJsonEventConfig(LunarEvent weatherEvent, String weatherEventID) {
-        Path configFile = this.lunarEventsConfigPath.resolve(weatherEventID.replace(":", "-") + ".json");
-        JsonElement jsonElement = LunarEvent.CODEC.encodeStart(JsonOps.INSTANCE, weatherEvent).result().get();
+    private void createJsonEventConfig(LunarEvent lunarEvent, String lunarEventID) {
+        Path configFile = this.lunarEventsConfigPath.resolve(lunarEventID.replace(":", "-") + ".json");
+        JsonElement jsonElement = LunarEvent.CODEC.encodeStart(JsonOps.INSTANCE, lunarEvent).result().get();
 
         try {
             Files.createDirectories(configFile.getParent());
@@ -343,7 +343,7 @@ public class LunarContext {
             // We need to recreate the json each time to ensure we're taking into account any config fixing.
             createJsonEventConfig(decodedValue, noTypeFileName);
 
-            if (isClient /*&& !BetterWeather.CLIENT_CONFIG.useServerClientSettings*/) {
+            if (isClient) {
                 if (this.lunarEvents.containsKey(name)) {
                     LunarEvent lunarEvent = this.lunarEvents.get(name);
                     lunarEvent.setClientSettings(decodedValue.getClientSettings());
