@@ -18,40 +18,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
-public class MixinServerWorld implements EnhancedCelestialsWorldData {
-
-    @Nullable
-    private LunarContext lunarContext;
+public abstract class MixinServerWorld {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectLunarContext(MinecraftServer server, Executor executor, LevelStorageSource.LevelStorageAccess save, ServerLevelData worldInfo, ResourceKey<Level> key, DimensionType dimensionType, ChunkProgressListener statusListener, ChunkGenerator generator, boolean b, long seed, List<CustomSpawner> specialSpawners, boolean b1, CallbackInfo ci) {
         if (((DimensionTypeAccess) dimensionType).getEffectsServerSafe().equals(DimensionType.OVERWORLD_EFFECTS)) {
-            lunarContext = new LunarContext((ServerLevel) (Object) this);
+            ((EnhancedCelestialsWorldData) this).setLunarContext(new LunarContext((ServerLevel) (Object) this));
         }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void attachLunarTick(BooleanSupplier hasTimeLeft, CallbackInfo ci) {
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
         if (lunarContext != null) {
             lunarContext.tick((ServerLevel) (Object) this);
         }
-    }
-
-    @Nullable
-    @Override
-    public LunarContext getLunarContext() {
-        return this.lunarContext;
-    }
-
-    @Override
-    public LunarContext setLunarContext(LunarContext lunarContext) {
-        this.lunarContext = lunarContext;
-        return this.lunarContext;
     }
 }
