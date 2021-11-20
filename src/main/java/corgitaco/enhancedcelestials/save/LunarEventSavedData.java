@@ -28,13 +28,13 @@ public class LunarEventSavedData extends SavedData {
             return clientCache;
         }
         DimensionDataStorage data = ((ServerLevel) world).getDataStorage();
-        LunarEventSavedData weatherData = data.computeIfAbsent(LunarEventSavedData::new, DATA_NAME);
+        LunarEventSavedData lunarData = data.computeIfAbsent(LunarEventSavedData::new, DATA_NAME);
 
-        if (weatherData == null) {
-            weatherData = new LunarEventSavedData();
-            data.set(weatherData);
+        if (lunarData == null) {
+            lunarData = new LunarEventSavedData();
+            data.set(lunarData);
         }
-        return weatherData;
+        return lunarData;
     }
 
     @Nullable
