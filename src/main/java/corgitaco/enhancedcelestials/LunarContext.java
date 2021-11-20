@@ -246,7 +246,7 @@ public class LunarContext {
 
     public void handleEventConfigs(boolean isClient) {
         if (isClient) {
-            DEFAULT.setLunarEventClient(DEFAULT.getClientSettings().createClient());
+            DEFAULT.setLunarEventClient(DEFAULT.getClientSettings().createClient(), "");
         }
         File eventsDirectory = this.lunarEventsConfigPath.toFile();
         if (!eventsDirectory.exists()) {
@@ -347,7 +347,7 @@ public class LunarContext {
                 if (this.lunarEvents.containsKey(name)) {
                     LunarEvent lunarEvent = this.lunarEvents.get(name);
                     lunarEvent.setClientSettings(decodedValue.getClientSettings());
-                    lunarEvent.setLunarEventClient(lunarEvent.getClientSettings().createClient());
+                    lunarEvent.setLunarEventClient(lunarEvent.getClientSettings().createClient(), configFile.getAbsolutePath());
                 }
             } else {
                 this.lunarEvents.put(name, decodedValue);
