@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(LightTexture.class)
 public abstract class MixinLightMapTexture {
     @Inject(method = "updateLightTexture", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Vector3f;lerp(Lcom/mojang/math/Vector3f;F)V", ordinal = 0), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-    private void doOurLightMap(float partialTicks, CallbackInfo ci, ClientLevel clientworld, float f, float f1, float f3, Vector3f skyVector) {
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) clientworld).getLunarContext();
+    private void doOurLightMap(float f, CallbackInfo ci, ClientLevel clientLevel, float g, float h, float j, float i, Vector3f skyVector) {
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) clientLevel).getLunarContext();
         if (lunarContext != null) {
             LunarEvent lastEvent = lunarContext.getLastEvent();
             LunarEvent currentEvent = lunarContext.getCurrentEvent();

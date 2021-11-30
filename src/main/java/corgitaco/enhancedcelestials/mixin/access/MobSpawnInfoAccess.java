@@ -14,7 +14,7 @@ import java.util.Map;
 public interface MobSpawnInfoAccess {
 
     @Invoker("<init>")
-    static MobSpawnSettings create(float creatureSpawnProbability, Map<MobCategory, List<MobSpawnSettings.SpawnerData>> spawners, Map<EntityType<?>, MobSpawnSettings.MobSpawnCost> spawnCosts, boolean isValidSpawnBiomeForPlayer) {
+    static MobSpawnSettings create(float creatureSpawnProbability, Map<MobCategory, List<MobSpawnSettings.SpawnerData>> spawners, Map<EntityType<?>, MobSpawnSettings.MobSpawnCost> spawnCosts) {
         throw new Error("Mixin did not apply!");
     }
 

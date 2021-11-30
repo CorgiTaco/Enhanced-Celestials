@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public abstract class LunarEventClientSettings {
 
-    public static final Codec<LunarEventClientSettings> CODEC = EnhancedCelestialsRegistry.LUNAR_CLIENT_EVENT_SETTINGS.dispatchStable(LunarEventClientSettings::codec, Function.identity());
+    public static final Codec<LunarEventClientSettings> CODEC = EnhancedCelestialsRegistry.LUNAR_CLIENT_EVENT_SETTINGS.byNameCodec().dispatchStable(LunarEventClientSettings::codec, Function.identity());
 
     private final ColorSettings colorSettings;
     private final float moonSize;

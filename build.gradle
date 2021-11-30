@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '0.9-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name + "-${minecraft_version}"
 version = project.mod_version
@@ -30,7 +30,7 @@ dependencies {
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"
-    annotationProcessor 'net.fabricmc:fabric-mixin-compile-extensions:0.4.6'
+//    annotationProcessor 'net.fabricmc:fabric-mixin-compile-extensions:0.4.6'
 }
 
 processResources {
@@ -48,8 +48,8 @@ tasks.withType(JavaCompile).configureEach {
     // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
 
-    // Minecraft 1.17 (21w19a) upwards uses Java 16.
-    it.options.release = 16
+    // Minecraft 1.18 upwards uses Java 17.
+    it.options.release = 17
 }
 
 java {
