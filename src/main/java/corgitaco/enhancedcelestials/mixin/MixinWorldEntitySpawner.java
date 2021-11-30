@@ -58,7 +58,7 @@ public class MixinWorldEntitySpawner {
                 LunarMobSpawnInfo lunarSpawner = lunarContext.getCurrentEvent().getLunarSpawner();
                 if (lunarSpawner != null) {
                     MobSpawnSettings lunarMobSpawnInfo = lunarSpawner.getSpawnInfo();
-                    Biome.BiomeBuilder fakeBiome = (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.NONE).biomeCategory(Biome.BiomeCategory.NONE).depth(0.1F).scale(0.2F).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(4159204).waterFogColor(329011).fogColor(12638463).skyColor(1).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build());
+                    Biome.BiomeBuilder fakeBiome = (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.NONE).biomeCategory(Biome.BiomeCategory.NONE).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(4159204).waterFogColor(329011).fogColor(12638463).skyColor(1).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build());
                     if (lunarSpawner.useBiomeSpawnSettings()) {
                         MobSpawnSettings biomeMobSpawnInfo = cir.getReturnValue().getMobSettings();
                         EnumMap<MobCategory, List<MobSpawnSettings.SpawnerData>> mergedSpawnersMap = new EnumMap<>(((MobSpawnInfoAccess) biomeMobSpawnInfo).getSpawners());
@@ -67,7 +67,7 @@ public class MixinWorldEntitySpawner {
                         IdentityHashMap<EntityType<?>, MobSpawnSettings.MobSpawnCost> mergedSpawnCosts = new IdentityHashMap<>(((MobSpawnInfoAccess) biomeMobSpawnInfo).getMobSpawnCosts());
                         mergedSpawnCosts.putAll(((MobSpawnInfoAccess) lunarMobSpawnInfo).getMobSpawnCosts());
 
-                        MobSpawnSettings mobSpawnInfo = MobSpawnInfoAccess.create(Math.max(lunarMobSpawnInfo.getCreatureProbability(), biomeMobSpawnInfo.getCreatureProbability()), mergedSpawnersMap, mergedSpawnCosts, biomeMobSpawnInfo.playerSpawnFriendly());
+                        MobSpawnSettings mobSpawnInfo = MobSpawnInfoAccess.create(Math.max(lunarMobSpawnInfo.getCreatureProbability(), biomeMobSpawnInfo.getCreatureProbability()), mergedSpawnersMap, mergedSpawnCosts);
                         fakeBiome.mobSpawnSettings(mobSpawnInfo);
                     } else {
                         fakeBiome.mobSpawnSettings(lunarMobSpawnInfo);

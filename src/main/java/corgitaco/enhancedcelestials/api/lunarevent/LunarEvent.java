@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public abstract class LunarEvent {
 
-    public static final Codec<LunarEvent> CODEC = EnhancedCelestialsRegistry.LUNAR_EVENT.dispatchStable(LunarEvent::codec, Function.identity());
+    public static final Codec<LunarEvent> CODEC = EnhancedCelestialsRegistry.LUNAR_EVENT.byNameCodec().dispatchStable(LunarEvent::codec, Function.identity());
 
     private LunarEventClientSettings clientSettings;
     private final int minNumberOfNightsBetween;
