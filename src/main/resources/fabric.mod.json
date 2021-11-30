@@ -24,6 +24,7 @@
   "mixins": [
     "enhancedcelestials.mixins.json"
   ],
+  "accessWidener": "enhancedcelestials.aw",
   "depends": {
     "fabricloader": ">=0.12.6",
     "fabric": "*",
