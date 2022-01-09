@@ -63,7 +63,7 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:22.0.0'
 
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor' //Re-enable when building jar
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 jar {
