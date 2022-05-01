@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+issueTrackerURL="https://github.com/CorgiTaco/Enhanced-Celestials/issues"
+license="LGPLv3"
+
+[[mods]] #mandatory
+modId="enhancedcelestials" #mandatory
+version="${file.jarVersion}" #mandatory
+displayName="Enhanced Celestials" #mandatory
+#updateJSONURL="http://myurl.me/" #optional
+#displayURL="http://example.com/" #optional
+#logoFile="examplemod.png" #optional
+authors="Corgi Taco"
+credits="LudoCrypt - Ambient sounds"
+description='''
+A minecraft mod adding new Lunar Events!
+'''
+[[dependencies.enhancedcelestials]]
+modId="forge"
+mandatory=true
+versionRange="[40,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.enhancedcelestials]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.18.2,)"
+ordering="NONE"
+side="BOTH"

@@ -1,0 +1,117 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.parchmentmc.org' }
+    }
+}
+
+plugins {
+    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'maven-publish'
+    id 'idea'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+
+tasks.build.dependsOn(tasks.findByName("shadowJar"))
+
+configurations {
+    shadow
+    implementation.extendsFrom(shadow)
+}
+shadowJar {
+    configurations = [project.configurations.shadow]
+}
+
+archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
+repositories {
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io"
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-1.18.2:${parchment_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation project(":Common")
+}
+
+loom {
+    accessWidenerPath = project(":Common").file("src/main/resources/enhancedcelestials.aw")
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+
+processResources {
+    from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${archivesBaseName}-"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":Common").sourceSets.main.allSource)
+}
+
+tasks.withType(Javadoc) {
+    failOnError false
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${mod_name}" }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+}
