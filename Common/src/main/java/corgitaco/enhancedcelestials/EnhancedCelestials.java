@@ -29,7 +29,7 @@ import java.util.Set;
 public class EnhancedCelestials {
     public static final String MOD_ID = "enhancedcelestials";
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final Path CONFIG_PATH = Services.PLATFORM.configDir();
+    public static final Path CONFIG_PATH = Services.PLATFORM.configDir().resolve(MOD_ID);
 
     public EnhancedCelestials() {
     }
