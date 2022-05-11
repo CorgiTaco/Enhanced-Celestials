@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: FAQ
+    url: https://github.com/CorgiTaco/Enhanced-Celestials/wiki/Issues-FAQ
+    about: Answers to frequently asked questions, may contain an answer to a crash you're having ;)
+  - name: Corgi Taco's Discord
+    url: https://discord.gg/eWPBm4QFFz
+    about: Join our discord to chat with us, ask questions, or make suggestions in regards to Mobifier!
+  - name: Wiki
+    url: https://github.com/CorgiTaco/Enhanced-Celestials/wiki
+    about: Information on configuring Enhanced Celestials and more!
+  - name: Donate
+    url: https://www.patreon.com/CorgiTaco
+    about: Donate!
