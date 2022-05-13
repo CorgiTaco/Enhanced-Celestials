@@ -123,6 +123,7 @@ dependencies {
     compileOnly project(":Common")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
+reg.configureJarTask(shadowJar)
 
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
