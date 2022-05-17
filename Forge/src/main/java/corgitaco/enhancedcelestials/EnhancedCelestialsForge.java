@@ -19,28 +19,11 @@ import java.util.function.Supplier;
 public class EnhancedCelestialsForge {
 
     public EnhancedCelestialsForge() {
+        // This only exists to ensure classloading
+        ECSounds.SOUNDS.getModId();
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::commonSetup);
-        bootStrap(bus);
     }
-
-    private static void bootStrap(IEventBus eventBus) {
-        register(SoundEvent.class, eventBus, () -> ECSounds.bootStrap());
-    }
-
-    @SuppressWarnings("rawtypes")
-    private static <T extends IForgeRegistryEntry<T>> void register(Class clazz, IEventBus eventBus, Supplier<Collection<ECRegistryObject<T>>> registryObjectsSupplier) {
-        eventBus.addGenericListener(clazz, (RegistryEvent.Register<T> event) -> {
-            Collection<ECRegistryObject<T>> registryObjects = registryObjectsSupplier.get();
-            IForgeRegistry<T> registry = event.getRegistry();
-            for (ECRegistryObject<T> registryObject : registryObjects) {
-                registryObject.object().setRegistryName(EnhancedCelestials.createLocation(registryObject.id()));
-                registry.register(registryObject.object());
-            }
-            EnhancedCelestials.LOGGER.info("Enhanced Celestials registered: " + registry.getRegistryName());
-        });
-    }
-
 
     private void commonSetup(FMLCommonSetupEvent event) {
         EnhancedCelestials.commonSetup();
