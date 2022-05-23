@@ -45,7 +45,7 @@ public class BloodMoon extends LunarEvent {
 
     @Override
     public double getSpawnMultiplierForMonsterCategory(MobCategory classification) {
-        return this.spawnCategoryMultiplier.getDouble(classification);
+        return this.spawnCategoryMultiplier.getOrDefault(classification, 1);
     }
 
     @Override
