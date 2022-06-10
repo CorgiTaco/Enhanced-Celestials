@@ -14,7 +14,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -33,7 +33,7 @@ import java.util.List;
 public class MixinWorldEntitySpawner {
 
     @Inject(method = "mobsAt", at = @At("RETURN"), cancellable = true)
-    private static void useLunarSpawner(ServerLevel world, StructureFeatureManager $$1, ChunkGenerator $$2, MobCategory classification, BlockPos $$4, Holder<Biome> $$5, CallbackInfoReturnable<WeightedRandomList<MobSpawnSettings.SpawnerData>> cir) {
+    private static void useLunarSpawner(ServerLevel world, StructureManager $$1, ChunkGenerator $$2, MobCategory classification, BlockPos $$4, Holder<Biome> $$5, CallbackInfoReturnable<WeightedRandomList<MobSpawnSettings.SpawnerData>> cir) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
         if (lunarContext != null) {
             LunarMobSpawnInfo lunarSpawner = lunarContext.getCurrentEvent().getLunarSpawner();
@@ -59,7 +59,7 @@ public class MixinWorldEntitySpawner {
                 LunarMobSpawnInfo lunarSpawner = lunarContext.getCurrentEvent().getLunarSpawner();
                 if (lunarSpawner != null) {
                     MobSpawnSettings lunarMobSpawnInfo = lunarSpawner.getSpawnInfo();
-                    Biome.BiomeBuilder fakeBiome = (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.NONE).biomeCategory(Biome.BiomeCategory.NONE).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(4159204).waterFogColor(329011).fogColor(12638463).skyColor(1).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build());
+                    Biome.BiomeBuilder fakeBiome = (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.NONE).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(4159204).waterFogColor(329011).fogColor(12638463).skyColor(1).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build());
                     if (lunarSpawner.useBiomeSpawnSettings()) {
                         MobSpawnSettings biomeMobSpawnInfo = cir.getReturnValue().getMobSettings();
                         EnumMap<MobCategory, List<MobSpawnSettings.SpawnerData>> mergedSpawnersMap = new EnumMap<>(((MobSpawnInfoAccess) biomeMobSpawnInfo).getSpawners());

@@ -10,7 +10,7 @@ import corgitaco.enhancedcelestials.save.LunarEventSavedData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class SetLunarEventCommand {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
         if (lunarEventKey.equals(EC_NOT_ENABLED) || lunarContext == null) {
-            source.sendFailure(new TranslatableComponent("enhancedcelestials.commands.disabled"));
+            source.sendFailure(Component.translatable("enhancedcelestials.commands.disabled"));
             return 0;
         }
 
@@ -57,7 +57,7 @@ public class SetLunarEventCommand {
 
             LunarEventSavedData.get(world).setForecast(lunarContext.getLunarForecast());
         } else {
-            source.sendFailure(new TranslatableComponent("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
+            source.sendFailure(Component.translatable("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
             return 0;
         }
         return 1;

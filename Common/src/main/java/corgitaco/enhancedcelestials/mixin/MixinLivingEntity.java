@@ -3,7 +3,7 @@ package corgitaco.enhancedcelestials.mixin;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +38,7 @@ public abstract class MixinLivingEntity extends Entity {
         if (lunarContext != null) {
             if (lunarContext.getCurrentEvent().blockSleeping()) {
                 if (((LivingEntity) (Object) this) instanceof ServerPlayer) {
-                    ((ServerPlayer) (Object) this).displayClientMessage(new TranslatableComponent("enhancedcelestials.sleep.fail").withStyle(ChatFormatting.RED), true);
+                    ((ServerPlayer) (Object) this).displayClientMessage(Component.translatable("enhancedcelestials.sleep.fail").withStyle(ChatFormatting.RED), true);
                 }
                 cir.setReturnValue(false);
             }

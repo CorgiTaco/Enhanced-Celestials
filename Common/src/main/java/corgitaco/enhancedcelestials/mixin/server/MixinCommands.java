@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.server.commands.LunarForecastCommand;
 import corgitaco.enhancedcelestials.server.commands.SetLunarEventCommand;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import org.spongepowered.asm.mixin.Final;
@@ -23,7 +24,7 @@ public abstract class MixinCommands {
     private CommandDispatcher<CommandSourceStack> dispatcher;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void addEnhancedCelestialCommands(Commands.CommandSelection envType, CallbackInfo ci) {
+    private void addEnhancedCelestialCommands(Commands.CommandSelection $$0, CommandBuildContext $$1, CallbackInfo ci) {
         LiteralArgumentBuilder<CommandSourceStack> requires = Commands.literal(EnhancedCelestials.MOD_ID).requires(commandSource -> commandSource.hasPermission(3));
         requires.then(SetLunarEventCommand.register(dispatcher));
         requires.then(LunarForecastCommand.register(dispatcher));

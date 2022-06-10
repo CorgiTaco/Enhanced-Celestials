@@ -1,15 +1,14 @@
 package corgitaco.enhancedcelestials.mixin;
 
+import corgitaco.enhancedcelestials.DimensionTypeTags;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
-import corgitaco.enhancedcelestials.mixin.access.DimensionTypeAccess;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,8 +24,8 @@ import java.util.function.BooleanSupplier;
 public abstract class MixinServerWorld {
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void injectLunarContext(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, Holder<DimensionType> dimensionType, ChunkProgressListener $$6, ChunkGenerator $$7, boolean $$8, long $$9, List $$10, boolean $$11, CallbackInfo ci) {
-        if (((DimensionTypeAccess) dimensionType.value()).getEffectsServerSafe().equals(DimensionType.OVERWORLD_EFFECTS)) {
+    private void injectLunarContext(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey<Level> $$4, LevelStem stem, ChunkProgressListener $$6, boolean $$7, long $$8, List $$9, boolean $$10, CallbackInfo ci) {
+        if (stem.typeHolder().is(DimensionTypeTags.HAS_LUNAR_EVENTS)) {
             ((EnhancedCelestialsWorldData) this).setLunarContext(new LunarContext((ServerLevel) (Object) this));
         }
     }

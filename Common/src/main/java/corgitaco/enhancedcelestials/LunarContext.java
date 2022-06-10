@@ -188,14 +188,14 @@ public class LunarContext {
                 LunarTextComponents.Notification endNotification = lastEvent.endNotification();
                 if (endNotification != null) {
                     for (ServerPlayer player : players) {
-                        player.displayClientMessage(endNotification.getCustomTranslationTextComponent(), endNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
+                        player.displayClientMessage(endNotification.getCustomTranslationTextComponent().getComponent(), endNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
                     }
                 }
 
                 LunarTextComponents.Notification startNotification = this.currentEvent.startNotification();
                 if (startNotification != null) {
                     for (ServerPlayer player : players) {
-                        player.displayClientMessage(startNotification.getCustomTranslationTextComponent(), startNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
+                        player.displayClientMessage(startNotification.getCustomTranslationTextComponent().getComponent(), startNotification.getNotificationType() == LunarTextComponents.NotificationType.HOT_BAR);
                     }
                 }
                 Services.PLATFORM.sendToAllClients(players, new LunarEventChangedPacket(this.currentEvent.getKey()));

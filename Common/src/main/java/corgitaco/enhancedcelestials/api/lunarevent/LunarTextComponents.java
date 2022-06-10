@@ -90,7 +90,7 @@ public class LunarTextComponents {
         CHAT,
         HOT_BAR;
 
-        public static final Codec<NotificationType> CODEC = StringRepresentable.fromEnum(NotificationType::values, NotificationType::byName);
+        public static final Codec<NotificationType> CODEC = StringRepresentable.fromEnum(NotificationType::values);
 
         public static NotificationType byName(String name) {
             return NotificationType.valueOf(name.toUpperCase());

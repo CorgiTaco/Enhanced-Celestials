@@ -5,8 +5,8 @@ import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import javax.annotation.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public abstract class LunarEventClientSettings {

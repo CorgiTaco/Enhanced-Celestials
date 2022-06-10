@@ -3,14 +3,9 @@ package corgitaco.enhancedcelestials.core;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.reg.RegistrationProvider;
 import corgitaco.enhancedcelestials.reg.RegistryObject;
-import corgitaco.enhancedcelestials.util.ECRegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class ECSounds {
 
