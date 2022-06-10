@@ -48,8 +48,12 @@ archivesBaseName = "${mod_name}-forge-${minecraft_version}"
 
 shadowJar {
     configurations = [project.configurations.shadow]
+    archiveClassifier.set('')
 }
-
+reobf {
+    shadowJar {
+    }
+}
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
 
@@ -162,6 +166,12 @@ publishing {
     }
 }
 
+
+jar {
+    archiveClassifier.set('slim')
+}
+
+
 task forge_publishCurseForge(type: TaskPublishCurseForge) {
     apiToken = "$System.env.CURSEFORGE_KEY"
     int projectId = 438447
@@ -183,9 +193,8 @@ task forge_checkForRefmap() {
             FileTree files = zipTree(file1)
             Set<String> fileNames = files.getFiles().stream().map(file -> file.getName()).collect(Collectors.toSet())
 
-            String forgeRefmap = "${mod_id}_forge.refmap.json"
             String commonRefmap = "${mod_id}.refmap.json"
-            if (!fileNames.contains(forgeRefmap) || !fileNames.contains(commonRefmap)) {
+            if (!fileNames.contains(commonRefmap)) {
                 throw new IllegalStateException("Refmap is missing.")
             }
         } else {
