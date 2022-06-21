@@ -16,9 +16,7 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id "net.darkhax.curseforgegradle" version "1.0.7"
-
 }
-
 
 tasks.build.dependsOn(tasks.findByName("shadowJar"))
 
@@ -28,10 +26,17 @@ configurations {
 }
 shadowJar {
     configurations = [project.configurations.shadow]
+    relocate 'blue.endless.jankson', "${project.group}.shadow.blue.endless.jankson"
 }
 
 archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
+
 repositories {
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven {
+        name = 'Forge'
+        url = 'https://maven.minecraftforge.net'
+    }
     maven {
         url "https://www.cursemaven.com"
         content {
@@ -50,49 +55,68 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.18.2:${parchment_version}@zip")
     }
+
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
+    shadow("blue.endless:jankson:${jankson_version}")
+//    modImplementation("com.github.CorgiTaco:databreaker:${databreaker_version}") {
+//        exclude module: "fabric-loader"
+//    }
+
+//    modImplementation "curse.maven:starlight-521783:3667443"
+//    modImplementation "curse.maven:cyanide-543444:3757528"
+//    modImplementation "curse.maven:iris-455508:3770305"
+//
+//    modImplementation "curse.maven:sodium-394468:3669187"
+//
+//    runtimeOnly compileOnly('org.joml:joml:1.10.2')
+//    runtimeOnly compileOnly("org.anarres:jcpp:1.4.14")
 }
 reg.configureJarTask(shadowJar)
 
 loom {
     accessWidenerPath = project(":Common").file("src/main/resources/enhancedcelestials.aw")
     runs {
+        def args = []
+
         client {
             client()
             setConfigName("Fabric Client")
             ideConfigGenerated(true)
             runDir("run")
+            vmArgs(args)
         }
         server {
             server()
             setConfigName("Fabric Server")
             ideConfigGenerated(true)
             runDir("run")
+            vmArgs(args)
         }
     }
 }
 
-
 processResources {
-    from project(":Common").sourceSets.main.resources
+//    from project(":Common").sourceSets.main.resources
     inputs.property "version", project.version
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
 
-    filesMatching('*.mixins.json') {
+    filesMatching("${mod_id}.mixins.json") {
+        expand "refmap_target": "${archivesBaseName}-"
+    }
+    filesMatching("${mod_id}_asm.mixins.json") {
         expand "refmap_target": "${archivesBaseName}-"
     }
 }
 
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
-}
-
+//tasks.withType(JavaCompile) {
+//    source(project(":Common").sourceSets.main.allSource)
+//}
 tasks.withType(Javadoc) {
     failOnError false
 }
@@ -102,20 +126,16 @@ jar {
         rename { "${it}_${mod_name}" }
     }
 }
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
+// Disable to build with gradle //TODO: Fix gradle + building w/ intellij
+sourceSets {
+    main {
+        java {
+//            srcDir 'src/main/java'
+            srcDirs project(':Common').sourceSets.main.java.srcDirs
         }
-    }
-
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
+        resources {
+//            srcDir 'src/main/resources'
+            srcDirs project(':Common').sourceSets.main.resources.srcDirs
         }
     }
 }

@@ -23,6 +23,7 @@
   },
   "mixins": [
     "enhancedcelestials.mixins.json",
+    "enhancedcelestials_asm.mixins.json",
     "enhancedcelestials.fabric.mixins.json"
   ],
   "depends": {

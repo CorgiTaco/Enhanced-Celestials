@@ -59,6 +59,7 @@ mixin {
 
     config "${mod_id}.mixins.json"
     config "${mod_id}.forge.mixins.json"
+    config "${mod_id}_asm.mixins.json"
 }
 
 minecraft {
@@ -76,7 +77,7 @@ minecraft {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
-            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
+            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}_asm.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
             def output = sourceSets.main.output;
             def commonOutput = project(":Common").sourceSets.main.output;
             environment("MOD_CLASSES", [output.classesDirs.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))

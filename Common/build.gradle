@@ -1,7 +1,6 @@
 plugins {
-    id 'java'
-    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
-    id 'maven-publish'
+    id('java')
+    id('org.spongepowered.gradle.vanilla') version '0.2.1-SNAPSHOT'
 }
 
 archivesBaseName = "${mod_name}-common-${minecraft_version}"
@@ -22,33 +21,26 @@ minecraft {
     }
 }
 
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
 dependencies {
-    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.4'
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    compileOnly("org.ow2.asm:asm-tree:9.2")
+    compileOnly("blue.endless:jankson:${jankson_version}")
 }
 
 processResources {
-
     def buildProps = project.properties.clone()
 
     filesMatching(['pack.mcmeta']) {
-
         expand buildProps
     }
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-        }
-    }
+    exclude '.cache/**'
 
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
+    exclude("data/forge/tags/**")
+}
+
+tasks.withType(Javadoc) {
+    failOnError false
 }
