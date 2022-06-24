@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -26,7 +27,7 @@ public abstract class MixinServerWorld {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectLunarContext(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey<Level> $$4, LevelStem stem, ChunkProgressListener $$6, boolean $$7, long $$8, List $$9, boolean $$10, CallbackInfo ci) {
         if (stem.typeHolder().is(DimensionTypeTags.HAS_LUNAR_EVENTS)) {
-            ((EnhancedCelestialsWorldData) this).setLunarContext(new LunarContext((ServerLevel) (Object) this));
+            ((EnhancedCelestialsWorldData) this).setLunarContext(LunarContext.forLevel((ServerLevel) (Object) this, Optional.empty()));
         }
     }
 

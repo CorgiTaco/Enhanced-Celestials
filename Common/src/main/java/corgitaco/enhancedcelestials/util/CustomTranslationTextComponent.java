@@ -36,7 +36,7 @@ public class CustomTranslationTextComponent {
         this.translationKey = translationKey;
         this.style = style;
         this.args = Arrays.asList(args);
-        this.component = Component.translatable(translationKey, Arrays.stream(args).map(customTranslationTextComponent -> customTranslationTextComponent.component).toList());
+        this.component = Component.translatable(translationKey, Arrays.stream(args).map(customTranslationTextComponent -> customTranslationTextComponent.component).toList()).withStyle(style);
     }
 
     public CustomTranslationTextComponent(String translationKey, Style style, List<CustomTranslationTextComponent> args) {

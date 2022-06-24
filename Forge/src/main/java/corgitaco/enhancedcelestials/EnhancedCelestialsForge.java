@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials;
 
+import corgitaco.enhancedcelestials.core.ECRegistries;
 import corgitaco.enhancedcelestials.core.ECSounds;
 import corgitaco.enhancedcelestials.network.ForgeNetworkHandler;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,6 +14,7 @@ public class EnhancedCelestialsForge {
     public EnhancedCelestialsForge() {
         // This only exists to ensure classloading
         ECSounds.SOUNDS.getModId();
+        ECRegistries.loadClasses();
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::commonSetup);
         DimensionTypeTags.init();

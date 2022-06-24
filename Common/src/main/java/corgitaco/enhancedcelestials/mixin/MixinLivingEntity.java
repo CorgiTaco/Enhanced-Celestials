@@ -28,7 +28,7 @@ public abstract class MixinLivingEntity extends Entity {
     private void lunarEntityTick(CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            lunarContext.getCurrentEvent().livingEntityTick((LivingEntity) (Object) this, this.level);
+            lunarContext.getLunarForecast().getCurrentEvent().value().livingEntityTick((LivingEntity) (Object) this, this.level);
         }
     }
 
@@ -36,7 +36,7 @@ public abstract class MixinLivingEntity extends Entity {
     private void blockSleeping(CallbackInfoReturnable<Boolean> cir) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            if (lunarContext.getCurrentEvent().blockSleeping()) {
+            if (lunarContext.getLunarForecast().getCurrentEvent().value().blockSleeping()) {
                 if (((LivingEntity) (Object) this) instanceof ServerPlayer) {
                     ((ServerPlayer) (Object) this).displayClientMessage(Component.translatable("enhancedcelestials.sleep.fail").withStyle(ChatFormatting.RED), true);
                 }

@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.client;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
@@ -34,8 +35,9 @@ public class LunarSoundHandler implements AmbientSoundHandler {
             return;
         }
 
-        LunarEvent currentEvent = lunarContext.getCurrentEvent();
-        SoundEvent soundTrack = currentEvent.getClient().getSoundTrack(); // Use client directly here.
+        LunarForecast lunarForecast = lunarContext.getLunarForecast();
+        LunarEvent currentEvent = lunarForecast.getCurrentEvent().value();
+        SoundEvent soundTrack = currentEvent.getClientSettings().soundTrack(); // Use client directly here.
         if (currentEvent != this.lunarEvent || this.activeLunarSoundsMap.isEmpty()) {
             this.lunarEvent = currentEvent;
             this.activeLunarSoundsMap.forEach(BiomeAmbientSoundsHandler.LoopSoundInstance::fadeOut);

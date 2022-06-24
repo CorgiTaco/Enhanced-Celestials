@@ -21,7 +21,7 @@ public class EnhancedCelestialsASMMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return false;
+        return true;
     }
 
     @Override
@@ -36,7 +36,6 @@ public class EnhancedCelestialsASMMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-        System.out.println("AAAAAAAAAAAAAAAA");
         if (targetClassName.equals("net.minecraft.core.RegistryAccess")) {
             targetClass.methods.forEach(methodNode -> {
                 if (methodNode.name.equals("method_30531")) {
@@ -44,8 +43,14 @@ public class EnhancedCelestialsASMMixinPlugin implements IMixinConfigPlugin {
                     AbstractInsnNode last = instructions.getLast().getPrevious().getPrevious();
                     instructions.insertBefore(last, new VarInsnNode(Opcodes.ALOAD, 0));
                     instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/EnhancedCelestialsRegistry", "LUNAR_EVENT_KEY", "Lnet/minecraft/resources/ResourceKey;"));
-                    instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/lunarevent/LunarEvent", "CODEC", "Lcom/mojang/serialization/Codec;"));
-                    instructions.insertBefore(last, new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/core/RegistryAccess", "put", "(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Codec;)V", true));
+                    instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/lunarevent/LunarEvent", "DIRECT_CODEC", "Lcom/mojang/serialization/Codec;"));
+                    instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/lunarevent/LunarEvent", "DIRECT_CODEC", "Lcom/mojang/serialization/Codec;"));
+                    instructions.insertBefore(last, new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/core/RegistryAccess", "put", "(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Codec;Lcom/mojang/serialization/Codec;)V", true));
+                    instructions.insertBefore(last, new VarInsnNode(Opcodes.ALOAD, 0));
+                    instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/EnhancedCelestialsRegistry", "LUNAR_DIMENSION_SETTINGS_KEY", "Lnet/minecraft/resources/ResourceKey;"));
+                    instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/lunarevent/LunarDimensionSettings", "CODEC", "Lcom/mojang/serialization/Codec;"));
+                    instructions.insertBefore(last, new FieldInsnNode(Opcodes.GETSTATIC, "corgitaco/enhancedcelestials/api/lunarevent/LunarDimensionSettings", "CODEC", "Lcom/mojang/serialization/Codec;"));
+                    instructions.insertBefore(last, new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/core/RegistryAccess", "put", "(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Codec;Lcom/mojang/serialization/Codec;)V", true));
                 }
             });
         }

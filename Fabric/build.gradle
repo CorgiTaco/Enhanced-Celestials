@@ -79,7 +79,7 @@ reg.configureJarTask(shadowJar)
 loom {
     accessWidenerPath = project(":Common").file("src/main/resources/enhancedcelestials.aw")
     runs {
-        def args = []
+        def args = ["-Dmixin.debug.export=true"]
 
         client {
             client()

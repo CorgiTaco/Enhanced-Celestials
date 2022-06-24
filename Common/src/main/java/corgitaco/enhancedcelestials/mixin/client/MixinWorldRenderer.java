@@ -6,6 +6,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.LunarForecast;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -28,7 +29,8 @@ public abstract class MixinWorldRenderer {
     private void changeMoonColor(PoseStack $$0, Matrix4f $$1, float partialTicks, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            Vector3f glColor = lunarContext.getCurrentEvent().getClientSettings().getColorSettings().getGLMoonColor();
+            LunarForecast lunarForecast = lunarContext.getLunarForecast();
+            Vector3f glColor = lunarForecast.getCurrentEvent().value().getClientSettings().colorSettings().getGLMoonColor();
             RenderSystem.setShaderColor(glColor.x(), glColor.y(), glColor.z(), 1.0F - this.level.getRainLevel(partialTicks));
         }
     }
@@ -37,7 +39,8 @@ public abstract class MixinWorldRenderer {
     private void bindCustomMoonTexture(int i, ResourceLocation resourceLocation) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            RenderSystem.setShaderTexture(i, lunarContext.getCurrentEvent().getClient().getMoonTextureLocation());
+            LunarForecast lunarForecast = lunarContext.getLunarForecast();
+            RenderSystem.setShaderTexture(i, lunarForecast.getCurrentEvent().value().getClientSettings().moonTextureLocation());
         } else {
             RenderSystem.setShaderTexture(i, MOON_LOCATION);
         }
@@ -47,7 +50,8 @@ public abstract class MixinWorldRenderer {
     private float getSuperMoonSize(float arg0) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            return lunarContext.getCurrentEvent().getClient().getMoonSize();
+            LunarForecast lunarForecast = lunarContext.getLunarForecast();
+            return lunarForecast.getCurrentEvent().value().getClientSettings().moonSize();
         }
         return arg0;
     }

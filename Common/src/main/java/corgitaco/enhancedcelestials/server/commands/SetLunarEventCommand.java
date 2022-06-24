@@ -1,65 +1,55 @@
 package corgitaco.enhancedcelestials.server.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.datafixers.util.Pair;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
-import corgitaco.enhancedcelestials.LunarEventInstance;
-import corgitaco.enhancedcelestials.save.LunarEventSavedData;
+import corgitaco.enhancedcelestials.LunarForecast;
+import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
+import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class SetLunarEventCommand {
 
-    public static final String EC_NOT_ENABLED = "null";
+    private static final DynamicCommandExceptionType ERROR_LUNAR_EVENT_INVALID = new DynamicCommandExceptionType(obj -> Component.translatable("enhancedcelestials.commands.setlunarevent.invalid", obj));
 
     public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        return Commands.literal("setLunarEvent").then(
-                Commands.argument("lunarEvent", StringArgumentType.string())
-                        .suggests((ctx, sb) -> {
-                            LunarContext lunarEventContext = ((EnhancedCelestialsWorldData) ctx.getSource().getLevel()).getLunarContext();
-                            return SharedSuggestionProvider.suggest(lunarEventContext != null ? lunarEventContext.getLunarEvents().keySet().stream() : Arrays.stream(new String[]{EC_NOT_ENABLED}), sb);
-                        }).executes(cs -> setLunarEvent(cs.getSource(), cs.getArgument("lunarEvent", String.class)))
-        );
+        return Commands.literal("setLunarEvent")
+                .then(Commands.argument("lunarEvent", ResourceOrTagLocationArgument.resourceOrTag(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY))
+                .executes(cs -> setLunarEvent(cs.getSource(), ResourceOrTagLocationArgument.getRegistryType(cs, "lunarEvent", EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, ERROR_LUNAR_EVENT_INVALID))));
     }
 
-    public static int setLunarEvent(CommandSourceStack source, String lunarEventKey) {
+    public static int setLunarEvent(CommandSourceStack source, ResourceOrTagLocationArgument.Result<LunarEvent> lunarEventResult) {
         ServerLevel world = source.getLevel();
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-
-        if (lunarEventKey.equals(EC_NOT_ENABLED) || lunarContext == null) {
+        if (lunarContext == null) {
             source.sendFailure(Component.translatable("enhancedcelestials.commands.disabled"));
             return 0;
         }
 
-        long dayLength = lunarContext.getLunarTimeSettings().getDayLength();
+
+        LunarForecast forecast = lunarContext.getLunarForecast();
+
+        long dayLength = forecast.getDimensionSettingsHolder().value().dayLength();
         long currentDay = (world.getDayTime() / dayLength);
 
-        if (lunarContext.getLunarEvents().containsKey(lunarEventKey)) {
+        Pair<Component, Boolean> component = forecast.setOrReplaceEventWithResponse(lunarEventResult, currentDay, source.getLevel().getRandom());
+
+        if (component.getSecond()) {
             if (!world.isNight()) {
                 world.setDayTime((currentDay * dayLength) + 13000L);
             }
-            LunarEventInstance commandInstance = new LunarEventInstance(lunarEventKey, currentDay);
-            List<LunarEventInstance> forecast = lunarContext.getLunarForecast().getForecast();
-            if (!forecast.isEmpty()) {
-                if (forecast.get(0).active(currentDay)) {
-                    forecast.remove(0);
-                }
-            }
-            forecast.add(0, commandInstance);
-
-            LunarEventSavedData.get(world).setForecast(lunarContext.getLunarForecast());
+            source.sendSuccess(component.getFirst(), true);
+            return 1;
         } else {
-            source.sendFailure(Component.translatable("enhancedcelestials.commands.lunarevent_missing", lunarEventKey));
+            source.sendFailure(component.getFirst());
             return 0;
         }
-        return 1;
     }
 }

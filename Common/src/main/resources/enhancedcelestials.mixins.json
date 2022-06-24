@@ -13,6 +13,7 @@
     "MixinServerWorld",
     "MixinWorld",
     "MixinWorldEntitySpawner",
+    "access.BuiltinRegistriesAccess",
     "access.ChunkAccess",
     "access.ChunkMapAccess",
     "access.ColorAccess",

@@ -2,35 +2,42 @@ package corgitaco.enhancedcelestials;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-
-import java.util.Map;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public class LunarEventInstance {
 
-    public static final Codec<LunarEventInstance> CODEC = RecordCodecBuilder.create((builder) -> {
-        return builder.group(Codec.STRING.fieldOf("lunarEventKey").forGetter((lunarEventInstance) -> {
-            return lunarEventInstance.lunarEventKey;
-        }), Codec.LONG.fieldOf("scheduledDay").forGetter((lunarEventInstance -> {
-            return lunarEventInstance.scheduledDay;
-        }))).apply(builder, LunarEventInstance::new);
-    });
+    public static final Codec<LunarEventInstance> CODEC = RecordCodecBuilder.create(builder ->
+            builder.group(
+                    ResourceKey.codec(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY).fieldOf("lunarEventKey").forGetter(lunarEventInstance -> lunarEventInstance.lunarEventKey),
+                    Codec.LONG.fieldOf("scheduledDay").forGetter(lunarEventInstance -> lunarEventInstance.scheduledDay),
+                    Codec.BOOL.fieldOf("forced").forGetter(lunarEventInstance -> lunarEventInstance.forced)
+            ).apply(builder, LunarEventInstance::new));
 
 
-    private final String lunarEventKey;
-    private long scheduledDay;
+    private final ResourceKey<LunarEvent> lunarEventKey;
+    private final long scheduledDay;
+    private final boolean forced;
 
-    public LunarEventInstance(String lunarEventKey, long scheduledDay) {
-        this.lunarEventKey = lunarEventKey;
-        this.scheduledDay = scheduledDay;
+    public LunarEventInstance(ResourceKey<LunarEvent> lunarEventKey, long scheduledDay) {
+        this(lunarEventKey, scheduledDay, false);
     }
 
-    public String getLunarEventKey() {
+    public LunarEventInstance(ResourceKey<LunarEvent> lunarEventKey, long scheduledDay, boolean forced) {
+        this.lunarEventKey = lunarEventKey;
+        this.scheduledDay = scheduledDay;
+        this.forced = forced;
+    }
+
+    public ResourceKey<LunarEvent> getLunarEventKey() {
         return lunarEventKey;
     }
 
-    public LunarEvent getEvent(Map<String, LunarEvent> events) {
-        return events.get(lunarEventKey);
+    public Holder<LunarEvent> getEvent(Registry<LunarEvent> events) {
+        return events.getHolderOrThrow(lunarEventKey);
     }
 
     public long scheduledDay() {
@@ -38,7 +45,7 @@ public class LunarEventInstance {
     }
 
     public long getDaysUntil(long currentDay) {
-       return this.scheduledDay - currentDay;
+        return this.scheduledDay - currentDay;
     }
 
     public boolean passed(long currentDay) {
@@ -47,9 +54,5 @@ public class LunarEventInstance {
 
     public boolean active(long currentDay) {
         return this.scheduledDay - currentDay == 0;
-    }
-
-    public void setScheduledDay(int scheduledDay) {
-        this.scheduledDay = scheduledDay;
     }
 }

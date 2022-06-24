@@ -12,58 +12,58 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import javax.annotation.Nullable;
 
-public class LunarEventSavedData extends SavedData {
+public class LunarForecastSavedData extends SavedData {
     public static final String DATA_NAME = EnhancedCelestials.MOD_ID + "_lunar_event_data";
 
-    private static LunarEventSavedData clientCache = new LunarEventSavedData();
+    private static LunarForecastSavedData clientCache = new LunarForecastSavedData();
     private static ClientLevel worldCache = null;
 
 
-    public static LunarEventSavedData get(LevelAccessor world) {
+    public static LunarForecastSavedData get(LevelAccessor world) {
         if (!(world instanceof ServerLevel)) {
             if (worldCache != world) {
                 worldCache = (ClientLevel) world;
-                clientCache = new LunarEventSavedData();
+                clientCache = new LunarForecastSavedData();
             }
             return clientCache;
         }
         DimensionDataStorage data = ((ServerLevel) world).getDataStorage();
-        LunarEventSavedData lunarData = data.computeIfAbsent(LunarEventSavedData::load, LunarEventSavedData::new, DATA_NAME);
+        LunarForecastSavedData lunarData = data.computeIfAbsent(LunarForecastSavedData::load, LunarForecastSavedData::new, DATA_NAME);
         if (lunarData == null) {
-            lunarData = new LunarEventSavedData();
+            lunarData = new LunarForecastSavedData();
             data.set(DATA_NAME, lunarData);
         }
         return lunarData;
     }
 
     @Nullable
-    private LunarForecast forecast;
+    private LunarForecast.SaveData forecastSaveData;
 
-    public LunarEventSavedData(LunarForecast lunarForecast) {
-        this.forecast = lunarForecast;
+    public LunarForecastSavedData(LunarForecast.SaveData lunarForecast) {
+        this.forecastSaveData = lunarForecast;
     }
 
-    public LunarEventSavedData() {
+    public LunarForecastSavedData() {
         this(null);
     }
 
-    public static LunarEventSavedData load(CompoundTag nbt) {
-        return new LunarEventSavedData(LunarForecast.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().get().getFirst());
+    public static LunarForecastSavedData load(CompoundTag nbt) {
+        return new LunarForecastSavedData(LunarForecast.SaveData.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().orElseThrow().getFirst());
     }
 
     @Override
     public CompoundTag save(CompoundTag compound) {
-        compound.put("forecast", LunarForecast.CODEC.encodeStart(NbtOps.INSTANCE, forecast).result().get());
+        compound.put("forecast", LunarForecast.SaveData.CODEC.encodeStart(NbtOps.INSTANCE, forecastSaveData).result().orElseThrow());
         return compound;
     }
 
     @Nullable
-    public LunarForecast getForecast() {
-        return forecast;
+    public LunarForecast.SaveData getForecastSaveData() {
+        return forecastSaveData;
     }
 
-    public void setForecast(LunarForecast forecast) {
-        this.forecast = forecast;
+    public void setForecastSaveData(LunarForecast.SaveData forecastSaveData) {
+        this.forecastSaveData = forecastSaveData;
         setDirty();
     }
 }
