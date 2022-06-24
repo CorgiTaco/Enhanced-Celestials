@@ -1,17 +1,19 @@
 package corgitaco.enhancedcelestials.api.lunarevent;
 
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
+import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.reg.RegistrationProvider;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.data.BuiltinRegistries;
 
 import java.util.IdentityHashMap;
 import java.util.function.Supplier;
 
 public class DefaultLunarDimensionSettings {
-    public static final RegistrationProvider<LunarDimensionSettings> LUNAR_EVENT_DIMENSION_SETTINGS = RegistrationProvider.get(EnhancedCelestialsBuiltinRegistries.LUNAR_EVENT_DIMENSION_SETTING, "minecraft");
+    public static final RegistrationProvider<LunarDimensionSettings> LUNAR_EVENT_DIMENSION_SETTINGS = RegistrationProvider.get(EnhancedCelestialsBuiltinRegistries.LUNAR_EVENT_DIMENSION_SETTING, EnhancedCelestialsRegistry.MOD_ID);
 
-    public static final Holder<LunarDimensionSettings> OVERWORLD_LUNAR_SETTINGS = createEvent("overworld", () -> new LunarDimensionSettings(Util.make(new IdentityHashMap<>(), map -> {
+    public static final Holder<LunarDimensionSettings> OVERWORLD_LUNAR_SETTINGS = createEventUnsafe("overworld", () -> new LunarDimensionSettings(Util.make(new IdentityHashMap<>(), map -> {
         map.put(DefaultLunarEvents.BLOOD_MOON, new LunarDimensionSettings.Entry(0.07, 4));
         map.put(DefaultLunarEvents.SUPER_BLOOD_MOON, new LunarDimensionSettings.Entry(0.035, 20));
         map.put(DefaultLunarEvents.HARVEST_MOON, new LunarDimensionSettings.Entry(0.035, 4));
@@ -24,6 +26,12 @@ public class DefaultLunarDimensionSettings {
     public static Holder<LunarDimensionSettings> createEvent(String id, Supplier<LunarDimensionSettings> event) {
         return LUNAR_EVENT_DIMENSION_SETTINGS.register(id, event).asHolder();
     }
+
+    @Deprecated
+    public static Holder<LunarDimensionSettings> createEventUnsafe(String id, Supplier<LunarDimensionSettings> event) {
+        return BuiltinRegistries.register(EnhancedCelestialsBuiltinRegistries.LUNAR_EVENT_DIMENSION_SETTING, id, event.get());
+    }
+
 
     public static void loadClass(){}
 }

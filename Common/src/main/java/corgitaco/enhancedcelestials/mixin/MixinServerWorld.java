@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.util.ProgressListener;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.LevelStorageSource;
@@ -36,6 +37,14 @@ public abstract class MixinServerWorld {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
         if (lunarContext != null) {
             lunarContext.tick((ServerLevel) (Object) this);
+        }
+    }
+
+    @Inject(method = "save", at = @At("RETURN"))
+    private void saveLunarContext(ProgressListener $$0, boolean $$1, boolean $$2, CallbackInfo ci) {
+        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
+        if (lunarContext != null) {
+            lunarContext.save((ServerLevel) (Object) this);
         }
     }
 }

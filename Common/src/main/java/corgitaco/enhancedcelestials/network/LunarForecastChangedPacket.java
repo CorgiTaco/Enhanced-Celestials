@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.network;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.LunarEventInstance;
 import corgitaco.enhancedcelestials.LunarForecast;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
@@ -41,13 +42,21 @@ public class LunarForecastChangedPacket implements S2CPacket {
         if (level != null) {
             LunarContext lunarContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
             if (lunarContext != null) {
-                lunarContext.getLunarForecast().getForecast().clear();
-                lunarContext.getLunarForecast().getForecast().addAll(this.lunarForecast.forecast());
+                LunarForecast lunarForecast = lunarContext.getLunarForecast();
+                lunarForecast.getForecast().clear();
+                lunarForecast.getForecast().addAll(this.lunarForecast.forecast());
 
-                lunarContext.getLunarForecast().getPastEvents().clear();
-                lunarContext.getLunarForecast().getPastEvents().addAll(this.lunarForecast.pastEvents());
+                lunarForecast.getPastEvents().clear();
+                lunarForecast.getPastEvents().addAll(this.lunarForecast.pastEvents());
 
-                lunarContext.getLunarForecast().setLastCheckedGameTime(this.lunarForecast.lastCheckedGameTime());
+                lunarForecast.setLastCheckedGameTime(this.lunarForecast.lastCheckedGameTime());
+
+                if (!lunarForecast.getForecast().isEmpty()) {
+                    LunarEventInstance lunarEventInstance = lunarForecast.getForecast().get(0);
+                    if (lunarEventInstance.active(level.getDayTime())) {
+                        lunarForecast.setCurrentEvent(lunarEventInstance.getLunarEventKey());
+                    }
+                }
             }
         }
     }

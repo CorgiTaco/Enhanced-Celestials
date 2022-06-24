@@ -32,10 +32,11 @@ public class LunarContext {
             Holder<LunarDimensionSettings> lunarDimensionSettings = possibleLunarDimensionSettings.get();
             LunarForecast.SaveData forecastSaveData = saveData.orElseGet(() -> LunarForecastSavedData.get(level).getForecastSaveData());
             LunarForecast forecast;
+            long dayTime = level.getDayTime();
             if (forecastSaveData == null) {
-                forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry);
+                forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, dayTime);
             } else {
-                forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, forecastSaveData);
+                forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, dayTime, forecastSaveData);
             }
             return new LunarContext(forecast);
         }
@@ -44,7 +45,7 @@ public class LunarContext {
 
     public void tick(Level world) {
         this.lunarForecast.tick(world);
-        if (world.getGameTime() / 2400 == 0) {
+        if (world.getGameTime() % 2400 == 0) {
             save(world);
         }
     }

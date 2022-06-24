@@ -161,7 +161,7 @@ public class DefaultLunarEvents {
             new LunarEvent(
                     new LunarEventClientSettings(
                             new ColorSettings("00ffff", 1, "00ffff", 1),
-                            20,
+                            40,
                             null,
                             ECSounds.BLUE_MOON.get()
                     ),

@@ -44,19 +44,20 @@ public class LunarForecast {
 
     private final List<Holder<LunarEvent>> scrambledKeys = new ArrayList<>();
 
-    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, LunarForecast.SaveData savedData) {
-        this(dimensionSettingsHolder, lunarEventRegistry, savedData.forecast(), savedData.pastEvents(), savedData.lastCheckedGameTime());
+    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime, LunarForecast.SaveData savedData) {
+        this(dimensionSettingsHolder, lunarEventRegistry, currentDayTime, savedData.forecast(), savedData.pastEvents(), savedData.lastCheckedGameTime());
     }
 
-    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry) {
-        this(dimensionSettingsHolder, lunarEventRegistry, new ArrayList<>(), new ArrayList<>(), -1L);
+    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime) {
+        this(dimensionSettingsHolder, lunarEventRegistry, currentDayTime, new ArrayList<>(), new ArrayList<>(), -1L);
     }
 
-    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, List<LunarEventInstance> forecast, List<LunarEventInstance> pastEvents, long lastCheckedGameTime) {
+    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime, List<LunarEventInstance> forecast, List<LunarEventInstance> pastEvents, long lastCheckedGameTime) {
         this.lunarEventRegistry = lunarEventRegistry;
         LunarDimensionSettings lunarDimensionSettings = dimensionSettingsHolder.value();
 
-        Collection<Holder<LunarEvent>> possibleEvents = lunarDimensionSettings.eventChance().keySet();
+        Map<Holder<LunarEvent>, LunarDimensionSettings.Entry> eventChances = lunarDimensionSettings.eventChance();
+        Collection<Holder<LunarEvent>> possibleEvents = eventChances.keySet();
         this.dimensionSettingsHolder = dimensionSettingsHolder;
         this.forecast = new ArrayList<>(forecast);
         this.pastEvents = new ArrayList<>(pastEvents);
@@ -72,7 +73,7 @@ public class LunarForecast {
 
         this.lastCheckedGameTime = lastCheckedGameTime;
         this.scrambledKeys.addAll(possibleEvents);
-        this.currentEvent = lunarDimensionSettings.defaultEvent();
+        this.currentEvent = !forecast.isEmpty() && forecast.get(0).active(currentDayTime / lunarDimensionSettings.dayLength()) ? forecast.get(0).getEvent(lunarEventRegistry) : lunarDimensionSettings.defaultEvent();
         this.mostRecentEvent = pastEvents.isEmpty() ? lunarDimensionSettings.defaultEvent() : pastEvents.get(0).getEvent(lunarEventRegistry);
     }
 
@@ -150,8 +151,9 @@ public class LunarForecast {
     }
 
     public void tick(Level level) {
-        Holder<LunarEvent> lastCurrentEvent = this.currentEvent;
         LunarDimensionSettings lunarDimensionSettings = this.dimensionSettingsHolder.value();
+
+        Holder<LunarEvent> lastCurrentEvent = this.currentEvent;
 
         long dayTime = level.getDayTime();
         long dayLength = lunarDimensionSettings.dayLength();
@@ -168,10 +170,15 @@ public class LunarForecast {
         if (updateForecast(level, lunarDimensionSettings, this, 0L)) {
             Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
         }
-        updatePastEventsAndRecentAndCurrentEvents(this, currentDay);
-        LunarEventInstance lunarEventInstance = this.forecast.get(0);
-        if (lunarEventInstance.active(currentDay)) {
-            this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
+        if (level.isNight()) {
+
+            updatePastEventsAndRecentAndCurrentEvents(this, currentDay);
+            LunarEventInstance lunarEventInstance = this.forecast.get(0);
+            if (lunarEventInstance.active(currentDay)) {
+                this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
+            } else {
+                this.currentEvent = lunarDimensionSettings.defaultEvent();
+            }
         } else {
             this.currentEvent = lunarDimensionSettings.defaultEvent();
         }
@@ -314,6 +321,7 @@ public class LunarForecast {
         if (!lunarForecast.getForecast().isEmpty()) {
             LunarEventInstance mostRecentInstance = lunarForecast.getForecast().get(0);
             if (mostRecentInstance.passed(currentDay)) {
+                lunarForecast.forecast.remove(0);
                 List<LunarEventInstance> pastEvents = lunarForecast.pastEvents;
                 pastEvents.add(0, mostRecentInstance);
                 while (pastEvents.size() > 100) {
