@@ -23,7 +23,7 @@ public abstract class MixinPlayerList {
         if (lunarContext != null) {
             LunarForecast.SaveData saveData = lunarContext.getLunarForecast().saveData();
             Services.PLATFORM.sendToClient(playerIn, new LunarContextConstructionPacket(saveData));
-            Services.PLATFORM.sendToClient(playerIn, new LunarForecastChangedPacket(saveData));
+            Services.PLATFORM.sendToClient(playerIn, new LunarForecastChangedPacket(saveData, worldIn.isNight()));
         }
     }
 }

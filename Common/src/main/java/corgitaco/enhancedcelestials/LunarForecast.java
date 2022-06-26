@@ -87,7 +87,7 @@ public class LunarForecast {
         this.lastCheckedGameTime = Long.MIN_VALUE;
         if (updateForecast(level, this.dimensionSettingsHolder.value(), this)) {
             List<ServerPlayer> players = level.players();
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
+            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
         }
     }
 
@@ -167,30 +167,32 @@ public class LunarForecast {
 
     private void serverTick(ServerLevel level, Holder<LunarEvent> lastCurrentEvent, LunarDimensionSettings lunarDimensionSettings, long currentDay) {
         List<ServerPlayer> players = level.players();
+        boolean isNight = level.isNight();
         if (updateForecast(level, lunarDimensionSettings, this, 0L)) {
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
+            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         }
 
         updatePastEventsAndRecentAndCurrentEvents(this, currentDay);
         LunarEventInstance lunarEventInstance = this.forecast.get(0);
-        if (lunarEventInstance.active(currentDay) && level.isNight()) {
+        if (lunarEventInstance.active(currentDay) && isNight) {
             this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
         } else {
             this.currentEvent = lunarDimensionSettings.defaultEvent();
         }
 
         if (lastCurrentEvent != this.currentEvent) {
-            onLunarEventChange(lastCurrentEvent, players);
+            onLunarEventChange(lastCurrentEvent, players, isNight);
         }
 
         // Sync every 5 minutes just in case.
         if (level.getGameTime() % 6000L == 0) {
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
+            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         }
     }
 
-    private void onLunarEventChange(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players) {
+    private void onLunarEventChange(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players, boolean isNight) {
         this.blend = 0;
+        Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         notifyPlayers(lastCurrentEvent, players);
     }
 
@@ -258,9 +260,6 @@ public class LunarForecast {
             this.mostRecentEvent = this.currentEvent;
             this.currentEvent = currentEvent;
             blend = 0;
-        } else {
-            EnhancedCelestials.LOGGER.warn("Attempted to set the same current event...");
-            new Throwable().printStackTrace();
         }
     }
 

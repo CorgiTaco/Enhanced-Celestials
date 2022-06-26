@@ -22,7 +22,6 @@ public class EnhancedCelestialsForge {
         ECRegistries.loadClasses();
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::commonSetup);
-        DimensionTypeTags.init();
         DataPackRegistriesHooks.addRegistryCodec(new RegistryAccess.RegistryData<>(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, LunarEvent.DIRECT_CODEC, LunarEvent.DIRECT_CODEC));
         DataPackRegistriesHooks.addRegistryCodec(new RegistryAccess.RegistryData<>(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, LunarDimensionSettings.CODEC, LunarDimensionSettings.CODEC));
     }

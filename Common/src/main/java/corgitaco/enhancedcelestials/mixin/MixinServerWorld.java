@@ -1,6 +1,5 @@
 package corgitaco.enhancedcelestials.mixin;
 
-import corgitaco.enhancedcelestials.DimensionTypeTags;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import net.minecraft.resources.ResourceKey;
@@ -27,9 +26,7 @@ public abstract class MixinServerWorld {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectLunarContext(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey<Level> $$4, LevelStem stem, ChunkProgressListener $$6, boolean $$7, long $$8, List $$9, boolean $$10, CallbackInfo ci) {
-        if (stem.typeHolder().is(DimensionTypeTags.HAS_LUNAR_EVENTS)) {
-            ((EnhancedCelestialsWorldData) this).setLunarContext(LunarContext.forLevel((ServerLevel) (Object) this, Optional.empty()));
-        }
+        ((EnhancedCelestialsWorldData) this).setLunarContext(LunarContext.forLevel((ServerLevel) (Object) this, Optional.empty()));
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
