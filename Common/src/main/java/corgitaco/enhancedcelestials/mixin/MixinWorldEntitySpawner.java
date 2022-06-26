@@ -1,8 +1,8 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarMobSpawnInfo;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
 import corgitaco.enhancedcelestials.mixin.access.ChunkAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobSpawnInfoAccess;
 import net.minecraft.core.BlockPos;

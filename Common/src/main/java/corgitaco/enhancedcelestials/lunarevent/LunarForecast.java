@@ -1,9 +1,10 @@
-package corgitaco.enhancedcelestials;
+package corgitaco.enhancedcelestials.lunarevent;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
@@ -28,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -172,7 +174,7 @@ public class LunarForecast {
             Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         }
 
-        updatePastEventsAndRecentAndCurrentEvents(this, currentDay);
+        updatePastEventsAndRecentAndCurrentEvents(this, currentDay, lunarDimensionSettings.trackedPastEventsMaxCount());
         LunarEventInstance lunarEventInstance = this.forecast.get(0);
         if (lunarEventInstance.active(currentDay) && isNight) {
             this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
@@ -197,16 +199,18 @@ public class LunarForecast {
     }
 
     private void notifyPlayers(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players) {
-        LunarTextComponents.Notification endNotification = lastCurrentEvent.value().endNotification();
-        if (endNotification != null) {
-            for (ServerPlayer player : players) {
-                player.displayClientMessage(endNotification.customTranslationTextComponent().getComponent(), endNotification.notificationType() == LunarTextComponents.NotificationType.HOT_BAR);
-            }
-        }
-        LunarTextComponents.Notification startNotification = this.currentEvent.value().startNotification();
-        if (startNotification != null) {
-            for (ServerPlayer player : players) {
-                player.displayClientMessage(startNotification.customTranslationTextComponent().getComponent(), startNotification.notificationType() == LunarTextComponents.NotificationType.HOT_BAR);
+        sendNotificationToPlayers(players, lastCurrentEvent.value().endNotification());
+        sendNotificationToPlayers(players, this.currentEvent.value().startNotification());
+    }
+
+    private void sendNotificationToPlayers(List<ServerPlayer> players, @Nullable LunarTextComponents.Notification notification) {
+        if (notification != null) {
+            LunarTextComponents.NotificationType notificationType = notification.notificationType();
+            if (notificationType != LunarTextComponents.NotificationType.NONE) {
+                boolean hotBar = notificationType == LunarTextComponents.NotificationType.HOT_BAR;
+                for (ServerPlayer player : players) {
+                    player.displayClientMessage(notification.customTranslationTextComponent().getComponent(), hotBar);
+                }
             }
         }
     }
@@ -320,14 +324,14 @@ public class LunarForecast {
         return true;
     }
 
-    private static void updatePastEventsAndRecentAndCurrentEvents(LunarForecast lunarForecast, long currentDay) {
+    private static void updatePastEventsAndRecentAndCurrentEvents(LunarForecast lunarForecast, long currentDay, long trackedPastEventsMaxCount) {
         if (!lunarForecast.getForecast().isEmpty()) {
             LunarEventInstance mostRecentInstance = lunarForecast.getForecast().get(0);
             if (mostRecentInstance.passed(currentDay)) {
                 lunarForecast.forecast.remove(0);
                 List<LunarEventInstance> pastEvents = lunarForecast.pastEvents;
                 pastEvents.add(0, mostRecentInstance);
-                while (pastEvents.size() > 100) {
+                while (pastEvents.size() > trackedPastEventsMaxCount) {
                     pastEvents.remove(pastEvents.size() - 1);
                 }
                 lunarForecast.mostRecentEvent = mostRecentInstance.getEvent(lunarForecast.lunarEventRegistry);

@@ -1,5 +1,7 @@
 package corgitaco.enhancedcelestials;
 
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+
 import javax.annotation.Nullable;
 
 public interface EnhancedCelestialsWorldData {

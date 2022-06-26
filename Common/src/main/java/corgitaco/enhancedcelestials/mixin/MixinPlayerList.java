@@ -1,8 +1,8 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
-import corgitaco.enhancedcelestials.LunarForecast;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import corgitaco.enhancedcelestials.network.LunarContextConstructionPacket;
 import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.platform.Services;

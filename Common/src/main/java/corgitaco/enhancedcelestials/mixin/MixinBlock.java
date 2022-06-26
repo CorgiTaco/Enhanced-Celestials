@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;

@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
 import corgitaco.enhancedcelestials.mixin.access.ChunkMapAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobCountsAccess;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;

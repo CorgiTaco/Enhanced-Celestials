@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

@@ -18,7 +18,7 @@ public class DefaultLunarDimensionSettings {
         map.put(DefaultLunarEvents.SUPER_HARVEST_MOON, new LunarDimensionSettings.Entry(0.05, 20));
         map.put(DefaultLunarEvents.BLUE_MOON, new LunarDimensionSettings.Entry(0.1, 4));
         map.put(DefaultLunarEvents.SUPER_BLUE_MOON, new LunarDimensionSettings.Entry(0.05, 20));
-    }), DefaultLunarEvents.DEFAULT, 24000L, 100, 2));
+    }), DefaultLunarEvents.DEFAULT, 100, 24000L, 100, 2));
 
 
     public static Holder<LunarDimensionSettings> createEvent(String id, Supplier<LunarDimensionSettings> event) {

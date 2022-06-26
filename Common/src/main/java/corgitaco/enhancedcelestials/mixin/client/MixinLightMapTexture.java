@@ -2,10 +2,10 @@ package corgitaco.enhancedcelestials.mixin.client;
 
 import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
-import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.util.Mth;

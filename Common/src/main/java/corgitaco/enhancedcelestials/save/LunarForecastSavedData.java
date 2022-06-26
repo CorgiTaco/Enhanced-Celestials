@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.save;
 
 import corgitaco.enhancedcelestials.EnhancedCelestials;
-import corgitaco.enhancedcelestials.LunarForecast;
+import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;

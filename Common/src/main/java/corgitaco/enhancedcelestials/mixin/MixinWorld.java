@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 

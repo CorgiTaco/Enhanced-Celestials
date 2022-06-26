@@ -1,9 +1,9 @@
 package corgitaco.enhancedcelestials.client;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.LunarContext;
-import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

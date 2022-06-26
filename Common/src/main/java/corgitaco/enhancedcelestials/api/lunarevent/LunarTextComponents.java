@@ -39,6 +39,7 @@ public record LunarTextComponents(CustomTranslationTextComponent name,
 
     public enum NotificationType implements StringRepresentable {
         CHAT,
+        NONE,
         HOT_BAR;
 
         public static final Codec<NotificationType> CODEC = StringRepresentable.fromEnum(NotificationType::values);

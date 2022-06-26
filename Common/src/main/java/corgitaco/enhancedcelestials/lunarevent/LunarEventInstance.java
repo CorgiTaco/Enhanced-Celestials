@@ -1,4 +1,4 @@
-package corgitaco.enhancedcelestials;
+package corgitaco.enhancedcelestials.lunarevent;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

@@ -1,4 +1,4 @@
-package corgitaco.enhancedcelestials;
+package corgitaco.enhancedcelestials.lunarevent;
 
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
