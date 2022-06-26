@@ -116,7 +116,7 @@ public class LunarForecast {
             Holder<LunarEvent> randomElement = tag.get().getRandomElement(randomSource).orElseThrow();
             removeIfActive(currentDay);
             this.forecast.add(0, new LunarEventInstance(randomElement.unwrapKey().orElseThrow(), currentDay, true));
-            return Pair.of(Component.translatable("Set lunar event to \"%s\" from tag \"%s", lunarEventTagKey.location()), true);
+            return Pair.of(Component.translatable("Set lunar event to \"%s\" from tag \"%s\"", lunarEventTagKey.location(), lunarEventTagKey.location()), true);
         }
         return Pair.of(Component.translatable("Could not set lunar event for result:\n\"%s\"", result.toString()), false);
     }
