@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.network;
 
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
 import corgitaco.enhancedcelestials.LunarForecast;
@@ -40,6 +41,9 @@ public class LunarContextConstructionPacket implements S2CPacket {
             LunarContext lunarContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
             if (lunarContext == null) {
                 ((EnhancedCelestialsWorldData) level).setLunarContext(LunarContext.forLevel(level, Optional.of(this.saveData)));
+            } else {
+                EnhancedCelestials.LOGGER.warn("Attempted lunar context reconstruction from:");
+                new Throwable().printStackTrace();
             }
         }
     }

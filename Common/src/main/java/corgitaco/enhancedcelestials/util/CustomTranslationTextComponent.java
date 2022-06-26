@@ -50,4 +50,8 @@ public class CustomTranslationTextComponent {
     public String getKey() {
         return translationKey;
     }
+
+    public Style getStyle() {
+        return style;
+    }
 }

@@ -53,7 +53,8 @@ public class LunarForecastChangedPacket implements S2CPacket {
 
                 if (!lunarForecast.getForecast().isEmpty()) {
                     LunarEventInstance lunarEventInstance = lunarForecast.getForecast().get(0);
-                    if (lunarEventInstance.active(level.getDayTime())) {
+                    long currentDay = level.getDayTime() / lunarForecast.getDimensionSettingsHolder().value().dayLength();
+                    if (lunarEventInstance.active(currentDay)) {
                         lunarForecast.setCurrentEvent(lunarEventInstance.getLunarEventKey());
                     }
                 }

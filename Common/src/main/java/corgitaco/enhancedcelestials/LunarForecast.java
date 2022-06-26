@@ -7,7 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
-import corgitaco.enhancedcelestials.network.LunarEventChangedPacket;
 import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.platform.Services;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
@@ -19,6 +18,8 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,13 +37,13 @@ public class LunarForecast {
     private final List<LunarEventInstance> forecast;
     private final List<LunarEventInstance> pastEvents;
     private final Registry<LunarEvent> lunarEventRegistry;
+    private final List<Holder<LunarEvent>> scrambledKeys;
+
     private Holder<LunarEvent> currentEvent;
     private Holder<LunarEvent> mostRecentEvent;
     private float blend;
     private long lastCheckedGameTime;
 
-
-    private final List<Holder<LunarEvent>> scrambledKeys = new ArrayList<>();
 
     public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime, LunarForecast.SaveData savedData) {
         this(dimensionSettingsHolder, lunarEventRegistry, currentDayTime, savedData.forecast(), savedData.pastEvents(), savedData.lastCheckedGameTime());
@@ -72,7 +73,7 @@ public class LunarForecast {
         }
 
         this.lastCheckedGameTime = lastCheckedGameTime;
-        this.scrambledKeys.addAll(possibleEvents);
+        this.scrambledKeys = new ArrayList<>(possibleEvents);
         this.currentEvent = !forecast.isEmpty() && forecast.get(0).active(currentDayTime / lunarDimensionSettings.dayLength()) ? forecast.get(0).getEvent(lunarEventRegistry) : lunarDimensionSettings.defaultEvent();
         this.mostRecentEvent = pastEvents.isEmpty() ? lunarDimensionSettings.defaultEvent() : pastEvents.get(0).getEvent(lunarEventRegistry);
     }
@@ -86,7 +87,6 @@ public class LunarForecast {
         this.lastCheckedGameTime = Long.MIN_VALUE;
         if (updateForecast(level, this.dimensionSettingsHolder.value(), this)) {
             List<ServerPlayer> players = level.players();
-            Services.PLATFORM.sendToAllClients(players, new LunarEventChangedPacket(this.currentEvent.unwrapKey().orElseThrow()));
             Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
         }
     }
@@ -123,21 +123,21 @@ public class LunarForecast {
         long currentDay = currentDayTime / this.dimensionSettingsHolder.value().dayLength();
         MutableComponent textComponent = null;
 
-        for (int i = Math.min(100, this.getForecast().size() - 1); i > 0; i--) {
+        for (int i = Math.min(100, this.getForecast().size() - 1); i >= 0; i--) {
             LunarEventInstance lunarEventInstance = this.getForecast().get(i);
             Holder<LunarEvent> event = lunarEventInstance.getEvent(this.lunarEventRegistry);
             CustomTranslationTextComponent name = event.value().getTextComponents().name();
-
+            TextColor color = name.getStyle().getColor();
             if (textComponent == null) {
-                textComponent = Component.translatable(name.getKey());
+                textComponent = Component.translatable(name.getKey()).withStyle(Style.EMPTY.withColor(color));
             } else {
-                textComponent.append(", ").append(Component.translatable(name.getKey()));
+                textComponent.append(Component.literal(", ").withStyle(Style.EMPTY.withColor(ChatFormatting.WHITE))).append(Component.translatable(name.getKey()).withStyle(Style.EMPTY.withColor(color)));
             }
-            textComponent.append(Component.translatable("enhancedcelestials.lunarforecast.days_left", lunarEventInstance.getDaysUntil(currentDay)));
+            textComponent.append(Component.translatable("enhancedcelestials.lunarforecast.days_left", lunarEventInstance.getDaysUntil(currentDay)).withStyle(Style.EMPTY.withColor(color)));
         }
 
         if (textComponent != null) {
-            return Component.translatable("enhancedcelestials.lunarforecast.header", textComponent.append("."));
+            return Component.translatable("enhancedcelestials.lunarforecast.header", textComponent.append(Component.literal(".").withStyle(Style.EMPTY.withColor(ChatFormatting.WHITE))));
         } else {
             return Component.translatable("enhancedcelestials.lunarforecast.empty", textComponent).withStyle(ChatFormatting.YELLOW);
         }
@@ -170,24 +170,28 @@ public class LunarForecast {
         if (updateForecast(level, lunarDimensionSettings, this, 0L)) {
             Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
         }
-        if (level.isNight()) {
 
-            updatePastEventsAndRecentAndCurrentEvents(this, currentDay);
-            LunarEventInstance lunarEventInstance = this.forecast.get(0);
-            if (lunarEventInstance.active(currentDay)) {
-                this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
-            } else {
-                this.currentEvent = lunarDimensionSettings.defaultEvent();
-            }
+        updatePastEventsAndRecentAndCurrentEvents(this, currentDay);
+        LunarEventInstance lunarEventInstance = this.forecast.get(0);
+        if (lunarEventInstance.active(currentDay) && level.isNight()) {
+            this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
         } else {
             this.currentEvent = lunarDimensionSettings.defaultEvent();
         }
 
         if (lastCurrentEvent != this.currentEvent) {
-            blend = 0;
-            Services.PLATFORM.sendToAllClients(players, new LunarEventChangedPacket(this.currentEvent.unwrapKey().orElseThrow()));
-            notifyPlayers(lastCurrentEvent, players);
+            onLunarEventChange(lastCurrentEvent, players);
         }
+
+        // Sync every 5 minutes just in case.
+        if (level.getGameTime() % 6000L == 0) {
+            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this));
+        }
+    }
+
+    private void onLunarEventChange(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players) {
+        this.blend = 0;
+        notifyPlayers(lastCurrentEvent, players);
     }
 
     private void notifyPlayers(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players) {
@@ -282,7 +286,7 @@ public class LunarForecast {
             lastCheckedDay = lastCheckedTime / dayLength;
         }
 
-        if (currentDay + yearLengthInDays == lastCheckedDay) {
+        if (currentDay + yearLengthInDays <= lastCheckedDay) {
             return false;
         }
 

@@ -1,7 +1,7 @@
 {
   "enhancedcelestials.commands.disabled": "Enhanced Celestials' lunar events are disabled for this world!",
   "enhancedcelestials.commands.lunarevent_missing": "\"%s\" is not a valid lunar event!",
-  "enhancedcelestials.lunarforecast.days_left": "(%s days until)",
+  "enhancedcelestials.lunarforecast.days_left": "(in %sd)",
   "enhancedcelestials.lunarforecast.empty": "No upcoming lunar events.",
   "enhancedcelestials.lunarforecast.header": "Current Lunar forecast:\n%s",
   "enhancedcelestials.lunarforecast.recompute": "Lunar forecast was recomputed!",

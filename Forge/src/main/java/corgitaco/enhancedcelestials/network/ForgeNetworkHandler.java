@@ -23,8 +23,7 @@ public class ForgeNetworkHandler {
     public static void init() {
         EnhancedCelestials.LOGGER.debug(String.format("Initializing %s network...", EnhancedCelestials.MOD_ID));
         SIMPLE_CHANNEL.registerMessage(0, LunarContextConstructionPacket.class, LunarContextConstructionPacket::write, LunarContextConstructionPacket::readFromPacket, ForgeNetworkHandler::handle);
-        SIMPLE_CHANNEL.registerMessage(1, LunarEventChangedPacket.class, LunarEventChangedPacket::write, LunarEventChangedPacket::readFromPacket, ForgeNetworkHandler::handle);
-        SIMPLE_CHANNEL.registerMessage(2, LunarForecastChangedPacket.class, LunarForecastChangedPacket::write, LunarForecastChangedPacket::readFromPacket, ForgeNetworkHandler::handle);
+        SIMPLE_CHANNEL.registerMessage(1, LunarForecastChangedPacket.class, LunarForecastChangedPacket::write, LunarForecastChangedPacket::readFromPacket, ForgeNetworkHandler::handle);
         EnhancedCelestials.LOGGER.info(String.format("Initialized %s network!", EnhancedCelestials.MOD_ID));
     }
 

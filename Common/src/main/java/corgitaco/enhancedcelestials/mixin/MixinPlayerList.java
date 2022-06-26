@@ -2,7 +2,9 @@ package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.LunarContext;
+import corgitaco.enhancedcelestials.LunarForecast;
 import corgitaco.enhancedcelestials.network.LunarContextConstructionPacket;
+import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.platform.Services;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,11 +17,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerList.class)
 public abstract class MixinPlayerList {
 
-    @Inject(method = "sendLevelInfo", at = @At(value = "HEAD"))
+    @Inject(method = "sendLevelInfo", at = @At(value = "RETURN"))
     private void sendContext(ServerPlayer playerIn, ServerLevel worldIn, CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
         if (lunarContext != null) {
-            Services.PLATFORM.sendToClient(playerIn, new LunarContextConstructionPacket(lunarContext.getLunarForecast().saveData()));
+            LunarForecast.SaveData saveData = lunarContext.getLunarForecast().saveData();
+            Services.PLATFORM.sendToClient(playerIn, new LunarContextConstructionPacket(saveData));
+            Services.PLATFORM.sendToClient(playerIn, new LunarForecastChangedPacket(saveData));
         }
     }
 }

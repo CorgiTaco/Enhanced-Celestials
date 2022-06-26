@@ -27,9 +27,8 @@ public class FabricNetworkHandler {
 
     public static void init() {
         EnhancedCelestials.LOGGER.info(String.format("Initializing %s network...", EnhancedCelestials.MOD_ID));
-        registerMessage("forecastchanged", LunarForecastChangedPacket.class, LunarForecastChangedPacket::write, LunarForecastChangedPacket::readFromPacket, LunarForecastChangedPacket::handle);
-        registerMessage("eventchanged", LunarEventChangedPacket.class,  LunarEventChangedPacket::write, LunarEventChangedPacket::readFromPacket, LunarEventChangedPacket::handle);
-        registerMessage("contextconstruction", LunarContextConstructionPacket.class,  LunarContextConstructionPacket::write, LunarContextConstructionPacket::readFromPacket, LunarContextConstructionPacket::handle);
+        registerMessage("forecast_changed", LunarForecastChangedPacket.class, LunarForecastChangedPacket::write, LunarForecastChangedPacket::readFromPacket, LunarForecastChangedPacket::handle);
+        registerMessage("context_construction", LunarContextConstructionPacket.class,  LunarContextConstructionPacket::write, LunarContextConstructionPacket::readFromPacket, LunarContextConstructionPacket::handle);
         EnhancedCelestials.LOGGER.info(String.format("Initialized %s network!", EnhancedCelestials.MOD_ID));
     }
 

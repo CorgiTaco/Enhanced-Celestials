@@ -54,7 +54,10 @@ public class DefaultLunarEvents {
                     ),
                     DEFAULT_PHASES,
                     new LunarTextComponents(
-                            new CustomTranslationTextComponent("enhancedcelestials.name.blood_moon"),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.blood_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.RED)
+                            ),
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.notification.blood_moon.rise",
                                     Style.EMPTY.applyFormat(ChatFormatting.RED)
@@ -73,13 +76,16 @@ public class DefaultLunarEvents {
             new LunarEvent(
                     new LunarEventClientSettings(
                             new ColorSettings("FF0000", 1, "FF0000", 1),
-                            20,
+                            40,
                             null,
                             ECSounds.BLOOD_MOON.get()
                     ),
                     DEFAULT_PHASES,
                     new LunarTextComponents(
-                            new CustomTranslationTextComponent("enhancedcelestials.name.super_blood_moon"),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.super_blood_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.RED)
+                            ),
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.notification.super_blood_moon.rise",
                                     Style.EMPTY.applyFormat(ChatFormatting.RED).applyFormat(ChatFormatting.BOLD)
@@ -104,7 +110,10 @@ public class DefaultLunarEvents {
                     ),
                     DEFAULT_PHASES,
                     new LunarTextComponents(
-                            new CustomTranslationTextComponent("enhancedcelestials.name.harvest_moon"),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.harvest_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.YELLOW)
+                            ),
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.notification.harvest_moon.rise",
                                     Style.EMPTY.applyFormat(ChatFormatting.YELLOW)
@@ -125,7 +134,10 @@ public class DefaultLunarEvents {
                     ),
                     DEFAULT_SUPER_MOON_PHASES,
                     new LunarTextComponents(
-                            new CustomTranslationTextComponent("enhancedcelestials.name.super_harvest_moon"),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.super_harvest_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.YELLOW)
+                            ),
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.notification.super_harvest_moon.rise",
                                     Style.EMPTY.applyFormat(ChatFormatting.YELLOW).applyFormat(ChatFormatting.BOLD)
@@ -146,7 +158,10 @@ public class DefaultLunarEvents {
                     ),
                     DEFAULT_PHASES,
                     new LunarTextComponents(
-                            new CustomTranslationTextComponent("enhancedcelestials.name.blue_moon"),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.blue_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.AQUA)
+                            ),
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.notification.blue_moon.rise",
                                     Style.EMPTY.applyFormat(ChatFormatting.AQUA)
@@ -167,7 +182,10 @@ public class DefaultLunarEvents {
                     ),
                     DEFAULT_PHASES,
                     new LunarTextComponents(
-                            new CustomTranslationTextComponent("enhancedcelestials.name.super_blue_moon"),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.super_blue_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.AQUA)
+                            ),
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.notification.super_blue_moon.rise",
                                     Style.EMPTY.applyFormat(ChatFormatting.AQUA)
@@ -183,5 +201,6 @@ public class DefaultLunarEvents {
         return LUNAR_EVENTS.register(id, event).asHolder();
     }
 
-    public static void loadClass(){}
+    public static void loadClass() {
+    }
 }
