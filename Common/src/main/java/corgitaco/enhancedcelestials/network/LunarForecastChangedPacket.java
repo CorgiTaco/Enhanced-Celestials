@@ -10,14 +10,14 @@ import net.minecraft.world.level.Level;
 
 public class LunarForecastChangedPacket implements S2CPacket {
 
-    private final LunarForecast.SaveData lunarForecast;
+    private final LunarForecast.Data lunarForecast;
     private final boolean isNight; // TODO: When is mojang actually going to sync the client level's `isNight` method?!?!?!!?!?!?
 
     public LunarForecastChangedPacket(LunarForecast forecast, boolean isNight) {
-        this(forecast.saveData(), isNight);
+        this(forecast.data(), isNight);
     }
 
-    public LunarForecastChangedPacket(LunarForecast.SaveData lunarForecast, boolean isNight) {
+    public LunarForecastChangedPacket(LunarForecast.Data lunarForecast, boolean isNight) {
         this.lunarForecast = lunarForecast;
         this.isNight = isNight;
     }
@@ -25,7 +25,7 @@ public class LunarForecastChangedPacket implements S2CPacket {
 
     public static LunarForecastChangedPacket readFromPacket(FriendlyByteBuf buf) {
         try {
-            return new LunarForecastChangedPacket(buf.readWithCodec(LunarForecast.SaveData.CODEC), buf.readBoolean());
+            return new LunarForecastChangedPacket(buf.readWithCodec(LunarForecast.Data.CODEC), buf.readBoolean());
         } catch (Exception e) {
             throw new IllegalStateException("Lunar Forecast packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
@@ -34,7 +34,7 @@ public class LunarForecastChangedPacket implements S2CPacket {
     @Override
     public void write(FriendlyByteBuf buf) {
         try {
-            buf.writeWithCodec(LunarForecast.SaveData.CODEC, this.lunarForecast);
+            buf.writeWithCodec(LunarForecast.Data.CODEC, this.lunarForecast);
             buf.writeBoolean(this.isNight);
         } catch (Exception e) {
             throw new IllegalStateException("Lunar Forecast packet could not be written to. This is really really bad...\n\n" + e.getMessage());

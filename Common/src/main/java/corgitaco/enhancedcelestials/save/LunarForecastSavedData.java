@@ -37,10 +37,10 @@ public class LunarForecastSavedData extends SavedData {
     }
 
     @Nullable
-    private LunarForecast.SaveData forecastSaveData;
+    private LunarForecast.Data forecastData;
 
-    public LunarForecastSavedData(LunarForecast.SaveData lunarForecast) {
-        this.forecastSaveData = lunarForecast;
+    public LunarForecastSavedData(LunarForecast.Data lunarForecast) {
+        this.forecastData = lunarForecast;
     }
 
     public LunarForecastSavedData() {
@@ -48,22 +48,22 @@ public class LunarForecastSavedData extends SavedData {
     }
 
     public static LunarForecastSavedData load(CompoundTag nbt) {
-        return new LunarForecastSavedData(LunarForecast.SaveData.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().orElseThrow().getFirst());
+        return new LunarForecastSavedData(LunarForecast.Data.CODEC.decode(NbtOps.INSTANCE, nbt.get("forecast")).result().orElseThrow().getFirst());
     }
 
     @Override
     public CompoundTag save(CompoundTag compound) {
-        compound.put("forecast", LunarForecast.SaveData.CODEC.encodeStart(NbtOps.INSTANCE, forecastSaveData).result().orElseThrow());
+        compound.put("forecast", LunarForecast.Data.CODEC.encodeStart(NbtOps.INSTANCE, forecastData).result().orElseThrow());
         return compound;
     }
 
     @Nullable
-    public LunarForecast.SaveData getForecastSaveData() {
-        return forecastSaveData;
+    public LunarForecast.Data getForecastSaveData() {
+        return forecastData;
     }
 
-    public void setForecastSaveData(LunarForecast.SaveData forecastSaveData) {
-        this.forecastSaveData = forecastSaveData;
+    public void setForecastSaveData(LunarForecast.Data forecastData) {
+        this.forecastData = forecastData;
         setDirty();
     }
 }

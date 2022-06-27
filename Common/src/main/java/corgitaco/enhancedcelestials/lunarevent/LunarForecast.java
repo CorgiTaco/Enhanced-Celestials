@@ -47,10 +47,16 @@ public class LunarForecast {
     private long lastCheckedGameTime;
 
 
-    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime, LunarForecast.SaveData savedData) {
+    /**
+     * @param savedData The data from disk / packet.
+     */
+    public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime, Data savedData) {
         this(dimensionSettingsHolder, lunarEventRegistry, currentDayTime, savedData.forecast(), savedData.pastEvents(), savedData.lastCheckedGameTime());
     }
 
+    /**
+     * Creates a lunar forecast from no data.
+     */
     public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime) {
         this(dimensionSettingsHolder, lunarEventRegistry, currentDayTime, new ArrayList<>(), new ArrayList<>(), -1L);
     }
@@ -80,10 +86,16 @@ public class LunarForecast {
         this.mostRecentEvent = pastEvents.isEmpty() ? lunarDimensionSettings.defaultEvent() : pastEvents.get(0).getEvent(lunarEventRegistry);
     }
 
-    public SaveData saveData() {
-        return new SaveData(this.forecast, this.pastEvents, this.lastCheckedGameTime);
+    /**
+     * @return The save / packet data for the lunar forecast.
+     */
+    public Data data() {
+        return new Data(this.forecast, this.pastEvents, this.lastCheckedGameTime);
     }
 
+    /**
+     * Clears the current forecast & resets the last checked game time to allow updateForecast to refill the forecast.
+     */
     public void recompute(ServerLevel level) {
         this.forecast.clear();
         this.lastCheckedGameTime = Long.MIN_VALUE;
@@ -93,6 +105,14 @@ public class LunarForecast {
         }
     }
 
+    /**
+     * If the result is not already active, this modifies the lunar forecast by setting the new
+     * event(a random event from a tag if the result is a tag) at index 0
+     * of the forecast and replacing any currently active lunar event at index 0.
+     *
+     * @param result Either a tag or ResourceKey for a given lunar event.
+     * @return A pair of both the command message & boolean determining whether the command was a success(true) or failure(false).
+     */
     public Pair<Component, Boolean> setOrReplaceEventWithResponse(ResourceOrTagLocationArgument.Result<LunarEvent> result, long currentDay, RandomSource randomSource) {
         if (result.test(this.currentEvent)) {
             return Pair.of(Component.translatable("Event is already active"), false);
@@ -121,6 +141,9 @@ public class LunarForecast {
         return Pair.of(Component.translatable("Could not set lunar event for result:\n\"%s\"", result.toString()), false);
     }
 
+    /**
+     * @return A forecast text component to display in the chat showing up to the next 100 events.
+     */
     public Component getForecastComponent(long currentDayTime) {
         long currentDay = currentDayTime / this.dimensionSettingsHolder.value().dayLength();
         MutableComponent textComponent = null;
@@ -146,12 +169,18 @@ public class LunarForecast {
 
     }
 
+    /**
+     * Remove the most recent lunar event if one exists & if that lunar event is active.
+     */
     private void removeIfActive(long currentDay) {
         if (!forecast.isEmpty() && this.forecast.get(0).active(currentDay)) {
             this.forecast.remove(0);
         }
     }
 
+    /**
+     * Handles Lunar Event updates on tick.
+     */
     public void tick(Level level) {
         LunarDimensionSettings lunarDimensionSettings = this.dimensionSettingsHolder.value();
 
@@ -167,6 +196,9 @@ public class LunarForecast {
         this.blend = Mth.clamp(this.blend + 0.01F, 0, 1.0F);
     }
 
+    /**
+     * Handles the server side ticking of the Lunar Forecast.
+     */
     private void serverTick(ServerLevel level, Holder<LunarEvent> lastCurrentEvent, LunarDimensionSettings lunarDimensionSettings, long currentDay) {
         List<ServerPlayer> players = level.players();
         boolean isNight = level.isNight();
@@ -192,17 +224,26 @@ public class LunarForecast {
         }
     }
 
+    /**
+     * Handles lunar event changes and sends the changes to the client.
+     */
     private void onLunarEventChange(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players, boolean isNight) {
         this.blend = 0;
         Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         notifyPlayers(lastCurrentEvent, players);
     }
 
+    /**
+     * Sends the client messages to all players for when a lunar event change occurs.
+     */
     private void notifyPlayers(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players) {
         sendNotificationToPlayers(players, lastCurrentEvent.value().endNotification());
         sendNotificationToPlayers(players, this.currentEvent.value().startNotification());
     }
 
+    /**
+     * Sends the client message from a notification.
+     */
     private void sendNotificationToPlayers(List<ServerPlayer> players, @Nullable LunarTextComponents.Notification notification) {
         if (notification != null) {
             LunarTextComponents.NotificationType notificationType = notification.notificationType();
@@ -213,6 +254,26 @@ public class LunarForecast {
                 }
             }
         }
+    }
+
+    public void setLastCheckedGameTime(long lastCheckedGameTime) {
+        this.lastCheckedGameTime = lastCheckedGameTime;
+    }
+
+    public void setCurrentEvent(ResourceKey<LunarEvent> key) {
+        setCurrentEvent(this.lunarEventRegistry.getHolderOrThrow(key));
+    }
+
+    public void setCurrentEvent(Holder<LunarEvent> currentEvent) {
+        if (currentEvent != this.currentEvent) {
+            this.mostRecentEvent = this.currentEvent;
+            this.currentEvent = currentEvent;
+            blend = 0;
+        }
+    }
+
+    public Holder<LunarDimensionSettings> getDimensionSettingsHolder() {
+        return dimensionSettingsHolder;
     }
 
     public List<LunarEventInstance> getForecast() {
@@ -227,10 +288,6 @@ public class LunarForecast {
         return pastEvents;
     }
 
-    public Registry<LunarEvent> getLunarEventRegistry() {
-        return lunarEventRegistry;
-    }
-
     public Holder<LunarEvent> getCurrentEvent() {
         return currentEvent;
     }
@@ -243,35 +300,18 @@ public class LunarForecast {
         return blend;
     }
 
-    public List<Holder<LunarEvent>> getScrambledKeys() {
-        return scrambledKeys;
-    }
-
-    public void setLastCheckedGameTime(long lastCheckedGameTime) {
-        this.lastCheckedGameTime = lastCheckedGameTime;
-    }
-
-    public void setCurrentEvent(ResourceKey<LunarEvent> key) {
-        setCurrentEvent(this.lunarEventRegistry.getHolderOrThrow(key));
-    }
-
-    public Holder<LunarDimensionSettings> getDimensionSettingsHolder() {
-        return dimensionSettingsHolder;
-    }
-
-    public void setCurrentEvent(Holder<LunarEvent> currentEvent) {
-        if (currentEvent != this.currentEvent) {
-            this.mostRecentEvent = this.currentEvent;
-            this.currentEvent = currentEvent;
-            blend = 0;
-        }
-    }
-
+    /**
+     * This fills the forecast with randomly selected lunar events. Has no seed modifier.
+     *
+     * @return true if forecast changes occurred.
+     */
     public static boolean updateForecast(ServerLevel world, LunarDimensionSettings dimensionSettings, LunarForecast lunarForecast) {
         return updateForecast(world, dimensionSettings, lunarForecast, 0L);
     }
 
     /**
+     * This fills the forecast with randomly selected lunar events.
+     *
      * @return true if forecast changes occurred.
      */
     public static boolean updateForecast(ServerLevel world, LunarDimensionSettings dimensionSettings, LunarForecast lunarForecast, long seedModifier) {
@@ -312,7 +352,8 @@ public class LunarForecast {
             for (Holder<LunarEvent> lunarEventHolder : lunarForecast.scrambledKeys) {
                 LunarDimensionSettings.Entry entry = dimensionSettings.eventChance().get(lunarEventHolder);
                 LunarEvent value = lunarEventHolder.value();
-                if ((day - eventByLastTime.getOrDefault(value, currentDay)) > entry.minNumberOfNights() && (day - lastDay) > dimensionSettings.minDaysBetweenEvents() && entry.chance() > random.nextDouble() && value.getValidMoonPhases().contains(world.dimensionType().moonPhase(dayTime - 1))) {
+                boolean canCreateEventInstance = canCreateEventInstance(world, dimensionSettings, dayTime, currentDay, eventByLastTime, lastDay, day, random, entry, value);
+                if (canCreateEventInstance) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(lunarEventHolder.unwrapKey().orElseThrow(), day));
                     eventByLastTime.put(value, day);
@@ -324,6 +365,23 @@ public class LunarForecast {
         return true;
     }
 
+    /**
+     * @return If an event instance can be added to the forecast.
+     */
+    private static boolean canCreateEventInstance(ServerLevel world, LunarDimensionSettings dimensionSettings, long dayTime, long currentDay,
+                                                  Object2LongArrayMap<LunarEvent> eventByLastTime, long lastDay, long day,
+                                                  Random random, LunarDimensionSettings.Entry entry, LunarEvent value) {
+
+        boolean pastMinNumberOfNightsBetweenThisTypeOfEvent = (day - eventByLastTime.getOrDefault(value, currentDay)) > entry.minNumberOfNights();
+        boolean pastMinNumberOfNightsBetweenAllEvents = (day - lastDay) > dimensionSettings.minDaysBetweenEvents();
+        boolean isValidMoonPhase = value.getValidMoonPhases().contains(world.dimensionType().moonPhase(dayTime - 1));
+        boolean chance = entry.chance() > random.nextDouble();
+        return pastMinNumberOfNightsBetweenThisTypeOfEvent && pastMinNumberOfNightsBetweenAllEvents && chance && isValidMoonPhase;
+    }
+
+    /**
+     * Sets the most recent event and updates past events.
+     */
     private static void updatePastEventsAndRecentAndCurrentEvents(LunarForecast lunarForecast, long currentDay, long trackedPastEventsMaxCount) {
         if (!lunarForecast.getForecast().isEmpty()) {
             LunarEventInstance mostRecentInstance = lunarForecast.getForecast().get(0);
@@ -339,15 +397,18 @@ public class LunarForecast {
         }
     }
 
-    public record SaveData(List<LunarEventInstance> forecast,
-                           List<LunarEventInstance> pastEvents,
-                           long lastCheckedGameTime) {
-        public static final Codec<SaveData> CODEC = RecordCodecBuilder.create(builder ->
+    /**
+     * The save / packet data for the lunar forecast.
+     */
+    public record Data(List<LunarEventInstance> forecast,
+                       List<LunarEventInstance> pastEvents,
+                       long lastCheckedGameTime) {
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(builder ->
                 builder.group(
-                        LunarEventInstance.CODEC.listOf().fieldOf("forecast").forGetter(SaveData::forecast),
-                        LunarEventInstance.CODEC.listOf().fieldOf("past_events").forGetter(SaveData::pastEvents),
-                        Codec.LONG.fieldOf("last_checked_game_time").forGetter(SaveData::lastCheckedGameTime)
-                ).apply(builder, SaveData::new)
+                        LunarEventInstance.CODEC.listOf().fieldOf("forecast").forGetter(Data::forecast),
+                        LunarEventInstance.CODEC.listOf().fieldOf("past_events").forGetter(Data::pastEvents),
+                        Codec.LONG.fieldOf("last_checked_game_time").forGetter(Data::lastCheckedGameTime)
+                ).apply(builder, Data::new)
         );
     }
 }

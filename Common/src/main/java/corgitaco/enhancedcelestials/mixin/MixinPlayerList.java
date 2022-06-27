@@ -21,9 +21,9 @@ public abstract class MixinPlayerList {
     private void sendContext(ServerPlayer playerIn, ServerLevel worldIn, CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
         if (lunarContext != null) {
-            LunarForecast.SaveData saveData = lunarContext.getLunarForecast().saveData();
-            Services.PLATFORM.sendToClient(playerIn, new LunarContextConstructionPacket(saveData));
-            Services.PLATFORM.sendToClient(playerIn, new LunarForecastChangedPacket(saveData, worldIn.isNight()));
+            LunarForecast.Data data = lunarContext.getLunarForecast().data();
+            Services.PLATFORM.sendToClient(playerIn, new LunarContextConstructionPacket(data));
+            Services.PLATFORM.sendToClient(playerIn, new LunarForecastChangedPacket(data, worldIn.isNight()));
         }
     }
 }

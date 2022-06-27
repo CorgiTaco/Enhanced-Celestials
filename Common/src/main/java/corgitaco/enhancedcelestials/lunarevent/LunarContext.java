@@ -22,7 +22,7 @@ public class LunarContext {
     }
 
     @Nullable
-    public static LunarContext forLevel(Level level, Optional<LunarForecast.SaveData> saveData) {
+    public static LunarContext forLevel(Level level, Optional<LunarForecast.Data> saveData) {
         Registry<LunarDimensionSettings> lunarDimensionSettingsRegistry = level.registryAccess().registryOrThrow(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY);
         Registry<LunarEvent> lunarEventRegistry = level.registryAccess().registryOrThrow(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY);
         ResourceLocation location = level.dimension().location();
@@ -30,13 +30,13 @@ public class LunarContext {
 
         if (possibleLunarDimensionSettings.isPresent()) {
             Holder<LunarDimensionSettings> lunarDimensionSettings = possibleLunarDimensionSettings.get();
-            LunarForecast.SaveData forecastSaveData = saveData.orElseGet(() -> LunarForecastSavedData.get(level).getForecastSaveData());
+            LunarForecast.Data forecastData = saveData.orElseGet(() -> LunarForecastSavedData.get(level).getForecastSaveData());
             LunarForecast forecast;
             long dayTime = level.getDayTime();
-            if (forecastSaveData == null) {
+            if (forecastData == null) {
                 forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, dayTime);
             } else {
-                forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, dayTime, forecastSaveData);
+                forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, dayTime, forecastData);
             }
             return new LunarContext(forecast);
         }
@@ -51,7 +51,7 @@ public class LunarContext {
     }
 
     public void save(Level world) {
-        LunarForecastSavedData.get(world).setForecastSaveData(this.lunarForecast.saveData());
+        LunarForecastSavedData.get(world).setForecastSaveData(this.lunarForecast.data());
     }
 
     public LunarForecast getLunarForecast() {
