@@ -28,7 +28,7 @@ public abstract class MixinLivingEntity extends Entity {
     private void lunarEntityTick(CallbackInfo ci) {
         LunarContext lunarContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (lunarContext != null) {
-            lunarContext.getLunarForecast().getCurrentEvent().value().livingEntityTick((LivingEntity) (Object) this, this.level);
+            lunarContext.getLunarForecast().getCurrentEvent().value().livingEntityTick((LivingEntity) (Object) this);
         }
     }
 

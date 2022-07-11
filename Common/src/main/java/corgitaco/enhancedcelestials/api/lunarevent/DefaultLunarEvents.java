@@ -1,9 +1,11 @@
 package corgitaco.enhancedcelestials.api.lunarevent;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
+import corgitaco.enhancedcelestials.api.entityfilter.AnyEntityFilter;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import corgitaco.enhancedcelestials.core.ECSounds;
 import corgitaco.enhancedcelestials.reg.RegistrationProvider;
@@ -12,10 +14,12 @@ import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class DefaultLunarEvents {
@@ -68,7 +72,7 @@ public class DefaultLunarEvents {
                     new LunarMobSettings(
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
                             new LunarMobSpawnInfo(true, true, MobSpawnSettings.EMPTY),
-                            ImmutableMap.of()),
+                            List.of()),
                     DropSettings.EMPTY)
     );
 
@@ -96,7 +100,7 @@ public class DefaultLunarEvents {
                     new LunarMobSettings(
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
                             new LunarMobSpawnInfo(true, true, MobSpawnSettings.EMPTY),
-                            ImmutableMap.of()),
+                            List.of()),
                     DropSettings.EMPTY)
     );
 
@@ -168,7 +172,9 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.set")),
                     false,
-                    new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, ImmutableMap.of()),
+                    new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, List.of(
+                            Pair.of(AnyEntityFilter.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 0, true, false, false))
+                    )),
                     DropSettings.EMPTY)
     );
 
@@ -192,7 +198,9 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.super_blue_moon.set")),
                     false,
-                    new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, ImmutableMap.of()),
+                    new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, List.of(
+                            Pair.of(AnyEntityFilter.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 4, true, false, false))
+                    )),
                     DropSettings.EMPTY)
     );
 

@@ -3,17 +3,15 @@ package corgitaco.enhancedcelestials.api.lunarevent;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
+import corgitaco.enhancedcelestials.api.entityfilter.EntityFilter;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -77,19 +75,18 @@ public class LunarEvent {
         return this.lunarMobSettings.spawnCategoryMultiplier().getOrDefault(classification, 1.0D);
     }
 
-    public void livingEntityTick(LivingEntity entity, Level world) {
-        this.lunarMobSettings.effectsForEntityTag().forEach((entityTypeTagKey, mobEffectDoubleMap) -> {
-            if (entity.getType().is(entityTypeTagKey)) {
-                mobEffectDoubleMap.forEach((mobEffect, intProvider) -> {
-                    entity.addEffect(new MobEffectInstance(MobEffects.LUCK, 1210, intProvider.sample(world.random), true, false, false));
-                });
+    public void livingEntityTick(LivingEntity entity) {
+        this.lunarMobSettings.effectsForEntityTag().forEach((entityFilterMapPair) -> {
+            EntityFilter entityFilter = entityFilterMapPair.getFirst();
+            if (entityFilter.filter(entity)) {
+                MobEffectInstanceBuilder builder = entityFilterMapPair.getSecond();
+                entity.addEffect(builder.makeInstance());
             }
         });
     }
 
-    @Nullable
     public LunarMobSpawnInfo getLunarSpawner() {
-        return null;
+        return this.lunarMobSettings.lunarMobSpawnInfo();
     }
 
     public Set<Integer> getValidMoonPhases() {

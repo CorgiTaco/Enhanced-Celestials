@@ -15,6 +15,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -22,6 +23,8 @@ import java.util.function.Supplier;
 public class CodecUtil {
 
     public static final Codec<MobEffect> MOB_EFFECT = createLoggedExceptionRegistryCodec(Registry.MOB_EFFECT);
+    public static final Codec<EntityType<?>> ENTITY_TYPE = createLoggedExceptionRegistryCodec(Registry.ENTITY_TYPE);
+
 
 
     public static final Codec<ClickEvent.Action> CLICK_EVENT_ACTION_CODEC = Codec.STRING.comapFlatMap(s -> {
@@ -77,7 +80,7 @@ public class CodecUtil {
                     registryElements.append(i).append(". \"").append(registry.getKey(object).toString()).append("\"\n");
                 }
 
-                return DataResult.error(String.format("\"%s\" is not a valid id in registry: %s.\nCurrent Registry Values:\n\n%s\n", location.toString(), registry.toString(), registryElements.toString()));
+                return DataResult.error(String.format("\"%s\" is not a valid entityType in registry: %s.\nCurrent Registry Values:\n\n%s\n", location.toString(), registry.toString(), registryElements.toString()));
             }
             return DataResult.success(result.get());
         }, registry::getKey);
