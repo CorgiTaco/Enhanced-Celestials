@@ -19,5 +19,6 @@ public interface EntityFilter {
         ENTITY_FILTERS.register("by_type", () -> EntityTypeFilter.CODEC);
         ENTITY_FILTERS.register("by_type_tag", () -> EntityTypeTagFilter.CODEC);
         ENTITY_FILTERS.register("any", () -> AnyEntityFilter.CODEC);
+        ENTITY_FILTERS.register("multi", () -> MultiFilterFilter.CODEC);
     }
 }
