@@ -24,7 +24,7 @@ public record MultiFilterFilter(List<EntityFilter> filters, boolean inverse) imp
     @Override
     public boolean filter(LivingEntity entity) {
         for (EntityFilter filter : filters) {
-            if (!filter.filter(entity)) {
+            if (this.inverse != filter.filter(entity)) {
                 return false;
             }
         }
