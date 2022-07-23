@@ -359,13 +359,13 @@ public class LunarForecast {
             Random random = new Random(seed.applyAsLong(day));
             Collections.shuffle(lunarForecast.scrambledKeys, random);
             for (Holder<LunarEvent> lunarEventHolder : lunarForecast.scrambledKeys) {
-                Map<ResourceKey<Level>, LunarEvent.ChanceEntry> eventChancesByDimension = lunarEventHolder.value().getEventChancesByDimension();
+                Map<ResourceKey<Level>, LunarEvent.SpawnRequirements> eventChancesByDimension = lunarEventHolder.value().getEventChancesByDimension();
                 if (!eventChancesByDimension.containsKey(world.dimension())) {
                     continue;
                 }
-                LunarEvent.ChanceEntry chanceEntry = eventChancesByDimension.get(world.dimension());
+                LunarEvent.SpawnRequirements spawnRequirements = eventChancesByDimension.get(world.dimension());
                 LunarEvent value = lunarEventHolder.value();
-                boolean canCreateEventInstance = canCreateEventInstance(world, dimensionSettings, dayTime, currentDay, eventByLastTime, lastDay, day, random, chanceEntry, value);
+                boolean canCreateEventInstance = canCreateEventInstance(world, dimensionSettings, dayTime, currentDay, eventByLastTime, lastDay, day, random, spawnRequirements, value);
                 if (canCreateEventInstance) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(lunarEventHolder.unwrapKey().orElseThrow(), day));
@@ -383,12 +383,12 @@ public class LunarForecast {
      */
     private static boolean canCreateEventInstance(ServerLevel world, LunarDimensionSettings dimensionSettings, long dayTime, long currentDay,
                                                   Object2LongArrayMap<LunarEvent> eventByLastTime, long lastDay, long day,
-                                                  Random random, LunarEvent.ChanceEntry chanceEntry, LunarEvent value) {
+                                                  Random random, LunarEvent.SpawnRequirements spawnRequirements, LunarEvent value) {
 
-        boolean pastMinNumberOfNightsBetweenThisTypeOfEvent = (day - eventByLastTime.getOrDefault(value, currentDay)) > chanceEntry.minNumberOfNights();
+        boolean pastMinNumberOfNightsBetweenThisTypeOfEvent = (day - eventByLastTime.getOrDefault(value, currentDay)) > spawnRequirements.minNumberOfNights();
         boolean pastMinNumberOfNightsBetweenAllEvents = (day - lastDay) > dimensionSettings.minDaysBetweenEvents();
-        boolean isValidMoonPhase = value.getValidMoonPhases().contains(world.dimensionType().moonPhase(dayTime - 1));
-        boolean chance = chanceEntry.chance() > random.nextDouble();
+        boolean isValidMoonPhase = spawnRequirements.validMoonPhases().contains(world.dimensionType().moonPhase(dayTime - 1));
+        boolean chance = spawnRequirements.chance() > random.nextDouble();
         return pastMinNumberOfNightsBetweenThisTypeOfEvent && pastMinNumberOfNightsBetweenAllEvents && chance && isValidMoonPhase;
     }
 

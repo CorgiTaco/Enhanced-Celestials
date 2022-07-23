@@ -20,15 +20,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 public class LunarEvent {
 
     public static final Codec<LunarEvent> DIRECT_CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
-                    Codec.unboundedMap(ResourceKey.codec(Registry.DIMENSION_REGISTRY), ChanceEntry.CODEC).fieldOf("dimension_chances").forGetter(LunarEvent::getEventChancesByDimension),
+                    Codec.unboundedMap(ResourceKey.codec(Registry.DIMENSION_REGISTRY), SpawnRequirements.CODEC).fieldOf("dimension_chances").forGetter(LunarEvent::getEventChancesByDimension),
                     LunarEventClientSettings.CODEC.fieldOf("client_settings").forGetter(LunarEvent::getClientSettings),
-                    Codec.list(Codec.intRange(0, 8)).fieldOf("valid_moon_phase").forGetter((clientSettings) -> new ArrayList<>(clientSettings.getValidMoonPhases())),
                     LunarTextComponents.CODEC.fieldOf("text_components").forGetter(LunarEvent::getTextComponents),
                     LunarMobSettings.CODEC.fieldOf("mob_settings").forGetter(LunarEvent::getLunarMobSettings),
                     DropSettings.CODEC.fieldOf("drops").forGetter(LunarEvent::getDropSettings)
@@ -38,17 +36,15 @@ public class LunarEvent {
     public static final Codec<Holder<LunarEvent>> CODEC = RegistryFileCodec.create(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, DIRECT_CODEC);
 
 
-    private final Map<ResourceKey<Level>, ChanceEntry> eventChancesByDimension;
+    private final Map<ResourceKey<Level>, SpawnRequirements> eventChancesByDimension;
     private final LunarEventClientSettings clientSettings;
-    private final Set<Integer> validMoonPhases;
     private final LunarTextComponents textComponents;
     private final LunarMobSettings lunarMobSettings;
     private final DropSettings dropSettings;
 
-    public LunarEvent(Map<ResourceKey<Level>, ChanceEntry> eventChancesByDimension, LunarEventClientSettings clientSettings, Collection<Integer> validMoonPhases, LunarTextComponents textComponents, LunarMobSettings lunarMobSettings, DropSettings dropSettings) {
+    public LunarEvent(Map<ResourceKey<Level>, SpawnRequirements> eventChancesByDimension, LunarEventClientSettings clientSettings, LunarTextComponents textComponents, LunarMobSettings lunarMobSettings, DropSettings dropSettings) {
         this.eventChancesByDimension = eventChancesByDimension;
         this.clientSettings = clientSettings;
-        this.validMoonPhases = new IntArraySet(validMoonPhases);
         this.textComponents = textComponents;
         this.lunarMobSettings = lunarMobSettings;
         this.dropSettings = dropSettings;
@@ -94,10 +90,6 @@ public class LunarEvent {
         return this.lunarMobSettings.lunarMobSpawnInfo();
     }
 
-    public Set<Integer> getValidMoonPhases() {
-        return validMoonPhases;
-    }
-
     public boolean blockSleeping(LivingEntity entity) {
         return this.lunarMobSettings.blockSleeping().filter(entity);
     }
@@ -114,16 +106,21 @@ public class LunarEvent {
         return dropSettings;
     }
 
-    public Map<ResourceKey<Level>, ChanceEntry> getEventChancesByDimension() {
+    public Map<ResourceKey<Level>, SpawnRequirements> getEventChancesByDimension() {
         return eventChancesByDimension;
     }
 
-    public record ChanceEntry(double chance, int minNumberOfNights) {
-        public static final Codec<ChanceEntry> CODEC = RecordCodecBuilder.create(builder ->
+    public record SpawnRequirements(double chance, int minNumberOfNights, IntArraySet validMoonPhases) {
+        public static final Codec<SpawnRequirements> CODEC = RecordCodecBuilder.create(builder ->
                 builder.group(
-                        Codec.DOUBLE.fieldOf("chance").forGetter(ChanceEntry::chance),
-                        Codec.INT.fieldOf("min_number_of_nights_between").forGetter(ChanceEntry::minNumberOfNights)
-                ).apply(builder, ChanceEntry::new)
+                        Codec.DOUBLE.fieldOf("chance").forGetter(SpawnRequirements::chance),
+                        Codec.INT.fieldOf("min_number_of_nights_between").forGetter(SpawnRequirements::minNumberOfNights),
+                        Codec.list(Codec.intRange(0, 8)).fieldOf("valid_moon_phases").forGetter((clientSettings) -> new ArrayList<>(clientSettings.validMoonPhases))
+                ).apply(builder, SpawnRequirements::new)
         );
+
+        public SpawnRequirements(double chance, int minNumberOfNights, Collection<Integer> validMoonPhases) {
+            this(chance, minNumberOfNights, new IntArraySet(validMoonPhases));
+        }
     }
 }

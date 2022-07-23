@@ -41,7 +41,6 @@ public class DefaultLunarEvents {
                             null,
                             null
                     ),
-                    DEFAULT_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent("enhancedcelestials.name.moon"),
                             CustomTranslationTextComponent.DEFAULT,
@@ -51,16 +50,41 @@ public class DefaultLunarEvents {
                     DropSettings.EMPTY)
     );
 
+    public static final Holder<LunarEvent> SUPER_MOON = createEvent("super_moon", () ->
+            new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
+                    new LunarEventClientSettings(
+                            new ColorSettings("", 0, "", 0),
+                            40,
+                            null,
+                            null
+                    ),
+                    new LunarTextComponents(
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.name.super_moon",
+                                    Style.EMPTY.applyFormat(ChatFormatting.RED)
+                            ),
+                            new CustomTranslationTextComponent(
+                                    "enhancedcelestials.notification.super_moon.rise",
+                                    Style.EMPTY.applyFormat(ChatFormatting.RED)
+                            ),
+                            new CustomTranslationTextComponent("enhancedcelestials.notification.super_moon.set")),
+                    new LunarMobSettings(ImmutableMap.of(),
+                            new LunarMobSpawnInfo(true, false, true, MobSpawnSettings.EMPTY),
+                            List.of(),
+                            new InverseEntityFilter(AnyEntityFilter.INSTANCE)),
+                    DropSettings.EMPTY)
+    );
+
     public static final Holder<LunarEvent> BLOOD_MOON = createEvent("blood_moon", () ->
             new LunarEvent(
-                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.1, 4)),
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
                             new ColorSettings("FF0000", 0.6, "FF0000", 0.4),
                             20,
                             null,
                             ECSounds.BLOOD_MOON.get()
                     ),
-                    DEFAULT_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.name.blood_moon",
@@ -74,7 +98,7 @@ public class DefaultLunarEvents {
                     ),
                     new LunarMobSettings(
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
-                            new LunarMobSpawnInfo(true, true, MobSpawnSettings.EMPTY),
+                            new LunarMobSpawnInfo(true, true, false, MobSpawnSettings.EMPTY),
                             List.of(),
                             AnyEntityFilter.INSTANCE
                     ),
@@ -83,14 +107,13 @@ public class DefaultLunarEvents {
 
     public static final Holder<LunarEvent> SUPER_BLOOD_MOON = createEvent("super_blood_moon", () ->
             new LunarEvent(
-                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.05, 20)),
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
                             new ColorSettings("FF0000", 1, "FF0000", 1),
                             40,
                             null,
                             ECSounds.BLOOD_MOON.get()
                     ),
-                    DEFAULT_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.name.super_blood_moon",
@@ -104,7 +127,7 @@ public class DefaultLunarEvents {
                     ),
                     new LunarMobSettings(
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
-                            new LunarMobSpawnInfo(true, true, MobSpawnSettings.EMPTY),
+                            new LunarMobSpawnInfo(true, true, false, MobSpawnSettings.EMPTY),
                             List.of(),
                             AnyEntityFilter.INSTANCE
                     ),
@@ -113,14 +136,13 @@ public class DefaultLunarEvents {
 
     public static final Holder<LunarEvent> HARVEST_MOON = createEvent("harvest_moon", () ->
             new LunarEvent(
-                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.1, 4)),
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
                             new ColorSettings("FFDB63", 0.6, "FFDB63", 0.4),
                             20,
                             null,
                             ECSounds.HARVEST_MOON.get()
                     ),
-                    DEFAULT_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.name.harvest_moon",
@@ -137,14 +159,13 @@ public class DefaultLunarEvents {
 
     public static final Holder<LunarEvent> SUPER_HARVEST_MOON = createEvent("super_harvest_moon", () ->
             new LunarEvent(
-                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.05, 20)),
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
                             new ColorSettings("FFDB63", 1, "FFDB63", 1),
                             40,
                             null,
                             ECSounds.HARVEST_MOON.get()
                     ),
-                    DEFAULT_SUPER_MOON_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.name.super_harvest_moon",
@@ -161,14 +182,13 @@ public class DefaultLunarEvents {
 
     public static final Holder<LunarEvent> BLUE_MOON = createEvent("blue_moon", () ->
             new LunarEvent(
-                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.1, 4)),
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
                             new ColorSettings("00ffff", 0.6, "00ffff", 0.4),
                             20,
                             null,
                             ECSounds.BLUE_MOON.get()
                     ),
-                    DEFAULT_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.name.blue_moon",
@@ -187,14 +207,13 @@ public class DefaultLunarEvents {
 
     public static final Holder<LunarEvent> SUPER_BLUE_MOON = createEvent("super_blue_moon", () ->
             new LunarEvent(
-                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.05, 20)),
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
                             new ColorSettings("00ffff", 1, "00ffff", 1),
                             40,
                             null,
                             ECSounds.BLUE_MOON.get()
                     ),
-                    DEFAULT_PHASES,
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
                                     "enhancedcelestials.name.super_blue_moon",
