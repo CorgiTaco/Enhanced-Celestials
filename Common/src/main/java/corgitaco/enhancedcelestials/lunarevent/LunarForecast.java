@@ -11,6 +11,7 @@ import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
 import corgitaco.enhancedcelestials.platform.Services;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
+import it.unimi.dsi.fastutil.longs.Long2LongFunction;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
@@ -64,9 +65,17 @@ public class LunarForecast {
     public LunarForecast(Holder<LunarDimensionSettings> dimensionSettingsHolder, Registry<LunarEvent> lunarEventRegistry, long currentDayTime, List<LunarEventInstance> forecast, List<LunarEventInstance> pastEvents, long lastCheckedGameTime) {
         this.lunarEventRegistry = lunarEventRegistry;
         LunarDimensionSettings lunarDimensionSettings = dimensionSettingsHolder.value();
+        Collection<Holder<LunarEvent>> possibleEvents = new HashSet<>();
 
-        Map<Holder<LunarEvent>, LunarDimensionSettings.Entry> eventChances = lunarDimensionSettings.eventChance();
-        Collection<Holder<LunarEvent>> possibleEvents = eventChances.keySet();
+        for (Map.Entry<ResourceKey<LunarEvent>, LunarEvent> resourceKeyLunarEventEntry : lunarEventRegistry.entrySet()) {
+            Holder<LunarEvent> lunarEventHolder = lunarEventRegistry.getHolderOrThrow(resourceKeyLunarEventEntry.getKey());
+            ResourceKey<Level> levelResourceKey = ResourceKey.create(Registry.DIMENSION_REGISTRY, dimensionSettingsHolder.unwrapKey().orElseThrow().location());
+            if (lunarEventHolder.value().getEventChancesByDimension().containsKey(levelResourceKey)) {
+                possibleEvents.add(lunarEventHolder);
+            }
+        }
+
+
         this.dimensionSettingsHolder = dimensionSettingsHolder;
         this.forecast = new ArrayList<>(forecast);
         this.pastEvents = new ArrayList<>(pastEvents);
@@ -202,7 +211,7 @@ public class LunarForecast {
     private void serverTick(ServerLevel level, Holder<LunarEvent> lastCurrentEvent, LunarDimensionSettings lunarDimensionSettings, long currentDay) {
         List<ServerPlayer> players = level.players();
         boolean isNight = level.isNight();
-        if (updateForecast(level, lunarDimensionSettings, this, 0L)) {
+        if (updateForecast(level, lunarDimensionSettings, this)) {
             Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         }
 
@@ -306,7 +315,7 @@ public class LunarForecast {
      * @return true if forecast changes occurred.
      */
     public static boolean updateForecast(ServerLevel world, LunarDimensionSettings dimensionSettings, LunarForecast lunarForecast) {
-        return updateForecast(world, dimensionSettings, lunarForecast, 0L);
+        return updateForecast(world, dimensionSettings, lunarForecast, day -> world.getSeed() + world.dimension().location().hashCode() + day);
     }
 
     /**
@@ -314,7 +323,7 @@ public class LunarForecast {
      *
      * @return true if forecast changes occurred.
      */
-    public static boolean updateForecast(ServerLevel world, LunarDimensionSettings dimensionSettings, LunarForecast lunarForecast, long seedModifier) {
+    public static boolean updateForecast(ServerLevel world, LunarDimensionSettings dimensionSettings, LunarForecast lunarForecast, Long2LongFunction seed) {
         long dayTime = world.getDayTime();
         long lastCheckedTime = lunarForecast.getLastCheckedGameTime();
         long dayLength = dimensionSettings.dayLength();
@@ -347,12 +356,16 @@ public class LunarForecast {
 
         for (; day <= currentDay + yearLengthInDays; day++) {
             dayTime += dayLength;
-            Random random = new Random(world.getSeed() + world.dimension().location().hashCode() + day + seedModifier);
+            Random random = new Random(seed.applyAsLong(day));
             Collections.shuffle(lunarForecast.scrambledKeys, random);
             for (Holder<LunarEvent> lunarEventHolder : lunarForecast.scrambledKeys) {
-                LunarDimensionSettings.Entry entry = dimensionSettings.eventChance().get(lunarEventHolder);
+                Map<ResourceKey<Level>, LunarEvent.ChanceEntry> eventChancesByDimension = lunarEventHolder.value().getEventChancesByDimension();
+                if (!eventChancesByDimension.containsKey(world.dimension())) {
+                    continue;
+                }
+                LunarEvent.ChanceEntry chanceEntry = eventChancesByDimension.get(world.dimension());
                 LunarEvent value = lunarEventHolder.value();
-                boolean canCreateEventInstance = canCreateEventInstance(world, dimensionSettings, dayTime, currentDay, eventByLastTime, lastDay, day, random, entry, value);
+                boolean canCreateEventInstance = canCreateEventInstance(world, dimensionSettings, dayTime, currentDay, eventByLastTime, lastDay, day, random, chanceEntry, value);
                 if (canCreateEventInstance) {
                     lastDay = day;
                     newLunarEvents.add(new LunarEventInstance(lunarEventHolder.unwrapKey().orElseThrow(), day));
@@ -370,12 +383,12 @@ public class LunarForecast {
      */
     private static boolean canCreateEventInstance(ServerLevel world, LunarDimensionSettings dimensionSettings, long dayTime, long currentDay,
                                                   Object2LongArrayMap<LunarEvent> eventByLastTime, long lastDay, long day,
-                                                  Random random, LunarDimensionSettings.Entry entry, LunarEvent value) {
+                                                  Random random, LunarEvent.ChanceEntry chanceEntry, LunarEvent value) {
 
-        boolean pastMinNumberOfNightsBetweenThisTypeOfEvent = (day - eventByLastTime.getOrDefault(value, currentDay)) > entry.minNumberOfNights();
+        boolean pastMinNumberOfNightsBetweenThisTypeOfEvent = (day - eventByLastTime.getOrDefault(value, currentDay)) > chanceEntry.minNumberOfNights();
         boolean pastMinNumberOfNightsBetweenAllEvents = (day - lastDay) > dimensionSettings.minDaysBetweenEvents();
         boolean isValidMoonPhase = value.getValidMoonPhases().contains(world.dimensionType().moonPhase(dayTime - 1));
-        boolean chance = entry.chance() > random.nextDouble();
+        boolean chance = chanceEntry.chance() > random.nextDouble();
         return pastMinNumberOfNightsBetweenThisTypeOfEvent && pastMinNumberOfNightsBetweenAllEvents && chance && isValidMoonPhase;
     }
 

@@ -6,6 +6,7 @@ import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.entityfilter.AnyEntityFilter;
+import corgitaco.enhancedcelestials.api.entityfilter.InverseEntityFilter;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import corgitaco.enhancedcelestials.core.ECSounds;
 import corgitaco.enhancedcelestials.reg.RegistrationProvider;
@@ -16,6 +17,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 
 import java.util.Collection;
@@ -31,6 +33,7 @@ public class DefaultLunarEvents {
 
     public static final Holder<LunarEvent> DEFAULT = createEvent("default", () ->
             new LunarEvent(
+                    ImmutableMap.of(),
                     new LunarEventClientSettings(
                             new ColorSettings("", 0, "", 0),
                             20,
@@ -43,13 +46,13 @@ public class DefaultLunarEvents {
                             CustomTranslationTextComponent.DEFAULT,
                             CustomTranslationTextComponent.DEFAULT
                     ),
-                    false,
                     LunarMobSettings.DEFAULT,
                     DropSettings.EMPTY)
     );
 
     public static final Holder<LunarEvent> BLOOD_MOON = createEvent("blood_moon", () ->
             new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.1, 4)),
                     new LunarEventClientSettings(
                             new ColorSettings("FF0000", 0.6, "FF0000", 0.4),
                             20,
@@ -68,16 +71,18 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.set")
                     ),
-                    true,
                     new LunarMobSettings(
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
                             new LunarMobSpawnInfo(true, true, MobSpawnSettings.EMPTY),
-                            List.of()),
+                            List.of(),
+                            AnyEntityFilter.INSTANCE
+                    ),
                     DropSettings.EMPTY)
     );
 
     public static final Holder<LunarEvent> SUPER_BLOOD_MOON = createEvent("super_blood_moon", () ->
             new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.05, 20)),
                     new LunarEventClientSettings(
                             new ColorSettings("FF0000", 1, "FF0000", 1),
                             40,
@@ -96,16 +101,18 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.set")
                     ),
-                    true,
                     new LunarMobSettings(
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
                             new LunarMobSpawnInfo(true, true, MobSpawnSettings.EMPTY),
-                            List.of()),
+                            List.of(),
+                            AnyEntityFilter.INSTANCE
+                    ),
                     DropSettings.EMPTY)
     );
 
     public static final Holder<LunarEvent> HARVEST_MOON = createEvent("harvest_moon", () ->
             new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.1, 4)),
                     new LunarEventClientSettings(
                             new ColorSettings("FFDB63", 0.6, "FFDB63", 0.4),
                             20,
@@ -123,13 +130,13 @@ public class DefaultLunarEvents {
                                     Style.EMPTY.applyFormat(ChatFormatting.YELLOW)
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.harvest_moon.set")),
-                    false,
                     LunarMobSettings.DEFAULT,
                     new DropSettings(ImmutableMap.of()))
     );
 
     public static final Holder<LunarEvent> SUPER_HARVEST_MOON = createEvent("super_harvest_moon", () ->
             new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.05, 20)),
                     new LunarEventClientSettings(
                             new ColorSettings("FFDB63", 1, "FFDB63", 1),
                             40,
@@ -147,13 +154,13 @@ public class DefaultLunarEvents {
                                     Style.EMPTY.applyFormat(ChatFormatting.YELLOW).applyFormat(ChatFormatting.BOLD)
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.super_harvest_moon.set")),
-                    false,
                     LunarMobSettings.DEFAULT,
                     new DropSettings(ImmutableMap.of()))
     );
 
     public static final Holder<LunarEvent> BLUE_MOON = createEvent("blue_moon", () ->
             new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.1, 4)),
                     new LunarEventClientSettings(
                             new ColorSettings("00ffff", 0.6, "00ffff", 0.4),
                             20,
@@ -171,15 +178,15 @@ public class DefaultLunarEvents {
                                     Style.EMPTY.applyFormat(ChatFormatting.AQUA)
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.set")),
-                    false,
                     new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, List.of(
                             Pair.of(AnyEntityFilter.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 0, true, false, false))
-                    )),
+                    ), new InverseEntityFilter(AnyEntityFilter.INSTANCE)),
                     DropSettings.EMPTY)
     );
 
     public static final Holder<LunarEvent> SUPER_BLUE_MOON = createEvent("super_blue_moon", () ->
             new LunarEvent(
+                    ImmutableMap.of(Level.OVERWORLD, new LunarEvent.ChanceEntry(0.05, 20)),
                     new LunarEventClientSettings(
                             new ColorSettings("00ffff", 1, "00ffff", 1),
                             40,
@@ -197,10 +204,9 @@ public class DefaultLunarEvents {
                                     Style.EMPTY.applyFormat(ChatFormatting.AQUA)
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.super_blue_moon.set")),
-                    false,
                     new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, List.of(
                             Pair.of(AnyEntityFilter.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 4, true, false, false))
-                    )),
+                    ), new InverseEntityFilter(AnyEntityFilter.INSTANCE)),
                     DropSettings.EMPTY)
     );
 

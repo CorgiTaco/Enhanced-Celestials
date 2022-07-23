@@ -6,12 +6,11 @@ import corgitaco.enhancedcelestials.util.CodecUtil;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
-public record EntityTypeFilter(EntityType<?> entityType, boolean inverse) implements EntityFilter {
+public record EntityTypeFilter(EntityType<?> entityType) implements EntityFilter {
 
     public static final Codec<EntityTypeFilter> CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
-                    CodecUtil.ENTITY_TYPE.fieldOf("id").forGetter(EntityTypeFilter::entityType),
-                    Codec.BOOL.fieldOf("inverse").forGetter(EntityTypeFilter::inverse)
+                    CodecUtil.ENTITY_TYPE.fieldOf("id").forGetter(EntityTypeFilter::entityType)
             ).apply(builder, EntityTypeFilter::new)
     );
 
@@ -23,6 +22,6 @@ public record EntityTypeFilter(EntityType<?> entityType, boolean inverse) implem
 
     @Override
     public boolean filter(LivingEntity entity) {
-        return this.inverse != (entity.getType() == this.entityType);
+        return entity.getType() == this.entityType;
     }
 }

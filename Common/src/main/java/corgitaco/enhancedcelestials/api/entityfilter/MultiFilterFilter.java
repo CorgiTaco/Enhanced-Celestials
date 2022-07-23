@@ -6,15 +6,13 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-public record MultiFilterFilter(List<EntityFilter> filters, boolean inverse) implements EntityFilter {
+public record MultiFilterFilter(List<EntityFilter> filters) implements EntityFilter {
 
     public static final Codec<MultiFilterFilter> CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
-                    EntityFilter.CODEC.listOf().fieldOf("mob_category").forGetter(MultiFilterFilter::filters),
-                    Codec.BOOL.fieldOf("inverse").forGetter(MultiFilterFilter::inverse)
+                    EntityFilter.CODEC.listOf().fieldOf("filters").forGetter(MultiFilterFilter::filters)
             ).apply(builder, MultiFilterFilter::new)
     );
-
 
     @Override
     public Codec<? extends EntityFilter> codec() {
@@ -24,7 +22,7 @@ public record MultiFilterFilter(List<EntityFilter> filters, boolean inverse) imp
     @Override
     public boolean filter(LivingEntity entity) {
         for (EntityFilter filter : filters) {
-            if (this.inverse != filter.filter(entity)) {
+            if (!filter.filter(entity)) {
                 return false;
             }
         }
