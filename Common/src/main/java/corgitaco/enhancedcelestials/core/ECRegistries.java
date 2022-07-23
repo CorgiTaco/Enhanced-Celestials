@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.core;
 
+import corgitaco.enhancedcelestials.api.ECItemTags;
 import corgitaco.enhancedcelestials.api.ECLunarEventTags;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
@@ -16,5 +17,6 @@ public record ECRegistries() {
         DefaultLunarEvents.loadClass();
         DefaultLunarDimensionSettings.loadClass();
         ECLunarEventTags.loadClass();
+        ECItemTags.loadClass();
     }
 }

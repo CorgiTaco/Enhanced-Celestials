@@ -3,6 +3,7 @@ package corgitaco.enhancedcelestials.api.lunarevent;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
+import corgitaco.enhancedcelestials.api.ECItemTags;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.entityfilter.AnyEntityFilter;
@@ -131,7 +132,7 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.harvest_moon.set")),
                     LunarMobSettings.DEFAULT,
-                    new DropSettings(ImmutableMap.of()))
+                    new DropSettings(ImmutableMap.of(ECItemTags.HARVEST_MOON_CROPS, 2.0)))
     );
 
     public static final Holder<LunarEvent> SUPER_HARVEST_MOON = createEvent("super_harvest_moon", () ->
@@ -155,7 +156,7 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.super_harvest_moon.set")),
                     LunarMobSettings.DEFAULT,
-                    new DropSettings(ImmutableMap.of()))
+                    new DropSettings(ImmutableMap.of(ECItemTags.HARVEST_MOON_CROPS, 4.0)))
     );
 
     public static final Holder<LunarEvent> BLUE_MOON = createEvent("blue_moon", () ->

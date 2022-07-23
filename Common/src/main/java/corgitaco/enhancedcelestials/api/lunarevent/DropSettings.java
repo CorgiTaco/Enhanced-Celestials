@@ -14,7 +14,7 @@ public record DropSettings(Map<TagKey<Item>, Double> dropEnhancer) {
 
     public static Codec<DropSettings> CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
-                    Codec.unboundedMap(TagKey.codec(Registry.ITEM_REGISTRY), Codec.DOUBLE).fieldOf("drop_enhancer").forGetter(dropSettings -> dropSettings.dropEnhancer)
+                    Codec.unboundedMap(TagKey.hashedCodec(Registry.ITEM_REGISTRY), Codec.DOUBLE).fieldOf("drop_enhancer").forGetter(dropSettings -> dropSettings.dropEnhancer)
             ).apply(builder, DropSettings::new)
     );
 

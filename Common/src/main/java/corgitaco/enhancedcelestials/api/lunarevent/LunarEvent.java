@@ -57,7 +57,7 @@ public class LunarEvent {
     public void onBlockItemDrop(ServerLevel world, ItemStack itemStack) {
         this.dropSettings.dropEnhancer().forEach((itemTagKey, multiplier) -> {
             if (itemStack.is(itemTagKey)) {
-                itemStack.setCount((int) (itemStack.getCount() * multiplier));
+                itemStack.setCount((int) Math.round(itemStack.getCount() * multiplier));
             }
         });
     }

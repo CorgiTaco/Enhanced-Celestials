@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
 public class MixinBlock {
-    @Inject(method = "popResource", at = @At("HEAD"))
+    @Inject(method = "popResource*", at = @At("HEAD"))
     private static void modifyDrops(Level world, BlockPos pos, ItemStack stack, CallbackInfo ci) {
         if (!world.isClientSide) {
             LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
