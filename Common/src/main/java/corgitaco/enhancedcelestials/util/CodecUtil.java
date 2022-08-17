@@ -51,7 +51,7 @@ public class CodecUtil {
                 Codec.BOOL.optionalFieldOf("underlined", false).forGetter(Style::isUnderlined),
                 Codec.BOOL.optionalFieldOf("strikethrough", false).forGetter(Style::isStrikethrough),
                 Codec.BOOL.optionalFieldOf("obfuscated", false).forGetter(Style::isObfuscated),
-                CLICK_EVENT_CODEC.optionalFieldOf("clickEvent").forGetter((style) -> style.getClickEvent() != null ? Optional.of(style.getClickEvent()) : Optional.empty())
+                CLICK_EVENT_CODEC.optionalFieldOf("click_event").forGetter((style) -> style.getClickEvent() != null ? Optional.of(style.getClickEvent()) : Optional.empty())
         ).apply(builder, (color, bold, italic, underlined, strikethrough, obfuscated, clickEvent) -> StyleAccess.create(ColorAccess.create(ColorSettings.tryParseColor(color)), bold, italic, underlined, strikethrough, obfuscated, clickEvent.orElse(null), null, null, null));
     });
 

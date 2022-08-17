@@ -14,7 +14,7 @@ public record LunarMobSpawnInfo(boolean useBiomeSpawnSettings, boolean forceSurf
                     Codec.BOOL.fieldOf("use_biome_spawn_settings").orElse(false).forGetter(LunarMobSpawnInfo::useBiomeSpawnSettings),
                     Codec.BOOL.fieldOf("force_surface_spawning").orElse(false).forGetter(LunarMobSpawnInfo::forceSurfaceSpawning),
                     Codec.BOOL.fieldOf("slimes_spawn_everywhere").orElse(false).forGetter(LunarMobSpawnInfo::slimesSpawnEverywhere),
-                    MobSpawnSettings.CODEC.forGetter(LunarMobSpawnInfo::spawnInfo)
+                    MobSpawnSettings.CODEC.fieldOf("mob_spawn_settings").forGetter(LunarMobSpawnInfo::spawnInfo)
             ).apply(builder, LunarMobSpawnInfo::new)
     );
 }

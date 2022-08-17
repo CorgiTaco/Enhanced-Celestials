@@ -19,7 +19,7 @@ public record LunarMobSettings(Map<MobCategory, Double> spawnCategoryMultiplier,
             builder.group(
                     Codec.unboundedMap(MobCategory.CODEC, Codec.DOUBLE).fieldOf("spawn_category_multiplier").forGetter((clientSettings) -> clientSettings.spawnCategoryMultiplier),
                     LunarMobSpawnInfo.CODEC.fieldOf("lunar_spawn_settings").forGetter((clientSettings) -> clientSettings.lunarMobSpawnInfo),
-                    Codec.pair(EntityFilter.CODEC, MobEffectInstanceBuilder.CODEC).listOf().fieldOf("mob_effects").forGetter(lunarMobSettings -> lunarMobSettings.effectsForEntityTag),
+                    Codec.pair(EntityFilter.CODEC.fieldOf("filter").codec(), MobEffectInstanceBuilder.CODEC.fieldOf("mob_effect").codec()).listOf().fieldOf("mob_effects").forGetter(lunarMobSettings -> lunarMobSettings.effectsForEntityTag),
                     EntityFilter.CODEC.fieldOf("blocks_sleeping").forGetter(lunarMobSettings -> lunarMobSettings.blockSleeping)
             ).apply(builder, LunarMobSettings::new)
     );

@@ -15,8 +15,8 @@ public record LunarTextComponents(CustomTranslationTextComponent name,
     public static final Codec<LunarTextComponents> CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
                     CustomTranslationTextComponent.CODEC.fieldOf("name").forGetter(textComponents -> textComponents.name),
-                    Notification.CODEC.optionalFieldOf("startNotification").orElse(Optional.empty()).forGetter(clientSettings -> clientSettings.riseNotification),
-                    Notification.CODEC.optionalFieldOf("endNotification").orElse(Optional.empty()).forGetter(clientSettings -> clientSettings.setNotification)
+                    Notification.CODEC.optionalFieldOf("start_notification").orElse(Optional.empty()).forGetter(clientSettings -> clientSettings.riseNotification),
+                    Notification.CODEC.optionalFieldOf("end_notification").orElse(Optional.empty()).forGetter(clientSettings -> clientSettings.setNotification)
             ).apply(builder, LunarTextComponents::new)
     );
 

@@ -8,13 +8,13 @@ import corgitaco.enhancedcelestials.util.ColorUtil;
 public class ColorSettings {
 
     public static final Codec<ColorSettings> CODEC = RecordCodecBuilder.create(seasonClientSettingsInstance -> {
-        return seasonClientSettingsInstance.group(Codec.STRING.fieldOf("skyLightColor").forGetter((colorSettings) -> {
+        return seasonClientSettingsInstance.group(Codec.STRING.fieldOf("sky_light_color").forGetter((colorSettings) -> {
             return colorSettings.skyLightColor == Integer.MAX_VALUE ? "" : Integer.toHexString(colorSettings.skyLightColor);
-        }), Codec.DOUBLE.fieldOf("skyLightBlendStrength").orElse(0.5).forGetter((colorSettings) -> {
+        }), Codec.DOUBLE.fieldOf("sky_light_blend_strength").orElse(0.5).forGetter((colorSettings) -> {
             return colorSettings.skyLightBlendStrength;
-        }), Codec.STRING.fieldOf("moonTextureColor").forGetter((colorSettings) -> {
+        }), Codec.STRING.fieldOf("moon_texture_color").forGetter((colorSettings) -> {
             return colorSettings.skyLightColor == Integer.MAX_VALUE ? "" : Integer.toHexString(colorSettings.skyLightColor);
-        }), Codec.DOUBLE.fieldOf("moonTextureBlendStrength").orElse(0.5).forGetter((colorSettings) -> {
+        }), Codec.DOUBLE.fieldOf("moon_texture_blend_strength").orElse(0.5).forGetter((colorSettings) -> {
             return colorSettings.skyLightBlendStrength;
         })).apply(seasonClientSettingsInstance, ColorSettings::new);
     });

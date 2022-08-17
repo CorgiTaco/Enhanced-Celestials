@@ -13,10 +13,10 @@ public record LunarEventClientSettings(ColorSettings colorSettings, float moonSi
                                         ResourceLocation moonTextureLocation, @Nullable SoundEvent soundTrack) {
 
     public static final Codec<LunarEventClientSettings> CODEC = RecordCodecBuilder.create((builder) ->
-            builder.group(ColorSettings.CODEC.fieldOf("colorSettings").forGetter(LunarEventClientSettings::colorSettings),
-                    Codec.FLOAT.fieldOf("moonSize").orElse(20.0F).forGetter(LunarEventClientSettings::moonSize),
-                    ResourceLocation.CODEC.optionalFieldOf("moonTextureLocation").orElse(Optional.of(new ResourceLocation("textures/environment/moon_phases.png"))).forGetter(clientSettings -> clientSettings.moonTextureLocation() == null ? Optional.of(new ResourceLocation("textures/environment/moon_phases.png")) : Optional.of(clientSettings.moonTextureLocation())),
-                    SoundEvent.CODEC.optionalFieldOf("soundTrack").orElse(Optional.empty()).forGetter((clientSettings) -> clientSettings.soundTrack() == null ? Optional.empty() : Optional.of(clientSettings.soundTrack()))
+            builder.group(ColorSettings.CODEC.fieldOf("color_settings").forGetter(LunarEventClientSettings::colorSettings),
+                    Codec.FLOAT.fieldOf("moon_size").orElse(20.0F).forGetter(LunarEventClientSettings::moonSize),
+                    ResourceLocation.CODEC.optionalFieldOf("moon_texture_location").orElse(Optional.of(new ResourceLocation("textures/environment/moon_phases.png"))).forGetter(clientSettings -> clientSettings.moonTextureLocation() == null ? Optional.of(new ResourceLocation("textures/environment/moon_phases.png")) : Optional.of(clientSettings.moonTextureLocation())),
+                    SoundEvent.CODEC.optionalFieldOf("sound_track").orElse(Optional.empty()).forGetter((clientSettings) -> clientSettings.soundTrack() == null ? Optional.empty() : Optional.of(clientSettings.soundTrack()))
             ).apply(builder, ((colorSettings, moonSize, moonTextureLocation, soundEvent) ->
                     new LunarEventClientSettings(colorSettings, moonSize, moonTextureLocation.orElse(null), soundEvent.orElse(null)))
             )
