@@ -20,6 +20,5 @@ public class EnhancedCelestialsRegistry {
 
     public static final Registry<Codec<? extends EntityFilter>> ENTITY_FILTER = RegistryAccess.enhancedCelestials_invokeRegisterSimple(ENTITY_FILTER_KEY, Lifecycle.stable(), registry -> EntityFilter.CODEC);
 
-
     public static void init(){}
 }

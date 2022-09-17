@@ -24,5 +24,6 @@
   "enhancedcelestials.notification.super_blue_moon.set": "The \"Super Blue Moon\" sets... You don't feel very lucky anymore...",
   "enhancedcelestials.notification.super_harvest_moon.rise": "The \"Super Harvest Moon\" rises... Your crops provide an exceptional harvest.",
   "enhancedcelestials.notification.super_harvest_moon.set": "The \"Super Harvest Moon\" sets...",
-  "enhancedcelestials.sleep.fail": "You may not rest now because the current lunar event prevents it."
+  "enhancedcelestials.sleep.fail": "You may not rest now because the current lunar event prevents it.",
+  "block.enhancedcelestials.meteor": "Meteor"
 }
