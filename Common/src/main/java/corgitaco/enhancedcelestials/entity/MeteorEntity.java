@@ -45,15 +45,19 @@ public final class MeteorEntity extends Entity {
     public void tick() {
         super.tick();
 
-        var gravity = 0.04D;
+        var gravity = 0.2D;
 
         var velocity = getDeltaMovement();
         move(MoverType.SELF, velocity);
         setDeltaMovement(velocity.subtract(0.0D, gravity, 0.0D));
 
-        if (!level.isClientSide && onGround || verticalCollision || horizontalCollision) {
+        if (!level.isClientSide && (onGround || verticalCollision || horizontalCollision)) {
             discard();
             level.explode(this, getX(), getY(), getZ(), 4.0F, Explosion.BlockInteraction.DESTROY);
+        }
+
+        if (level.isClientSide) {
+
         }
     }
 }

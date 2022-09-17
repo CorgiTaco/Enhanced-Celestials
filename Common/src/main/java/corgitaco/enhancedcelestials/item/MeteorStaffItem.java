@@ -26,12 +26,12 @@ public class MeteorStaffItem extends Item {
         pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (pLevel.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!pLevel.isClientSide) {
             MeteorEntity meteorEntity = new MeteorEntity(pLevel);
-            HitResult hitResult = getPlayerPOVHitResult(500, pLevel, pPlayer, ClipContext.Fluid.NONE);
+            HitResult hitResult = getPlayerPOVHitResult(100, pLevel, pPlayer, ClipContext.Fluid.NONE);
             meteorEntity.setPos(pPlayer.position());
 
             Vec3 normalize = hitResult.getLocation().subtract(pPlayer.position()).normalize();
 
-            meteorEntity.setDeltaMovement(normalize.multiply(5D, 1, 5D));
+            meteorEntity.setDeltaMovement(normalize.multiply(5D, 5, 5D));
 
 
             pLevel.addFreshEntity(meteorEntity);
@@ -53,7 +53,7 @@ public class MeteorStaffItem extends Item {
         float $$10 = $$7 * $$8;
         float $$12 = $$6 * $$8;
         Vec3 $$14 = $$5.add((double)$$10 * dist, (double)$$9 * dist, (double)$$12 * dist);
-        return level.clip(new ClipContext($$5, $$14, net.minecraft.world.level.ClipContext.Block.OUTLINE, context, player));
+        return level.clip(new ClipContext($$5, $$14, ClipContext.Block.OUTLINE, context, player));
     }
 
 
