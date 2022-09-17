@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "enhancedcelestials:block/meteor",
+        "weight": 16
+      },
+      {
+        "model": "enhancedcelestials:block/meteor_large_pores",
+        "weight": 24
+      },
+      {
+        "model": "enhancedcelestials:block/meteor_medium_pores",
+        "weight": 24
+      },
+      {
+        "model": "enhancedcelestials:block/meteor_small_pores",
+        "weight": 24
+      }
+    ]
+  }
+}

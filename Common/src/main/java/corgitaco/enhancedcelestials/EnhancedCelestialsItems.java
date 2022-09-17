@@ -4,6 +4,7 @@ import corgitaco.enhancedcelestials.reg.RegistrationProvider;
 import corgitaco.enhancedcelestials.reg.RegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 public final class EnhancedCelestialsItems {
@@ -18,6 +19,6 @@ public final class EnhancedCelestialsItems {
     }
 
     private static Item.Properties createProperties() {
-        return new Item.Properties();
+        return new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS);
     }
 }

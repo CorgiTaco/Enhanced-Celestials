@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "enhancedcelestials:block/meteor_small_pores"
+  }
+}
