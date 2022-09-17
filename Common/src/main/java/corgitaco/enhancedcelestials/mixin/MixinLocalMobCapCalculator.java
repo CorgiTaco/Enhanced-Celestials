@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.mixin.access.ChunkMapAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobCountsAccess;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -27,11 +27,11 @@ public class MixinLocalMobCapCalculator {
     private boolean useLunarEventMobCap(LocalMobCapCalculator.MobCounts instance, MobCategory mobCategory) {
         ServerLevel level = ((ChunkMapAccess) this.chunkMap).getLevel();
         @Nullable
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-        if (lunarContext != null) {
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
+        if (enhancedCelestialsContext != null) {
             Object2IntMap<MobCategory> counts = ((MobCountsAccess) instance).getCounts();
             final int currentCount = counts.getOrDefault(mobCategory, 0);
-            return currentCount < mobCategory.getMaxInstancesPerChunk() * lunarContext.getLunarForecast().getCurrentEvent().value().getSpawnMultiplierForMonsterCategory(mobCategory);
+            return currentCount < mobCategory.getMaxInstancesPerChunk() * enhancedCelestialsContext.getLunarForecast().getCurrentEvent().value().getSpawnMultiplierForMonsterCategory(mobCategory);
         } else {
             return instance.canSpawn(mobCategory);
         }

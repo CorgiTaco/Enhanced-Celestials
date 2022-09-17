@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -12,17 +12,17 @@ public abstract class MixinWorld implements EnhancedCelestialsWorldData {
 
 
     @Nullable
-    private LunarContext lunarContext;
+    private EnhancedCelestialsContext enhancedCelestialsContext;
 
     @Nullable
     @Override
-    public LunarContext getLunarContext() {
-        return this.lunarContext;
+    public EnhancedCelestialsContext getLunarContext() {
+        return this.enhancedCelestialsContext;
     }
 
     @Override
-    public LunarContext setLunarContext(LunarContext lunarContext) {
-        this.lunarContext = lunarContext;
-        return this.lunarContext;
+    public EnhancedCelestialsContext setLunarContext(EnhancedCelestialsContext enhancedCelestialsContext) {
+        this.enhancedCelestialsContext = enhancedCelestialsContext;
+        return this.enhancedCelestialsContext;
     }
 }

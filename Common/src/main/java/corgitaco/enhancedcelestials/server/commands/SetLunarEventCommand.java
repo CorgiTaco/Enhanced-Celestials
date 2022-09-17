@@ -7,7 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -27,14 +27,14 @@ public class SetLunarEventCommand {
 
     public static int setLunarEvent(CommandSourceStack source, ResourceOrTagLocationArgument.Result<LunarEvent> lunarEventResult) {
         ServerLevel world = source.getLevel();
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-        if (lunarContext == null) {
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+        if (enhancedCelestialsContext == null) {
             source.sendFailure(Component.translatable("enhancedcelestials.commands.disabled"));
             return 0;
         }
 
 
-        LunarForecast forecast = lunarContext.getLunarForecast();
+        LunarForecast forecast = enhancedCelestialsContext.getLunarForecast();
 
         long dayLength = forecast.getDimensionSettingsHolder().value().dayLength();
         long currentDay = (world.getDayTime() / dayLength);

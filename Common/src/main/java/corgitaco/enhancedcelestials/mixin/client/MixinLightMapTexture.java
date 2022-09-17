@@ -4,7 +4,7 @@ import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
@@ -19,9 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class MixinLightMapTexture {
     @Inject(method = "updateLightTexture", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Vector3f;lerp(Lcom/mojang/math/Vector3f;F)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
     private void doOurLightMap(float $$0, CallbackInfo ci, ClientLevel clientLevel, float $$2, float $$4, float $$5, float $$6, float $$7, float $$11, float $$8, Vector3f skyVector) {
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) clientLevel).getLunarContext();
-        if (lunarContext != null) {
-            LunarForecast lunarForecast = lunarContext.getLunarForecast();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) clientLevel).getLunarContext();
+        if (enhancedCelestialsContext != null) {
+            LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
             LunarEvent lastEvent = lunarForecast.getMostRecentEvent().value();
             LunarEvent currentEvent = lunarForecast.getCurrentEvent().value();
 

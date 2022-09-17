@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin.client;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,9 +15,9 @@ public abstract class MixinClientWorld {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void attachLunarTick(BooleanSupplier hasTimeLeft, CallbackInfo ci) {
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
-        if (lunarContext != null) {
-            lunarContext.tick((ClientLevel) (Object) this);
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
+        if (enhancedCelestialsContext != null) {
+            enhancedCelestialsContext.tick((ClientLevel) (Object) this);
         }
     }
 }

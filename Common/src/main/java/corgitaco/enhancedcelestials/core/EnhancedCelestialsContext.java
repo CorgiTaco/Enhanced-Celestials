@@ -1,8 +1,9 @@
-package corgitaco.enhancedcelestials.lunarevent;
+package corgitaco.enhancedcelestials.core;
 
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import corgitaco.enhancedcelestials.save.LunarForecastSavedData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -13,16 +14,16 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class LunarContext {
+public class EnhancedCelestialsContext {
 
     private final LunarForecast lunarForecast;
 
-    private LunarContext(LunarForecast forecast) {
+    private EnhancedCelestialsContext(LunarForecast forecast) {
         this.lunarForecast = forecast;
     }
 
     @Nullable
-    public static LunarContext forLevel(Level level, Optional<LunarForecast.Data> saveData) {
+    public static EnhancedCelestialsContext forLevel(Level level, Optional<LunarForecast.Data> saveData) {
         Registry<LunarDimensionSettings> lunarDimensionSettingsRegistry = level.registryAccess().registryOrThrow(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY);
         Registry<LunarEvent> lunarEventRegistry = level.registryAccess().registryOrThrow(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY);
         ResourceLocation location = level.dimension().location();
@@ -38,7 +39,7 @@ public class LunarContext {
             } else {
                 forecast = new LunarForecast(lunarDimensionSettings, lunarEventRegistry, dayTime, forecastData);
             }
-            return new LunarContext(forecast);
+            return new EnhancedCelestialsContext(forecast);
         }
         return null;
     }

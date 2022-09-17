@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import corgitaco.enhancedcelestials.network.LunarContextConstructionPacket;
 import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
@@ -19,9 +19,9 @@ public abstract class MixinPlayerList {
 
     @Inject(method = "sendLevelInfo", at = @At(value = "RETURN"))
     private void sendContext(ServerPlayer playerIn, ServerLevel worldIn, CallbackInfo ci) {
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
-        if (lunarContext != null) {
-            LunarForecast.Data data = lunarContext.getLunarForecast().data();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) worldIn).getLunarContext();
+        if (enhancedCelestialsContext != null) {
+            LunarForecast.Data data = enhancedCelestialsContext.getLunarForecast().data();
             Services.PLATFORM.sendToClient(playerIn, new LunarContextConstructionPacket(data));
             Services.PLATFORM.sendToClient(playerIn, new LunarForecastChangedPacket(data, worldIn.isNight()));
         }

@@ -1,13 +1,13 @@
 package corgitaco.enhancedcelestials;
 
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 
 import javax.annotation.Nullable;
 
 public interface EnhancedCelestialsWorldData {
 
     @Nullable
-    LunarContext getLunarContext();
+    EnhancedCelestialsContext getLunarContext();
 
-    LunarContext setLunarContext(LunarContext lunarContext);
+    EnhancedCelestialsContext setLunarContext(EnhancedCelestialsContext enhancedCelestialsContext);
 }

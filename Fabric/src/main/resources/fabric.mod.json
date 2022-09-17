@@ -19,6 +19,9 @@
   "entrypoints": {
     "main": [
       "corgitaco.enhancedcelestials.EnhancedCelestialsFabric"
+    ],
+    "client":[
+      "corgitaco.enhancedcelestials.client.EnhancedCelestialsFabricClient"
     ]
   },
   "mixins": [

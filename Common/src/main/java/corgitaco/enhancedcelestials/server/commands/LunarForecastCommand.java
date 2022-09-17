@@ -3,7 +3,7 @@ package corgitaco.enhancedcelestials.server.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -19,13 +19,13 @@ public class LunarForecastCommand {
     public static int recompute(CommandSourceStack source) {
         ServerLevel world = source.getLevel();
 
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
-        if (lunarContext == null) {
+        if (enhancedCelestialsContext == null) {
             source.sendFailure(Component.translatable("enhancedcelestials.commands.disabled"));
             return 0;
         }
-        LunarForecast lunarForecast = lunarContext.getLunarForecast();
+        LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
         lunarForecast.recompute(world);
         source.sendSuccess(Component.translatable("enhancedcelestials.lunarforecast.recompute"), true);
         return 1;
@@ -34,14 +34,14 @@ public class LunarForecastCommand {
 
     public static int displayLunarForecast(CommandSourceStack source) {
         ServerLevel world = source.getLevel();
-        LunarContext lunarContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
-        if (lunarContext == null) {
+        if (enhancedCelestialsContext == null) {
             source.sendFailure(Component.translatable("enhancedcelestials.commands.disabled"));
             return 0;
         }
 
-        source.sendSuccess(lunarContext.getLunarForecast().getForecastComponent(world.getDayTime()), true);
+        source.sendSuccess(enhancedCelestialsContext.getLunarForecast().getForecastComponent(world.getDayTime()), true);
         return 1;
     }
 }

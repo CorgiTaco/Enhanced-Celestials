@@ -2,7 +2,7 @@ package corgitaco.enhancedcelestials.network;
 
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarEventInstance;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.network.FriendlyByteBuf;
@@ -44,9 +44,9 @@ public class LunarForecastChangedPacket implements S2CPacket {
     @Override
     public void handle(Level level) {
         if (level != null) {
-            LunarContext lunarContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-            if (lunarContext != null) {
-                LunarForecast lunarForecast = lunarContext.getLunarForecast();
+            EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
+            if (enhancedCelestialsContext != null) {
+                LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
                 lunarForecast.getForecast().clear();
                 lunarForecast.getForecast().addAll(this.lunarForecast.forecast());
 

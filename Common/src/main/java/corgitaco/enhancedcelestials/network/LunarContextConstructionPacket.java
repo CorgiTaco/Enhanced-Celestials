@@ -2,7 +2,7 @@ package corgitaco.enhancedcelestials.network;
 
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.lunarevent.LunarContext;
+import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
@@ -38,9 +38,9 @@ public class LunarContextConstructionPacket implements S2CPacket {
     @Override
     public void handle(Level level) {
         if (level != null) {
-            LunarContext lunarContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-            if (lunarContext == null) {
-                ((EnhancedCelestialsWorldData) level).setLunarContext(LunarContext.forLevel(level, Optional.of(this.data)));
+            EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
+            if (enhancedCelestialsContext == null) {
+                ((EnhancedCelestialsWorldData) level).setLunarContext(EnhancedCelestialsContext.forLevel(level, Optional.of(this.data)));
             } else {
                 EnhancedCelestials.LOGGER.warn("Attempted lunar context reconstruction from:");
                 new Throwable().printStackTrace();
