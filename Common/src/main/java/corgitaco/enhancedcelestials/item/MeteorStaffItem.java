@@ -32,6 +32,7 @@ public class MeteorStaffItem extends Item {
             Vec3 normalize = hitResult.getLocation().subtract(pPlayer.position()).normalize();
 
             meteorEntity.setDeltaMovement(normalize.multiply(5D, 5, 5D));
+            meteorEntity.setSize((byte) pLevel.random.nextInt(3, 5));
 
 
             pLevel.addFreshEntity(meteorEntity);

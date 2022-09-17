@@ -15,7 +15,7 @@
     "MixinWorld",
     "MixinWorldEntitySpawner",
     "access.BuiltinRegistriesAccess",
-    "access.ChunkAccess",
+    "access.ChunkAccessAccess",
     "access.ChunkMapAccess",
     "access.ColorAccess",
     "access.DimensionTypeAccess",

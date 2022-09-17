@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.ProgressListener;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
@@ -42,6 +43,14 @@ public abstract class MixinServerWorld {
         EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
         if (enhancedCelestialsContext != null) {
             enhancedCelestialsContext.save((ServerLevel) (Object) this);
+        }
+    }
+
+    @Inject(method = "tickChunk", at = @At("RETURN"))
+    private void tickEnhancedCelestialChunks(LevelChunk chunk, int i, CallbackInfo ci) {
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this).getLunarContext();
+        if (enhancedCelestialsContext != null) {
+            enhancedCelestialsContext.chunkTick((ServerLevel) (Object) this, chunk);
         }
     }
 }

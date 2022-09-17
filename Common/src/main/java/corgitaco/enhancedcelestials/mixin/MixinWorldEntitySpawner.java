@@ -3,7 +3,7 @@ package corgitaco.enhancedcelestials.mixin;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarMobSpawnInfo;
 import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
-import corgitaco.enhancedcelestials.mixin.access.ChunkAccess;
+import corgitaco.enhancedcelestials.mixin.access.ChunkAccessAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobSpawnInfoAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -53,7 +53,7 @@ public class MixinWorldEntitySpawner {
     @Inject(method = "getRoughBiome", at = @At("RETURN"), cancellable = true)
     private static void useLunarSpawner(BlockPos pos, net.minecraft.world.level.chunk.ChunkAccess chunk, CallbackInfoReturnable<Biome> cir) {
         if (chunk instanceof LevelChunk) {
-            Level world = ((ChunkAccess) chunk).getLevel();
+            Level world = ((ChunkAccessAccess) chunk).getLevel();
             EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
             if (enhancedCelestialsContext != null) {
                 LunarMobSpawnInfo lunarSpawner = enhancedCelestialsContext.getLunarForecast().getCurrentEvent().value().getLunarSpawner();

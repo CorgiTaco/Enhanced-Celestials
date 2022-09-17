@@ -7,6 +7,7 @@ import corgitaco.enhancedcelestials.entity.MeteorEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -54,6 +55,11 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
         matrices.popPose();
 
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
+    }
+
+    @Override
+    public boolean shouldRender(MeteorEntity $$0, Frustum $$1, double $$2, double $$3, double $$4) {
+        return true;
     }
 
     @Override
