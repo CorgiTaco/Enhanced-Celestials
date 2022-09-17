@@ -27,5 +27,6 @@
   "enhancedcelestials.sleep.fail": "You may not rest now because the current lunar event prevents it.",
   "block.enhancedcelestials.meteor": "Meteor",
   "block.enhancedcelestials.space_moss_carpet": "Space Moss Carpet",
-  "block.enhancedcelestials.space_moss_block": "Space Moss Block"
+  "block.enhancedcelestials.space_moss_block": "Space Moss Block",
+  "block.enhancedcelestials.space_moss_grass": "Space Moss Grass"
 }

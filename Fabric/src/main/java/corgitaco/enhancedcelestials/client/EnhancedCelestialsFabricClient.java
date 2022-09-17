@@ -11,6 +11,6 @@ public class EnhancedCelestialsFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         ECEntityRenderers.register(EntityRendererRegistry::register);
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ECBlocks.SPACE_MOSS_CARPET.get(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ECBlocks.SPACE_MOSS_CARPET.get(), ECBlocks.SPACE_MOSS_GRASS.get());
     }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "enhancedcelestials:block/space_moss_grass"
+  }
+}

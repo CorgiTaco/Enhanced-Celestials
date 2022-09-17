@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.block;
 
+import corgitaco.enhancedcelestials.core.ECBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -7,11 +8,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class SpaceMossBlock extends Block {
-    private final Block block;
 
-    public SpaceMossBlock(Block block, Properties $$0) {
+    public SpaceMossBlock(Properties $$0) {
         super($$0);
-        this.block = block;
     }
 
     @Override
@@ -22,7 +21,7 @@ public final class SpaceMossBlock extends Block {
 
         var blockPos = $$2.offset(x, y, z);
 
-        var blockState = block.defaultBlockState();
+        var blockState = ($$3.nextBoolean() ? ECBlocks.SPACE_MOSS_CARPET : ECBlocks.SPACE_MOSS_GRASS).get().defaultBlockState();
 
         if ($$1.isEmptyBlock(blockPos) && blockState.canSurvive($$1, blockPos)) {
             $$1.setBlock(blockPos, blockState, Block.UPDATE_CLIENTS);

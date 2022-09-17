@@ -14,6 +14,10 @@ public final class SpaceMossCarpetBlock extends CarpetBlock {
 
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
-        return $$1.getBlockState($$2.below()).is(EnhancedCelestialsBlockTags.SPACE_MOSS_GROWS_ON);
+        return doesSurvive($$0, $$1, $$2);
+    }
+
+    public static boolean doesSurvive(BlockState blockState, LevelReader reader, BlockPos blockPos) {
+        return reader.getBlockState(blockPos.below()).is(EnhancedCelestialsBlockTags.SPACE_MOSS_GROWS_ON);
     }
 }
