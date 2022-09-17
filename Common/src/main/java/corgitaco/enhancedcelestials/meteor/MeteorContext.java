@@ -27,7 +27,7 @@ public class MeteorContext {
 
                 BlockPos worldPosition = chunkAccess.getPos().getWorldPosition();
                 entity.setPos(worldPosition.getX() + random.nextInt(16), level.getMaxBuildHeight() + 2000, worldPosition.getZ() + random.nextInt(16));
-                entity.setSize((byte) random.nextInt(5, 25));
+                entity.setSize((byte) random.nextInt(2, 5));
                 level.addFreshEntity(entity);
             }
         }

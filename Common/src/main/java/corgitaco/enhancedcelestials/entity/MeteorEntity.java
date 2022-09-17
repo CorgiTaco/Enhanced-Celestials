@@ -52,7 +52,7 @@ public final class MeteorEntity extends Entity {
     public void tick() {
         super.tick();
 
-        var gravity = 0.1D;
+        var gravity = 0.2D;
 
         var velocity = getDeltaMovement();
         move(MoverType.SELF, velocity);
@@ -62,12 +62,13 @@ public final class MeteorEntity extends Entity {
         }
         setDeltaMovement(velocity.subtract(0.0D, gravity, 0.0D));
 
-        if (!level.isClientSide && (onGround || verticalCollision || horizontalCollision)) {
-            discard();
-            level.explode(this, getX(), getY(), getZ(), 2F, Explosion.BlockInteraction.DESTROY);
-        }
+        if (!level.isClientSide) {
+            if (onGround || verticalCollision || horizontalCollision) {
+                discard();
+                level.explode(this, getX(), getY(), getZ(), 5F, Explosion.BlockInteraction.DESTROY);
 
-        if (level.isClientSide) {
+            }
+        } else {
             Vec3 reverse = getDeltaMovement().multiply(-1, -1, -1);
 
             for (int i = 0; i < 5; i++) {

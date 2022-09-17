@@ -25,7 +25,10 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
         var size = entity.getSize();
 
         matrices.pushPose();
-        matrices.scale(0.5F * size, 0.5F * size, 0.5F * size);
+        float halfSize = 0.5F * size;
+        double translateOffset = -0.5 * halfSize;
+        matrices.translate(translateOffset, translateOffset, translateOffset);
+        matrices.scale(halfSize, halfSize, halfSize);
 
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
 
