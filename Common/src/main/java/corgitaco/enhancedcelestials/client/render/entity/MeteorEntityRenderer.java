@@ -4,44 +4,56 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.core.ECBlocks;
 import corgitaco.enhancedcelestials.entity.MeteorEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 
 public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
-    private final BlockRenderDispatcher blockRenderDispatcher;
 
     public MeteorEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.blockRenderDispatcher = context.getBlockRenderDispatcher();
     }
-
 
     @Override
     public void render(MeteorEntity entity, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
+        var size = entity.getSize();
+
         matrices.pushPose();
-        matrices.scale(3, 3, 3);
+        matrices.scale(0.5F * size, 0.5F * size, 0.5F * size);
+        matrices.translate(-0.5D, 0.0D, -0.5D);
+
+        var dispatcher = Minecraft.getInstance().getBlockRenderer();
+
+        var state = ECBlocks.METEOR.get().defaultBlockState();
+
+        var consumer = vertexConsumers.getBuffer(RenderType.solid());
+
+        var source = RandomSource.create(state.getSeed(BlockPos.ZERO));
+
         matrices.pushPose();
         matrices.mulPose(Vector3f.XP.rotationDegrees(15F));
-
-        this.blockRenderDispatcher.renderSingleBlock(ECBlocks.METEOR.get().defaultBlockState(), matrices, vertexConsumers, light, OverlayTexture.NO_OVERLAY);
+        dispatcher.renderBatched(state, BlockPos.ZERO, entity.level, matrices, consumer, false, source);
         matrices.popPose();
 
         matrices.pushPose();
         matrices.translate(0.4, 0.4, 0.4);
         matrices.mulPose(Vector3f.XP.rotationDegrees(45F));
-        this.blockRenderDispatcher.renderSingleBlock(ECBlocks.METEOR.get().defaultBlockState(), matrices, vertexConsumers, light, OverlayTexture.NO_OVERLAY);
+        dispatcher.renderBatched(state, BlockPos.ZERO, entity.level, matrices, consumer, false, source);
         matrices.popPose();
+
         matrices.pushPose();
         matrices.translate(-0.1, 0.2, 0.7);
         matrices.mulPose(Vector3f.ZN.rotationDegrees(45F));
+        dispatcher.renderBatched(state, BlockPos.ZERO, entity.level, matrices, consumer, false, source);
+        matrices.popPose();
 
-        this.blockRenderDispatcher.renderSingleBlock(ECBlocks.METEOR.get().defaultBlockState(), matrices, vertexConsumers, light, OverlayTexture.NO_OVERLAY);
         matrices.popPose();
-        matrices.popPose();
+
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
     }
 
