@@ -8,11 +8,15 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public final class ECItems {
     private static final RegistrationProvider<Item> ITEMS = RegistrationProvider.get(Registry.ITEM, EnhancedCelestials.MOD_ID);
 
     public static final RegistryObject<Item> METEOR = ITEMS.register("meteor", () -> new BlockItem(ECBlocks.METEOR.get(), createProperties()));
+    public static final RegistryObject<Item> SPACE_MOSS_CARPET = ITEMS.register("space_moss_carpet", () -> new BlockItem(ECBlocks.SPACE_MOSS_CARPET.get(), createProperties()));
+    public static final RegistryObject<Item> SPACE_MOSS_BLOCK = ITEMS.register("space_moss_block", () -> new BlockItem(ECBlocks.SPACE_MOSS_BLOCK.get(), createProperties()));
+
     public static final RegistryObject<Item> METEOR_STAFF = ITEMS.register("meteor_staff", () -> new MeteorStaffItem( new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
 
     private ECItems() {

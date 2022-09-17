@@ -25,7 +25,6 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
 
         matrices.pushPose();
         matrices.scale(0.5F * size, 0.5F * size, 0.5F * size);
-        matrices.translate(-0.5D, 0.0D, -0.5D);
 
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
 
