@@ -25,6 +25,7 @@
     "access.MobCountsAccess",
     "access.MobSpawnInfoAccess",
     "access.RegistryAccess",
+    "access.StructuresAccess",
     "access.StyleAccess",
     "access.WorldEntitySpawnerAccess",
     "server.MixinCommands"
