@@ -1,7 +1,21 @@
 {
   "variants": {
-    "": {
-      "model": "enhancedcelestials:block/space_moss_block"
-    }
+    "": [
+      {
+        "model": "enhancedcelestials:block/space_moss_block"
+      },
+      {
+        "model": "enhancedcelestials:block/space_moss_block",
+        "y": 90
+      },
+      {
+        "model": "enhancedcelestials:block/space_moss_block",
+        "y": 180
+      },
+      {
+        "model": "enhancedcelestials:block/space_moss_block",
+        "y": 270
+      }
+    ]
   }
 }
