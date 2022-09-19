@@ -1,14 +1,14 @@
 package corgitaco.enhancedcelestials.entity;
 
 import corgitaco.enhancedcelestials.core.ECBlocks;
-import corgitaco.enhancedcelestials.core.EnhancedCelestialsBlockTags;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -18,6 +18,13 @@ public final class SpaceMossBugEntity extends PathfinderMob {
 
     public SpaceMossBugEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        goalSelector.addGoal(2, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -53,14 +60,13 @@ public final class SpaceMossBugEntity extends PathfinderMob {
                 }
             }
 
-            if (isCoveredInSpores() && getBlockStateOn().is(EnhancedCelestialsBlockTags.SPACE_MOSS_GROWS_ON) && random.nextInt(48) == 0) {
-                var blockPos = new BlockPos(getBlockX(), getBlockY(), getBlockZ());
-
+            if (isCoveredInSpores() && random.nextInt(48) == 0) {
                 var blockState = (random.nextBoolean() ? ECBlocks.SPACE_MOSS_CARPET : ECBlocks.SPACE_MOSS_GRASS).get().defaultBlockState();
+
+                var blockPos = blockPosition();
 
                 if (blockState.canSurvive(level, blockPos) && level.setBlock(blockPos, blockState, Block.UPDATE_CLIENTS)) {
                     setCoveredInSpores(false);
-
                     setSporeDelay((byte) 254);
                 }
             }

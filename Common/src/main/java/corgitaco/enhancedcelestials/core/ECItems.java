@@ -20,7 +20,7 @@ public final class ECItems {
 
     public static final RegistryObject<Item> METEOR_STAFF = ITEMS.register("meteor_staff", () -> new MeteorStaffItem( new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
 
-    public static final RegistryObject<Item> SPACE_MOSS_BUG_SPAWN_EGG = ITEMS.register("space_moss_bug_spawn_egg", () -> new SpawnEggItem(ECEntities.SPACE_MOSS_BUG.get(), 0, 0, createProperties()));
+    public static final RegistryObject<Item> SPACE_MOSS_BUG_SPAWN_EGG = ITEMS.register("space_moss_bug_spawn_egg", () -> new SpawnEggItem(ECEntities.SPACE_MOSS_BUG.get(), 0x626361, 0x564945, createProperties()));
 
     private ECItems() {
     }

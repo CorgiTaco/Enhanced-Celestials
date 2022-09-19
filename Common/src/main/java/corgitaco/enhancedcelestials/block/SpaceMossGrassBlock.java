@@ -19,12 +19,12 @@ public final class SpaceMossGrassBlock extends BushBlock implements SpaceMossGro
 
     @Override
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
-        collideWith($$3, $$1.random);
+        SpaceMossGrowthBlock.super.entityInside($$3, $$1);
     }
 
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
-        return survives($$0, $$1, $$2);
+        return SpaceMossGrowthBlock.super.canSurvive($$0, $$1, $$2);
     }
 
     @Override
