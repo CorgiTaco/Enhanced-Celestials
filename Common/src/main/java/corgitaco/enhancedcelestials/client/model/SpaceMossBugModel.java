@@ -5,6 +5,7 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 
 public final class SpaceMossBugModel extends HierarchicalModel<SpaceMossBugEntity> {
     private final ModelPart root;
@@ -43,7 +44,16 @@ public final class SpaceMossBugModel extends HierarchicalModel<SpaceMossBugEntit
 
     @Override
     public void setupAnim(SpaceMossBugEntity spaceMossBug, float v, float v1, float v2, float v3, float v4) {
+        var y = Mth.cos(v * 0.5F) * 1.2F * v1;
+        var yReverse = Mth.cos(v * 0.5F + Mth.PI) * 1.2F * v1;
 
+        right_front_leg.yRot = y;
+        right_middle_leg.yRot = yReverse;
+        right_back_leg.yRot = y;
+
+        left_front_leg.yRot = y;
+        left_middle_leg.yRot = yReverse;
+        left_back_leg.yRot = y;
     }
 
     public static LayerDefinition createBodyLayer() {

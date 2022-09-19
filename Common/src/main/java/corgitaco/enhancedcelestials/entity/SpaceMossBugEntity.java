@@ -1,16 +1,20 @@
 package corgitaco.enhancedcelestials.entity;
 
 import corgitaco.enhancedcelestials.core.ECBlocks;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 public final class SpaceMossBugEntity extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> COVERED_IN_SPORES = SynchedEntityData.defineId(SpaceMossBugEntity.class, EntityDataSerializers.BOOLEAN);
@@ -65,10 +69,22 @@ public final class SpaceMossBugEntity extends PathfinderMob {
 
                 var blockPos = blockPosition();
 
-                if (blockState.canSurvive(level, blockPos) && level.setBlock(blockPos, blockState, Block.UPDATE_CLIENTS)) {
+                if (level.isEmptyBlock(blockPos) && blockState.canSurvive(level, blockPos) && level.setBlock(blockPos, blockState, Block.UPDATE_CLIENTS)) {
                     setCoveredInSpores(false);
                     setSporeDelay((byte) 254);
                 }
+            }
+        }
+
+        if (level.isClientSide && isCoveredInSpores()) {
+            for (int i = 0; i < 5; i++) {
+                level.addParticle(ParticleTypes.FALLING_NECTAR,
+                        getX() + Mth.nextDouble(random, -0.4D, 0.4D),
+                        getY() + Mth.nextDouble(random, -0.4D, 0.4D),
+                        getZ() + Mth.nextDouble(random, -0.4D, 0.4D),
+                        0.0D,
+                        0.0D,
+                        0.0D);
             }
         }
     }
@@ -88,5 +104,10 @@ public final class SpaceMossBugEntity extends PathfinderMob {
 
     public void setSporeDelay(byte b) {
         entityData.set(SPORE_DELAY, b);
+    }
+
+    @Override
+    public @NotNull MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 }
