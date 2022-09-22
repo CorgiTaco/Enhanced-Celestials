@@ -64,7 +64,7 @@ public final class SpaceMossBugEntity extends PathfinderMob {
                 }
             }
 
-            if (isCoveredInSpores() && random.nextInt(48) == 0) {
+            if (isCoveredInSpores() && random.nextInt(96) == 0) {
                 var blockState = (random.nextBoolean() ? ECBlocks.SPACE_MOSS_CARPET : ECBlocks.SPACE_MOSS_GRASS).get().defaultBlockState();
 
                 var blockPos = blockPosition();

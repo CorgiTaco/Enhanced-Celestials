@@ -8,12 +8,13 @@
     "Corgi Taco"
   ],
   "contributors": [
-    "LudoCrypt - Moon Ambience"
+    "LudoCrypt - Moon Ambience",
+    "chaottic - Textures and models and code contributions"
   ],
   "contact": {
     "sources": "https://github.com/CorgiTaco/Enhanced-Celestials"
   },
-  "license": "LGPLv3",
+  "license": "Source code and binaries fall under LGPLv3 while textures and models are Copyright 2022-present chaottic. All Rights Reserved",
   "icon": "assets/modid/icon.png",
   "environment": "*",
   "entrypoints": {

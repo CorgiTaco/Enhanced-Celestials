@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 issueTrackerURL="https://github.com/CorgiTaco/Enhanced-Celestials/issues"
-license="LGPLv3"
+license="Source code and binaries fall under LGPLv3 while textures and models are Copyright 2022-present chaottic. All Rights Reserved"
 
 [[mods]] #mandatory
 modId="enhancedcelestials" #mandatory
