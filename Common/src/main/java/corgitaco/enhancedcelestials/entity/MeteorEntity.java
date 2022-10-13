@@ -34,12 +34,12 @@ public final class MeteorEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        setSize(compoundTag.getByte("Size"));
+        setSize(compoundTag.getFloat("Size"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        compoundTag.putByte("Size", getSize());
+        compoundTag.putFloat("Size", getSize());
     }
 
     @Override
@@ -71,8 +71,8 @@ public final class MeteorEntity extends Entity {
         }
     }
 
-    public byte getSize() {
-        return (byte) Math.max(entityData.get(SIZE), 1);
+    public float getSize() {
+        return Math.max(entityData.get(SIZE), 1);
     }
 
     @VisibleForTesting
