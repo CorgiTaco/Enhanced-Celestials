@@ -21,7 +21,7 @@ public class ECStructures {
     public static final RegistrationProvider<Structure> PROVIDER = RegistrationProvider.get(BuiltinRegistries.STRUCTURES, EnhancedCelestials.MOD_ID);
 
 
-    public static final Holder<Structure> CRATER = register("crater", () -> new CraterStructure(structure(BiomeTags.HAS_VILLAGE_PLAINS, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, TerrainAdjustment.NONE)));
+    public static final Holder<Structure> CRATER = register("crater", () -> new CraterStructure(structure(BiomeTags.IS_OVERWORLD, GenerationStep.Decoration.RAW_GENERATION, TerrainAdjustment.NONE)));
 
 
     private static Holder<Structure> register(String id, Supplier<Structure> structureSupplier) {

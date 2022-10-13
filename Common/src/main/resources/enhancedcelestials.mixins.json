@@ -9,6 +9,7 @@
     "MixinLivingEntity",
     "MixinLocalMobCapCalculator",
     "MixinLootTableManager",
+    "MixinConfiguredFeature",
     "MixinPlayerList",
     "MixinServerWorld",
     "MixinSlimeEntity",

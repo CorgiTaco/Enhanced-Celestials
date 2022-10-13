@@ -33,12 +33,12 @@ public class CraterPiece extends StructurePiece {
 
     public CraterPiece(StructurePieceSerializationContext context, CompoundTag tag) {
         super(ECStructurePieceTypes.CRATER_PIECE.get(), tag);
-        this.structureInfo = CraterStructure.PieceStructureInfo.CODEC.decode(NbtOps.INSTANCE, tag.get("volcano_info")).result().orElseThrow().getFirst();
+        this.structureInfo = CraterStructure.PieceStructureInfo.CODEC.decode(NbtOps.INSTANCE, tag.get("crater_info")).result().orElseThrow().getFirst();
     }
 
     @Override
     protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag compoundTag) {
-        compoundTag.put("volcano_info", CraterStructure.PieceStructureInfo.CODEC.encodeStart(NbtOps.INSTANCE, this.structureInfo).result().orElseThrow());
+        compoundTag.put("crater_info", CraterStructure.PieceStructureInfo.CODEC.encodeStart(NbtOps.INSTANCE, this.structureInfo).result().orElseThrow());
     }
 
 
@@ -48,7 +48,7 @@ public class CraterPiece extends StructurePiece {
         double radius = this.structureInfo.baseRadiusX();
         double radiusZ = this.structureInfo.baseRadiusZ();
 
-        double yRadius = 65;
+        double yRadius = 40;
         BlockPos origin = this.structureInfo.origin();
         int baseHeight = origin.getY();
 
@@ -71,28 +71,28 @@ public class CraterPiece extends StructurePiece {
         double yRadiusSquared = yRadius * yRadius;
         double zRadiusSquared = radiusZ * radiusZ;
 
-        FastNoise fastNoise = new FastNoise(20202);
-        fastNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        fastNoise.SetFrequency(0.008F);
-
-
         for (int worldX = minX; worldX <= maxX; worldX++) {
             int localX = worldX - origin.getX();
+            mutable.set(worldX, 0, 0);
 
             for (int worldZ = minZ; worldZ <= maxZ; worldZ++) {
                 int localZ = worldZ - origin.getZ();
+                mutable.set(worldX, 0, worldZ);
 
                 for (double y = -yRadius; y <= yRadius; y++) {
                     mutable.set(worldX, baseHeight + y, worldZ);
 
-                    //Credits to Hex_26 for this equation!
+                    //Credits to Hex_26 for this equation!/
                     double equationResult = (localX * localX) / xRadiusSquared + (y * y) / yRadiusSquared + (localZ * localZ) / zRadiusSquared;
-                    double threshold = 1 + 0.7 * fastNoise.GetNoise(mutable.getX(),  mutable.getZ());
-                    if (equationResult >= threshold) {
+                    double threshold = 1 + 0.7 * fastNoise.GetNoise(mutable.getX(), mutable.getZ());
+
+
+                    if (equationResult >= 1) {
                         continue;
                     }
 
                     worldGenLevel.setBlock(mutable, Blocks.AIR.defaultBlockState(), 3);
+
                 }
             }
         }
