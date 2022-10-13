@@ -22,12 +22,12 @@ public class MeteorContext {
     public void chunkTick(Level level, ChunkAccess chunkAccess) {
          if (level instanceof ServerLevel serverLevel) {
              RandomSource random = serverLevel.random;
-             if (random.nextInt(250) == 0) {
+             if (random.nextInt(25000) == 0) {
                  MeteorEntity entity = new MeteorEntity(level);
                  entity.setDeltaMovement(new Vec3(Mth.randomBetween(random, -2F, 2F), -0.35, Mth.randomBetween(random, -2F, 2F)));
                  BlockPos worldPosition = chunkAccess.getPos().getWorldPosition();
                  entity.setPos(worldPosition.getX() + random.nextInt(16), level.getMaxBuildHeight() + 700, worldPosition.getZ() + random.nextInt(16));
-                 entity.setSize((byte) random.nextInt(2, 5));
+                 entity.setSize(Mth.nextFloat(random, 1F, 8F));
                  level.addFreshEntity(entity);
              }
          }

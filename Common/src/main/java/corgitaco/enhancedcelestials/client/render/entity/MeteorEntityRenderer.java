@@ -22,11 +22,12 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
 
     @Override
     public void render(MeteorEntity entity, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
-        var size = 0.5F * entity.getSize();
-        var offset = -0.5 * size;
+        var size = entity.getBbWidth();
 
         matrices.pushPose();
-        matrices.translate(offset, offset, offset);
+
+        float xzOffset = size * -0.5F;
+        matrices.translate(xzOffset, 0, xzOffset);
         matrices.scale(size, size, size);
 
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
@@ -40,6 +41,9 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
         var uuid = entity.getUUID();
         var most = uuid.getMostSignificantBits();
         var least = uuid.getLeastSignificantBits();
+
+        dispatcher.renderBatched(state, BlockPos.ZERO, entity.level, matrices, consumer, false, source);
+
 
         for (int i = 0; i < Math.max(Math.floorMod(least, 5), 1); i++) {
             var random = most * i; // First should always be 0, 0, 0

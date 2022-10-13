@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.entity;
 
+import com.google.common.annotations.VisibleForTesting;
 import corgitaco.enhancedcelestials.core.ECEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -9,16 +10,14 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public final class MeteorEntity extends Entity {
-    private static final EntityDataAccessor<Byte> SIZE = SynchedEntityData.defineId(MeteorEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(MeteorEntity.class, EntityDataSerializers.FLOAT);
 
     public MeteorEntity(Level level) {
         this(ECEntities.METEOR.get(), level);
@@ -30,7 +29,7 @@ public final class MeteorEntity extends Entity {
 
     @Override
     protected void defineSynchedData() {
-        entityData.define(SIZE, (byte) 1);
+        entityData.define(SIZE, 1F);
     }
 
     @Override
@@ -52,21 +51,16 @@ public final class MeteorEntity extends Entity {
     public void tick() {
         super.tick();
 
-        var gravity = 0.2D;
 
         var velocity = getDeltaMovement();
-        move(MoverType.SELF, velocity);
 
-        if (isNoGravity()) {
-            return;
-        }
-        setDeltaMovement(velocity.subtract(0.0D, gravity, 0.0D));
+        setDeltaMovement(velocity.subtract(0, 0.3, 0));
+        move(MoverType.SELF, velocity);
 
         if (!level.isClientSide) {
             if (onGround || verticalCollision || horizontalCollision) {
                 discard();
                 level.explode(this, getX(), getY(), getZ(), 5F, Explosion.BlockInteraction.DESTROY);
-
             }
         } else {
             Vec3 reverse = getDeltaMovement().multiply(-1, -1, -1);
@@ -81,7 +75,31 @@ public final class MeteorEntity extends Entity {
         return (byte) Math.max(entityData.get(SIZE), 1);
     }
 
-    public void setSize(byte b) {
-        entityData.set(SIZE, (byte) Math.max(b, 1));
+    @VisibleForTesting
+    public void setSize(float pSize) {
+        float i = Mth.clamp(pSize, 1F, Byte.MAX_VALUE);
+        this.entityData.set(SIZE, i);
+        this.reapplyPosition();
+        this.refreshDimensions();
     }
+
+    public void refreshDimensions() {
+        double d0 = this.getX();
+        double d1 = this.getY();
+        double d2 = this.getZ();
+        super.refreshDimensions();
+        this.setPos(d0, d1, d2);
+    }
+
+    public void onSyncedDataUpdated(EntityDataAccessor<?> pKey) {
+        if (SIZE.equals(pKey)) {
+            this.refreshDimensions();
+        }
+        super.onSyncedDataUpdated(pKey);
+    }
+
+    public EntityDimensions getDimensions(Pose pPose) {
+        return super.getDimensions(pPose).scale(getSize() * 0.5F);
+    }
+
 }
