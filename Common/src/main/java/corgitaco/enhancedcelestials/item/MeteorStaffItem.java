@@ -23,7 +23,6 @@ public class MeteorStaffItem extends Item {
 
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (pLevel.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!pLevel.isClientSide) {
             MeteorEntity meteorEntity = new MeteorEntity(pLevel);
             HitResult hitResult = getPlayerPOVHitResult(100, pLevel, pPlayer, ClipContext.Fluid.NONE);
@@ -32,7 +31,7 @@ public class MeteorStaffItem extends Item {
             Vec3 normalize = hitResult.getLocation().subtract(pPlayer.position()).normalize();
 
             meteorEntity.setDeltaMovement(normalize.multiply(5D, 5, 5D));
-            meteorEntity.setSize((byte) pLevel.random.nextInt(5, 25));
+            meteorEntity.setSize(Mth.nextFloat(pLevel.random, 0.3F, 3F));
 
 
             pLevel.addFreshEntity(meteorEntity);

@@ -65,8 +65,13 @@ public final class MeteorEntity extends Entity {
         } else {
             Vec3 reverse = getDeltaMovement().multiply(-1, -1, -1);
 
-            for (int i = 0; i < 5; i++) {
-                level.addParticle(ParticleTypes.FLAME, getX() + Mth.nextDouble(random, -0.4, 0.4), getY() + Mth.nextDouble(random, -0.4, 0.4), getZ() + Mth.nextDouble(random, -0.4, 0.4), reverse.x(), reverse.y(), reverse.z());
+            float bbWidth = getBbWidth() / 2F;
+            for (float xOffset = -bbWidth; xOffset <= bbWidth; xOffset += 1) {
+                for (float zOffset = -bbWidth; zOffset <= bbWidth; zOffset += 1) {
+                    for (int i = 0; i < 5; i++) {
+                        level.addParticle(ParticleTypes.FLAME, getX() + xOffset, getY() + Mth.nextDouble(random, -0.4, 0.4), getZ() + zOffset, reverse.x(), reverse.y(), reverse.z());
+                    }
+                }
             }
         }
     }
