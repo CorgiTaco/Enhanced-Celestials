@@ -2,6 +2,7 @@ package corgitaco.enhancedcelestials.core;
 
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.entity.MeteorEntity;
+import corgitaco.enhancedcelestials.entity.MeteorStrikeEntity;
 import corgitaco.enhancedcelestials.entity.SpaceMossBugEntity;
 import corgitaco.enhancedcelestials.reg.RegistrationProvider;
 import corgitaco.enhancedcelestials.reg.RegistryObject;
@@ -22,6 +23,7 @@ public final class ECEntities {
 
     public static final RegistryObject<EntityType<MeteorEntity>> METEOR = createEntity("meteor", EntityType.Builder.<MeteorEntity>of(MeteorEntity::new, MobCategory.MISC).sized(3, 3).clientTrackingRange(512).updateInterval(Integer.MAX_VALUE));
     public static final RegistryObject<EntityType<SpaceMossBugEntity>> SPACE_MOSS_BUG = createEntity("space_moss_bug", EntityType.Builder.of(SpaceMossBugEntity::new, MobCategory.AMBIENT).sized(1.275F, 0.5625F));
+    public static final RegistryObject<EntityType<MeteorStrikeEntity>> METEOR_STRIKE = createEntity("meteor_strike", EntityType.Builder.<MeteorStrikeEntity>of(MeteorStrikeEntity::new, MobCategory.MISC).sized(5, 5));
 
     private ECEntities() {
     }
