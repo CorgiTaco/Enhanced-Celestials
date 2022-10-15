@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.UUID;
+
 public class MeteorStrikeRenderer extends EntityRenderer<MeteorStrikeEntity> {
 
 
@@ -30,7 +32,10 @@ public class MeteorStrikeRenderer extends EntityRenderer<MeteorStrikeEntity> {
         float width = meteorStrikeEntity.getBbWidth() / 2F;
 
         matrices.translate(0, 0.02, 0);
-        matrices.mulPose(Vector3f.YP.rotationDegrees((float) GLFW.glfwGetTime() * 25));
+        UUID uuid = meteorStrikeEntity.getUUID();
+        float rotation = (float) (((GLFW.glfwGetTime() + ((int) uuid.getMostSignificantBits()))) % 360F);
+
+        matrices.mulPose(Vector3f.YP.rotationDegrees(rotation * 25F));
 
 
         renderPlaneTexture(matrices, vertexConsumers, width);
