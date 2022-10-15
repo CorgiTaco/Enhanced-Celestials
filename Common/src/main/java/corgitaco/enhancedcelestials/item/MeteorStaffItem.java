@@ -79,7 +79,7 @@ public class MeteorStaffItem extends Item {
                         }
 
                     }, 5, 1F, entity, ClipContext.Fluid.NONE);
-                    if (meteorStrikeEntity.getBoundingBox().contains(hitResult.getLocation()) && meteorStrikeEntity.getSize() < 5) {
+                    if (meteorStrikeEntity.getBoundingBox().contains(hitResult.getLocation()) && meteorStrikeEntity.getSize() < 10) {
                         meteorStrikeEntity.setSize(meteorStrikeEntity.getSize() + 0.1F);
                     } else {
                         tag.remove("strike_id_for_charging");
@@ -111,7 +111,7 @@ public class MeteorStaffItem extends Item {
 
         }
 
-        return level.clip(new ClipContext(eyePosition, eyePosition.add((double) $$10 * dist, (double) $$9 * dist, (double) $$12 * dist), ClipContext.Block.OUTLINE, context, player));
+        return level.clip(new ClipContext(eyePosition, eyePosition.add((double) $$10 * dist, (double) $$9 * dist, (double) $$12 * dist), ClipContext.Block.COLLIDER, context, player));
     }
 
 
