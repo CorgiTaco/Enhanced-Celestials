@@ -50,7 +50,7 @@ public class MeteorStrikeEntity extends Entity {
 
         if (!level.isClientSide) {
             if (isReady()) {
-                if (level.random.nextFloat() < 0.4) {
+                if (level.random.nextFloat() < 0.01) {
                     float angle = this.level.random.nextFloat() * Mth.TWO_PI;
 
                     float addedDistance = Mth.nextFloat(this.random, 2F, getBbWidth() / 2F);
