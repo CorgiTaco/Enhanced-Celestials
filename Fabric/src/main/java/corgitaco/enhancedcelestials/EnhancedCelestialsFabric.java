@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials;
 
+import corgitaco.corgilib.CorgiLibFabric;
 import corgitaco.enhancedcelestials.core.ECEntities;
 import corgitaco.enhancedcelestials.core.ECRegistries;
 import corgitaco.enhancedcelestials.network.FabricNetworkHandler;
@@ -10,6 +11,7 @@ public class EnhancedCelestialsFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        CorgiLibFabric.initializeCorgiLib("Enhanced Celestials Fabric Mod Initializer");
         ECRegistries.loadClasses();
         EnhancedCelestials.commonSetup();
         FabricNetworkHandler.init();

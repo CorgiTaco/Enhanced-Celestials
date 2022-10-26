@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
+import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.client.Camera;
@@ -33,10 +34,14 @@ public abstract class MixinWorldRenderer {
         EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
         if (enhancedCelestialsContext != null) {
             LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
-            Vector3f lastGLColor = lunarForecast.getMostRecentEvent().value().getClientSettings().colorSettings().getGLMoonColor();
-            Vector3f currentGLColor = lunarForecast.getCurrentEvent().value().getClientSettings().colorSettings().getGLMoonColor();
 
-            float blend = lunarForecast.getBlend();
+            ColorSettings lastColorSettings = lunarForecast.getMostRecentEvent().value().getClientSettings().colorSettings();
+            ColorSettings currentColorSettings = lunarForecast.getCurrentEvent().value().getClientSettings().colorSettings();
+
+            Vector3f lastGLColor = lastColorSettings.getGLMoonColor();
+            Vector3f currentGLColor = currentColorSettings.getGLMoonColor();
+
+            float blend = Mth.lerp(lunarForecast.getBlend(), lastColorSettings.getMoonTextureBlendStrength(), currentColorSettings.getMoonTextureBlendStrength());
 
             float r = Mth.clampedLerp(lastGLColor.x(), currentGLColor.x(), blend);
             float g = Mth.clampedLerp(lastGLColor.y(), currentGLColor.y(), blend);

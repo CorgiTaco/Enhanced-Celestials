@@ -5,7 +5,6 @@ import corgitaco.enhancedcelestials.api.ECItemTags;
 import corgitaco.enhancedcelestials.api.ECLunarEventTags;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
-import corgitaco.enhancedcelestials.api.entityfilter.EntityFilter;
 import corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarEvents;
 import corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructurePieceTypes;
@@ -17,7 +16,6 @@ public record ECRegistries() {
     public static void loadClasses() {
         EnhancedCelestialsRegistry.init();
         EnhancedCelestialsBuiltinRegistries.init();
-        EntityFilter.init();
         if (EnhancedCelestials.NEW_CONTENT) {
             ECBlocks.classLoad();
             ECItems.classLoad();

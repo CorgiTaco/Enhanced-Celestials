@@ -15,15 +15,24 @@ credits="LudoCrypt - Ambient sounds"
 description='''
 A minecraft mod adding new Lunar Events!
 '''
+
 [[dependencies.enhancedcelestials]]
 modId="forge"
 mandatory=true
 versionRange="[40,)"
 ordering="NONE"
 side="BOTH"
+
 [[dependencies.enhancedcelestials]]
 modId="minecraft"
 mandatory=true
 versionRange="[1.18.2,)"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.enhancedcelestials]]
+modId = "corgilib"
+mandatory = true
+versionRange = "[1.0.0.5,)"
+ordering = "BEFORE"
+side = "BOTH"

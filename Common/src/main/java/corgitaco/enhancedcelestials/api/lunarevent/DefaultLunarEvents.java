@@ -2,12 +2,12 @@ package corgitaco.enhancedcelestials.api.lunarevent;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import corgitaco.corgilib.entity.condition.AnyCondition;
+import corgitaco.corgilib.entity.condition.FlipCondition;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.ECItemTags;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
-import corgitaco.enhancedcelestials.api.entityfilter.AnyEntityFilter;
-import corgitaco.enhancedcelestials.api.entityfilter.InverseEntityFilter;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import corgitaco.enhancedcelestials.core.ECSounds;
 import corgitaco.enhancedcelestials.reg.RegistrationProvider;
@@ -72,7 +72,7 @@ public class DefaultLunarEvents {
                     new LunarMobSettings(ImmutableMap.of(),
                             new LunarMobSpawnInfo(true, false, true, MobSpawnSettings.EMPTY),
                             List.of(),
-                            new InverseEntityFilter(AnyEntityFilter.INSTANCE)),
+                            new FlipCondition(AnyCondition.INSTANCE)),
                     DropSettings.EMPTY)
     );
 
@@ -80,7 +80,7 @@ public class DefaultLunarEvents {
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
-                            new ColorSettings("FF0000", 0.6, "FF0000", 0.4),
+                            new ColorSettings("FF0000", 0.6F, "FF0000", 0.4F),
                             20,
                             null,
                             ECSounds.BLOOD_MOON.get()
@@ -100,7 +100,7 @@ public class DefaultLunarEvents {
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
                             new LunarMobSpawnInfo(true, true, false, MobSpawnSettings.EMPTY),
                             List.of(),
-                            AnyEntityFilter.INSTANCE
+                            AnyCondition.INSTANCE
                     ),
                     DropSettings.EMPTY)
     );
@@ -129,7 +129,7 @@ public class DefaultLunarEvents {
                             ImmutableMap.of(MobCategory.MONSTER, 4.5D),
                             new LunarMobSpawnInfo(true, true, false, MobSpawnSettings.EMPTY),
                             List.of(),
-                            AnyEntityFilter.INSTANCE
+                            AnyCondition.INSTANCE
                     ),
                     DropSettings.EMPTY)
     );
@@ -138,7 +138,7 @@ public class DefaultLunarEvents {
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
-                            new ColorSettings("FFDB63", 0.6, "FFDB63", 0.4),
+                            new ColorSettings("FFDB63", 0.6F, "FFDB63", 0.4F),
                             20,
                             null,
                             ECSounds.HARVEST_MOON.get()
@@ -184,7 +184,7 @@ public class DefaultLunarEvents {
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
-                            new ColorSettings("00ffff", 0.6, "00ffff", 0.4),
+                            new ColorSettings("00ffff", 0.6F, "00ffff", 0.4F),
                             20,
                             null,
                             ECSounds.BLUE_MOON.get()
@@ -200,8 +200,8 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.blue_moon.set")),
                     new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, List.of(
-                            Pair.of(AnyEntityFilter.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 0, true, false, false))
-                    ), new InverseEntityFilter(AnyEntityFilter.INSTANCE)),
+                            Pair.of(AnyCondition.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 0, true, false, false))
+                    ), new FlipCondition(AnyCondition.INSTANCE)),
                     DropSettings.EMPTY)
     );
 
@@ -225,8 +225,8 @@ public class DefaultLunarEvents {
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.super_blue_moon.set")),
                     new LunarMobSettings(ImmutableMap.of(), LunarMobSpawnInfo.DEFAULT, List.of(
-                            Pair.of(AnyEntityFilter.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 4, true, false, false))
-                    ), new InverseEntityFilter(AnyEntityFilter.INSTANCE)),
+                            Pair.of(AnyCondition.INSTANCE, new MobEffectInstanceBuilder(MobEffects.LUCK, 1210, 4, true, false, false))
+                    ), new FlipCondition(AnyCondition.INSTANCE)),
                     DropSettings.EMPTY)
     );
 

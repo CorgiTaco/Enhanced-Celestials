@@ -47,6 +47,13 @@ repositories {
         name = "JitPack"
         url = "https://jitpack.io"
     }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
@@ -61,6 +68,8 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
     shadow("blue.endless:jankson:${jankson_version}")
+    modImplementation("maven.modrinth:corgilib:1.19.2-${corgilib_version}-fabric")
+
 //    modImplementation("com.github.CorgiTaco:databreaker:${databreaker_version}") {
 //        exclude module: "fabric-loader"
 //    }

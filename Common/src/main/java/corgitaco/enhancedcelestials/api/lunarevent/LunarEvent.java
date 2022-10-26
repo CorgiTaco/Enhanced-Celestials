@@ -2,8 +2,9 @@ package corgitaco.enhancedcelestials.api.lunarevent;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import corgitaco.corgilib.entity.condition.Condition;
+import corgitaco.corgilib.entity.condition.ConditionContext;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
-import corgitaco.enhancedcelestials.api.entityfilter.EntityFilter;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.core.Holder;
@@ -78,8 +79,8 @@ public class LunarEvent {
 
     public void livingEntityTick(LivingEntity entity) {
         this.lunarMobSettings.effectsForEntityTag().forEach((entityFilterMapPair) -> {
-            EntityFilter entityFilter = entityFilterMapPair.getFirst();
-            if (entityFilter.filter(entity)) {
+            Condition entityFilter = entityFilterMapPair.getFirst();
+            if (entityFilter.passes(new ConditionContext(entity.level, entity, entity.isDeadOrDying(), 0))) {
                 MobEffectInstanceBuilder builder = entityFilterMapPair.getSecond();
                 entity.addEffect(builder.makeInstance());
             }
@@ -91,7 +92,7 @@ public class LunarEvent {
     }
 
     public boolean blockSleeping(LivingEntity entity) {
-        return this.lunarMobSettings.blockSleeping().filter(entity);
+        return this.lunarMobSettings.blockSleeping().passes(new ConditionContext(entity.level, entity, entity.isDeadOrDying(), 0));
     }
 
     public LunarTextComponents getTextComponents() {
