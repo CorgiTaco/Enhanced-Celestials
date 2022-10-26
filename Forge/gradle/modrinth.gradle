@@ -1,3 +1,6 @@
+import com.modrinth.minotaur.request.Dependency.DependencyType
+import com.modrinth.minotaur.TaskModrinthUpload
+
 buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
@@ -9,19 +12,19 @@ buildscript {
 
 apply plugin: "com.modrinth.minotaur"
 
-import com.modrinth.minotaur.TaskModrinthUpload
 
 String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
 
 // Make sure it runs after build!
 task forge_publishModrinth (type: TaskModrinthUpload){
     token = "$System.env.MODRINTH_KEY"
-    projectId = ''
+    projectId = '2rL16t1O'
     versionName = "${archivesBaseName}-${project.version}"
-    versionNumber = project.version
+    versionNumber = "${project.minecraft_version}-${project.version}-forge"
     versionType = "${project.release_type}"
     uploadFile = shadowJar
     changelog = changelogText
     addGameVersion("${project.minecraft_version}")
+    addDependency("WhG2r7UF", DependencyType.REQUIRED)
     addLoader('forge')
 }

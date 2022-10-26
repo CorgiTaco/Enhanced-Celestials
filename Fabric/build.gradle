@@ -182,6 +182,7 @@ task fabric_publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurs
     mainFile.changelogType = "markdown"
     mainFile.releaseType = "${project.release_type}"
     mainFile.addGameVersion("${project.minecraft_version}")
+    mainFile.addRequirement("corgilib")
     mainFile.addModLoader("fabric")
 }
 
