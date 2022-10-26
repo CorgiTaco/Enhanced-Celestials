@@ -14,6 +14,8 @@ public class EnhancedCelestialsFabric implements ModInitializer {
         EnhancedCelestials.commonSetup();
         FabricNetworkHandler.init();
 
-        ECEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
+        if (EnhancedCelestials.NEW_CONTENT) {
+            ECEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
+        }
     }
 }

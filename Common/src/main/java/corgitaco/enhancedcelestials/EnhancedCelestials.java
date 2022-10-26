@@ -8,6 +8,8 @@ public class EnhancedCelestials {
     public static final String MOD_ID = "enhancedcelestials";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static final boolean NEW_CONTENT = false;
+
     public EnhancedCelestials() {
     }
 

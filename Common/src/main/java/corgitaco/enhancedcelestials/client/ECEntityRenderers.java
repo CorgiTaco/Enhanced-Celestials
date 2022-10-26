@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.client;
 
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.client.render.entity.MeteorEntityRenderer;
 import corgitaco.enhancedcelestials.client.render.entity.MeteorStrikeRenderer;
 import corgitaco.enhancedcelestials.client.render.entity.SpaceMossBugEntityRenderer;
@@ -11,9 +12,11 @@ import net.minecraft.world.entity.EntityType;
 public class ECEntityRenderers {
 
     public static <T extends Entity> void register(RegisterStrategy registerStrategy) {
-        registerStrategy.register(ECEntities.METEOR.get(), MeteorEntityRenderer::new);
-        registerStrategy.register(ECEntities.SPACE_MOSS_BUG.get(), SpaceMossBugEntityRenderer::new);
-        registerStrategy.register(ECEntities.METEOR_STRIKE.get(), MeteorStrikeRenderer::new);
+        if (EnhancedCelestials.NEW_CONTENT) {
+            registerStrategy.register(ECEntities.METEOR.get(), MeteorEntityRenderer::new);
+            registerStrategy.register(ECEntities.SPACE_MOSS_BUG.get(), SpaceMossBugEntityRenderer::new);
+            registerStrategy.register(ECEntities.METEOR_STRIKE.get(), MeteorStrikeRenderer::new);
+        }
     }
 
     @FunctionalInterface

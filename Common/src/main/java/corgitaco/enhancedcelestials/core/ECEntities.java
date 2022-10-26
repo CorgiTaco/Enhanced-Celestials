@@ -28,6 +28,9 @@ public final class ECEntities {
     private ECEntities() {
     }
 
+    public static void loadClass() {
+    }
+
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> consumer) {
         consumer.accept(SPACE_MOSS_BUG.get(), Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.2));
     }

@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.core;
 
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
@@ -19,11 +20,13 @@ import java.util.Optional;
 public class EnhancedCelestialsContext {
 
     private final LunarForecast lunarForecast;
+
+    @Nullable
     private final MeteorContext meteorContext;
 
     private EnhancedCelestialsContext(LunarForecast forecast) {
         this.lunarForecast = forecast;
-        this.meteorContext = new MeteorContext();
+        this.meteorContext = !EnhancedCelestials.NEW_CONTENT ? null : new MeteorContext();
     }
 
     @Nullable
@@ -56,7 +59,9 @@ public class EnhancedCelestialsContext {
     }
 
     public void chunkTick(Level level, ChunkAccess chunkAccess) {
-        meteorContext.chunkTick(level, chunkAccess);
+        if (meteorContext != null) {
+            meteorContext.chunkTick(level, chunkAccess);
+        }
     }
 
     public void save(Level world) {

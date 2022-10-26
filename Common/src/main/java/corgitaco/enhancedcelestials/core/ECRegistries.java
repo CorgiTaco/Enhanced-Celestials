@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.core;
 
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.ECItemTags;
 import corgitaco.enhancedcelestials.api.ECLunarEventTags;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
@@ -17,17 +18,17 @@ public record ECRegistries() {
         EnhancedCelestialsRegistry.init();
         EnhancedCelestialsBuiltinRegistries.init();
         EntityFilter.init();
-        ECItems.classLoad();
+        if (EnhancedCelestials.NEW_CONTENT) {
+            ECBlocks.classLoad();
+            ECItems.classLoad();
+            ECEntities.loadClass();
+            ECStructureTypes.loadClass();
+            ECStructurePieceTypes.bootStrap();
+            ECStructureSets.bootStrap();
+        }
         DefaultLunarEvents.loadClass();
         DefaultLunarDimensionSettings.loadClass();
         ECLunarEventTags.loadClass();
         ECItemTags.loadClass();
-
-        ECStructureTypes.loadClass();
-        ECStructurePieceTypes.bootStrap();
-        ECStructureSets.bootStrap();
-
-        ECBlocks.classLoad();
-        ECItems.classLoad();
     }
 }

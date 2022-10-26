@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.mixin;
 
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructures;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
@@ -20,11 +21,13 @@ public class MixinConfiguredFeature {
 
     @Inject(method = "place", at = @At("HEAD"), cancellable = true)
     private void cancelPlacementNearCraters(WorldGenLevel level, ChunkGenerator generator, RandomSource source, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        Structure structure = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY).get(ECStructures.CRATER.unwrapKey().orElseThrow());
-        ChunkAccess chunk = level.getChunk(pos);
-        boolean hasCrater = chunk.getAllStarts().containsKey(structure) || chunk.getAllReferences().containsKey(structure);
-        if (hasCrater) {
-            cir.setReturnValue(false);
+        if (EnhancedCelestials.NEW_CONTENT) {
+            Structure structure = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY).get(ECStructures.CRATER.unwrapKey().orElseThrow());
+            ChunkAccess chunk = level.getChunk(pos);
+            boolean hasCrater = chunk.getAllStarts().containsKey(structure) || chunk.getAllReferences().containsKey(structure);
+            if (hasCrater) {
+                cir.setReturnValue(false);
+            }
         }
     }
 }
