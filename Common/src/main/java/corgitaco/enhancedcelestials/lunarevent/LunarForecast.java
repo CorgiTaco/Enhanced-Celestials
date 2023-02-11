@@ -44,7 +44,8 @@ public class LunarForecast {
 
     private Holder<LunarEvent> currentEvent;
     private Holder<LunarEvent> mostRecentEvent;
-    private float blend;
+    private Holder<LunarEvent> defaultEvent;
+    private float blend = 1;
     private long lastCheckedGameTime;
 
 
@@ -91,8 +92,11 @@ public class LunarForecast {
 
         this.lastCheckedGameTime = lastCheckedGameTime;
         this.scrambledKeys = new ArrayList<>(possibleEvents);
-        this.currentEvent = !forecast.isEmpty() && forecast.get(0).active(currentDayTime / lunarDimensionSettings.dayLength()) ? forecast.get(0).getEvent(lunarEventRegistry) : lunarDimensionSettings.defaultEvent();
-        this.mostRecentEvent = pastEvents.isEmpty() ? lunarDimensionSettings.defaultEvent() : pastEvents.get(0).getEvent(lunarEventRegistry);
+
+        this.defaultEvent = lunarEventRegistry.getHolderOrThrow(lunarDimensionSettings.defaultEvent());
+
+        this.currentEvent = !forecast.isEmpty() && forecast.get(0).active(currentDayTime / lunarDimensionSettings.dayLength()) ? forecast.get(0).getEvent(lunarEventRegistry) : this.defaultEvent;
+        this.mostRecentEvent = pastEvents.isEmpty() ? this.defaultEvent : pastEvents.get(0).getEvent(lunarEventRegistry);
     }
 
     /**
@@ -210,26 +214,29 @@ public class LunarForecast {
      */
     private void serverTick(ServerLevel level, Holder<LunarEvent> lastCurrentEvent, LunarDimensionSettings lunarDimensionSettings, long currentDay) {
         List<ServerPlayer> players = level.players();
-        boolean isNight = level.isNight();
         if (updateForecast(level, lunarDimensionSettings, this)) {
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
+            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
         }
 
         updatePastEventsAndRecentAndCurrentEvents(this, currentDay, lunarDimensionSettings.trackedPastEventsMaxCount());
         LunarEventInstance lunarEventInstance = this.forecast.get(0);
-        if (lunarEventInstance.active(currentDay) && isNight) {
+        if (lunarEventInstance.active(currentDay) && level.isNight()) {
             this.currentEvent = lunarEventInstance.getEvent(this.lunarEventRegistry);
         } else {
-            this.currentEvent = lunarDimensionSettings.defaultEvent();
+            this.currentEvent = this.defaultEvent;
+        }
+
+        if (level.isDay()) {
+            this.currentEvent = this.defaultEvent;
         }
 
         if (lastCurrentEvent != this.currentEvent) {
-            onLunarEventChange(lastCurrentEvent, players, isNight);
+            onLunarEventChange(lastCurrentEvent, players, level.isNight());
         }
 
         // Sync every 5 minutes just in case.
         if (level.getGameTime() % 6000L == 0) {
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
+            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
         }
     }
 

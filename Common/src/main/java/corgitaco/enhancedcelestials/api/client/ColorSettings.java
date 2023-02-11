@@ -7,32 +7,24 @@ import corgitaco.enhancedcelestials.util.ColorUtil;
 
 public class ColorSettings {
 
-    public static final Codec<ColorSettings> CODEC = RecordCodecBuilder.create(seasonClientSettingsInstance -> {
-        return seasonClientSettingsInstance.group(Codec.STRING.fieldOf("sky_light_color").forGetter((colorSettings) -> {
-            return colorSettings.skyLightColor == Integer.MAX_VALUE ? "" : Integer.toHexString(colorSettings.skyLightColor);
-        }), Codec.FLOAT.fieldOf("sky_light_blend_strength").orElse(0.5F).forGetter((colorSettings) -> {
-            return colorSettings.skyLightBlendStrength;
+    public static final Codec<ColorSettings> CODEC = RecordCodecBuilder.create(colorSettingsInstance -> {
+        return colorSettingsInstance.group(Codec.STRING.fieldOf("sky_light_color").forGetter((colorSettings) -> {
+            return colorSettings.skyLightColor == Integer.MAX_VALUE ? "ffffff" : Integer.toHexString(colorSettings.skyLightColor);
         }), Codec.STRING.fieldOf("moon_texture_color").forGetter((colorSettings) -> {
-            return colorSettings.skyLightColor == Integer.MAX_VALUE ? "" : Integer.toHexString(colorSettings.skyLightColor);
-        }), Codec.FLOAT.fieldOf("moon_texture_blend_strength").orElse(0.5F).forGetter((colorSettings) -> {
-            return colorSettings.skyLightBlendStrength;
-        })).apply(seasonClientSettingsInstance, ColorSettings::new);
+            return colorSettings.moonTextureColor == Integer.MAX_VALUE ? "ffffff" : Integer.toHexString(colorSettings.moonTextureColor);
+        })).apply(colorSettingsInstance, ColorSettings::new);
     });
 
     private final int skyLightColor;
-    private final float skyLightBlendStrength;
     private final int moonTextureColor;
-    private final float moonTextureBlendStrength;
 
-    public ColorSettings(String skyLightHexColor, float skyLightBlendStrength, String moonTextureHexColor, float moonTextureBlendStrength) {
-        this(tryParseColor(skyLightHexColor), skyLightBlendStrength, tryParseColor(moonTextureHexColor), moonTextureBlendStrength);
+    public ColorSettings(String skyLightHexColor, String moonTextureHexColor) {
+        this(tryParseColor(skyLightHexColor), tryParseColor(moonTextureHexColor));
     }
 
-    public ColorSettings(int skyLightColor, float skyLightBlendStrength, int moonTextureColor, float moonTextureBlendStrength) {
+    public ColorSettings(int skyLightColor, int moonTextureColor) {
         this.skyLightColor = skyLightColor;
-        this.skyLightBlendStrength = skyLightBlendStrength;
         this.moonTextureColor = moonTextureColor;
-        this.moonTextureBlendStrength = moonTextureBlendStrength;
     }
 
     public static int tryParseColor(String input) {
@@ -59,19 +51,11 @@ public class ColorSettings {
         return ColorUtil.glColor(ColorUtil.unpack(this.moonTextureColor));
     }
 
-    public float getMoonTextureBlendStrength() {
-        return moonTextureBlendStrength;
-    }
-
     public int getSkyLightColor() {
         return skyLightColor;
     }
 
     public Vector3f getGLSkyLightColor() {
         return ColorUtil.glColor(ColorUtil.unpack(this.skyLightColor));
-    }
-
-    public double getSkyLightBlendStrength() {
-        return skyLightBlendStrength;
     }
 }

@@ -11,8 +11,8 @@ import net.minecraft.data.BuiltinRegistries;
 
 public class EnhancedCelestialsBuiltinRegistries {
 
-    public static final Registry<LunarEvent> LUNAR_EVENT = BuiltinRegistriesAccess.ec_invokeRegisterSimple(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, registry -> DefaultLunarEvents.DEFAULT);
-    public static final Registry<LunarDimensionSettings> LUNAR_EVENT_DIMENSION_SETTING = BuiltinRegistriesAccess.ec_invokeRegisterSimple(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, registry -> DefaultLunarDimensionSettings.OVERWORLD_LUNAR_SETTINGS);
+    public static final Registry<LunarEvent> LUNAR_EVENT = BuiltinRegistriesAccess.ec_invokeRegisterSimple(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, registry -> DefaultLunarEvents.DEFAULT.asHolder());
+    public static final Registry<LunarDimensionSettings> LUNAR_EVENT_DIMENSION_SETTING = BuiltinRegistriesAccess.ec_invokeRegisterSimple(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, registry -> DefaultLunarDimensionSettings.OVERWORLD_LUNAR_SETTINGS.asHolder());
 
     public static void init(){}
 

@@ -34,9 +34,6 @@ public class LunarEvent {
             ).apply(builder, LunarEvent::new)
     );
 
-    public static final Codec<Holder<LunarEvent>> CODEC = RegistryFileCodec.create(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, DIRECT_CODEC);
-
-
     private final Map<ResourceKey<Level>, SpawnRequirements> eventChancesByDimension;
     private final LunarEventClientSettings clientSettings;
     private final LunarTextComponents textComponents;
