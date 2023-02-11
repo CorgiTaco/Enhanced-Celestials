@@ -35,7 +35,7 @@
     "fabric": "*",
     "minecraft": ">=1.18.2",
     "java": ">=17",
-    "corgilib": ">=1.0.0.5"
+    "corgilib": ">=1.0.0.22"
   },
   "accessWidener": "enhancedcelestials.aw"
 }

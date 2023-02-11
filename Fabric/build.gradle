@@ -26,7 +26,6 @@ configurations {
 }
 shadowJar {
     configurations = [project.configurations.shadow]
-    relocate 'blue.endless.jankson', "${project.group}.shadow.blue.endless.jankson"
 }
 
 archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
@@ -67,7 +66,6 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
-    shadow("blue.endless:jankson:${jankson_version}")
     modImplementation("maven.modrinth:corgilib:1.19.2-${corgilib_version}-fabric")
 
 //    modImplementation("com.github.CorgiTaco:databreaker:${databreaker_version}") {
