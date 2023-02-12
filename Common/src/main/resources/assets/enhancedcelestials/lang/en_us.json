@@ -1,4 +1,8 @@
 {
+  "block.enhancedcelestials.meteor": "Meteor",
+  "block.enhancedcelestials.space_moss_block": "Space Moss Block",
+  "block.enhancedcelestials.space_moss_carpet": "Space Moss Carpet",
+  "block.enhancedcelestials.space_moss_grass": "Space Moss Grass",
   "enhancedcelestials.commands.disabled": "Enhanced Celestials' lunar events are disabled for this world!",
   "enhancedcelestials.commands.lunarevent_missing": "\"%s\" is not a valid lunar event!",
   "enhancedcelestials.lunarforecast.days_left": "(in %sd)",
@@ -12,6 +16,7 @@
   "enhancedcelestials.name.super_blood_moon": "Super Blood Moon",
   "enhancedcelestials.name.super_blue_moon": "Super Blue Moon",
   "enhancedcelestials.name.super_harvest_moon": "Super Harvest Moon",
+  "enhancedcelestials.name.super_moon": "Super Moon",
   "enhancedcelestials.notification.blood_moon.rise": "The \"Blood Moon\" rises... Distant sounds of the undead can be heard...",
   "enhancedcelestials.notification.blood_moon.set": "The \"Blood Moon\" sets... The undead begin to burn...",
   "enhancedcelestials.notification.blue_moon.rise": "The \"Blue Moon\" rises... You feel lucky!",
@@ -24,12 +29,10 @@
   "enhancedcelestials.notification.super_blue_moon.set": "The \"Super Blue Moon\" sets... You don't feel very lucky anymore...",
   "enhancedcelestials.notification.super_harvest_moon.rise": "The \"Super Harvest Moon\" rises... Your crops provide an exceptional harvest.",
   "enhancedcelestials.notification.super_harvest_moon.set": "The \"Super Harvest Moon\" sets...",
+  "enhancedcelestials.notification.super_moon.rise": "The \"Super Moon\" rises... Slimes begin to spawn nearby.",
+  "enhancedcelestials.notification.super_moon.set": "The \"Super Moon\" sets...",
   "enhancedcelestials.sleep.fail": "You may not rest now because the current lunar event prevents it.",
-  "block.enhancedcelestials.meteor": "Meteor",
-  "block.enhancedcelestials.space_moss_carpet": "Space Moss Carpet",
-  "block.enhancedcelestials.space_moss_block": "Space Moss Block",
-  "block.enhancedcelestials.space_moss_grass": "Space Moss Grass",
-  "item.enhancedcelestials.space_moss_bug_spawn_egg": "Space Moss Bug Spawn Egg",
   "entity.enhancedcelestials.meteor": "Meteor",
-  "entity.enhancedcelestials.space_moss_bug": "Space Moss Bug"
+  "entity.enhancedcelestials.space_moss_bug": "Space Moss Bug",
+  "item.enhancedcelestials.space_moss_bug_spawn_egg": "Space Moss Bug Spawn Egg"
 }

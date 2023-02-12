@@ -44,7 +44,7 @@ public class LunarForecast {
 
     private Holder<LunarEvent> currentEvent;
     private Holder<LunarEvent> mostRecentEvent;
-    private Holder<LunarEvent> defaultEvent;
+    private final Holder<LunarEvent> defaultEvent;
     private float blend = 1;
     private long lastCheckedGameTime;
 

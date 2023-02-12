@@ -61,12 +61,10 @@ public class DefaultLunarEvents {
                     ),
                     new LunarTextComponents(
                             new CustomTranslationTextComponent(
-                                    "enhancedcelestials.name.super_moon",
-                                    Style.EMPTY.applyFormat(ChatFormatting.RED)
+                                    "enhancedcelestials.name.super_moon"
                             ),
                             new CustomTranslationTextComponent(
-                                    "enhancedcelestials.notification.super_moon.rise",
-                                    Style.EMPTY.applyFormat(ChatFormatting.RED)
+                                    "enhancedcelestials.notification.super_moon.rise"
                             ),
                             new CustomTranslationTextComponent("enhancedcelestials.notification.super_moon.set")),
                     new LunarMobSettings(ImmutableMap.of(),
