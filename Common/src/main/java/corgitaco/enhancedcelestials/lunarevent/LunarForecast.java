@@ -304,7 +304,14 @@ public class LunarForecast {
         return pastEvents;
     }
 
-    public Holder<LunarEvent> getCurrentEvent() {
+    public Holder<LunarEvent> getCurrentEvent(boolean isClearSkies) {
+        if (this.dimensionSettingsHolder.value().requiresClearSkies() && !isClearSkies) {
+            return this.defaultEvent;
+        }
+        return currentEvent;
+    }
+
+    public Holder<LunarEvent> getCurrentEventRaw() {
         return currentEvent;
     }
 

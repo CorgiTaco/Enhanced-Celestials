@@ -36,7 +36,7 @@ public class LunarSoundHandler implements AmbientSoundHandler {
         }
 
         LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
-        LunarEvent currentEvent = lunarForecast.getCurrentEvent().value();
+        LunarEvent currentEvent = lunarForecast.getCurrentEvent(world.getRainLevel(1) < 1).value();
         SoundEvent soundTrack = currentEvent.getClientSettings().soundTrack(); // Use client directly here.
         if (currentEvent != this.lunarEvent || this.activeLunarSoundsMap.isEmpty()) {
             this.lunarEvent = currentEvent;

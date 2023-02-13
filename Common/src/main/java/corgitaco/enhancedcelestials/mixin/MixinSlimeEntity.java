@@ -26,7 +26,7 @@ public class MixinSlimeEntity {
         if (accessor instanceof ServerLevel serverLevel) {
             EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) serverLevel).getLunarContext();
             if (enhancedCelestialsContext != null) {
-                boolean slimesSpawnEverywhere = enhancedCelestialsContext.getLunarForecast().getCurrentEvent().value().getLunarMobSettings().lunarMobSpawnInfo().slimesSpawnEverywhere();
+                boolean slimesSpawnEverywhere = enhancedCelestialsContext.getLunarForecast().getCurrentEvent(serverLevel.getRainLevel(1) < 1).value().getLunarMobSettings().lunarMobSpawnInfo().slimesSpawnEverywhere();
 
                 boolean aboveY = pos.getY() > 50 && pos.getY() >= accessor.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()) - 1;
 

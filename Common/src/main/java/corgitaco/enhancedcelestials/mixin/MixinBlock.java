@@ -19,7 +19,7 @@ public class MixinBlock {
         if (!world.isClientSide) {
             EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
             if (enhancedCelestialsContext != null) {
-                enhancedCelestialsContext.getLunarForecast().getCurrentEvent().value().onBlockItemDrop((ServerLevel) world, stack);
+                enhancedCelestialsContext.getLunarForecast().getCurrentEvent(world.getRainLevel(1) < 1).value().onBlockItemDrop((ServerLevel) world, stack);
             }
         }
     }

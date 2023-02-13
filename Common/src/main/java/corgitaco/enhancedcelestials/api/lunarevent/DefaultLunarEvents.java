@@ -54,7 +54,7 @@ public class DefaultLunarEvents {
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
-                            new ColorSettings("3333ff", "ffffff"),
+                            new ColorSettings("6766ff", "ffffff"),
                             40,
                             null,
                             null

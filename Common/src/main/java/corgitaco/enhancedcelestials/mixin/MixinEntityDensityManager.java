@@ -6,6 +6,7 @@ import corgitaco.enhancedcelestials.mixin.access.ChunkMapAccess;
 import corgitaco.enhancedcelestials.mixin.access.LocalMobCapCalculatorAccess;
 import corgitaco.enhancedcelestials.mixin.access.WorldEntitySpawnerAccess;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LocalMobCapCalculator;
@@ -32,9 +33,10 @@ public class MixinEntityDensityManager {
 
     @Inject(method = "canSpawnForCategory", at = @At("HEAD"), cancellable = true)
     private void modifySpawnCapByCategory(MobCategory entityClassification, ChunkPos chunkPos, CallbackInfoReturnable<Boolean> cir) {
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) ((ChunkMapAccess) ((LocalMobCapCalculatorAccess) this.localMobCapCalculator).getChunkMap()).getLevel()).getLunarContext();
+        ServerLevel level = ((ChunkMapAccess) ((LocalMobCapCalculatorAccess) this.localMobCapCalculator).getChunkMap()).getLevel();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
         if (enhancedCelestialsContext != null) {
-            int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * enhancedCelestialsContext.getLunarForecast().getCurrentEvent().value().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
+            int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * enhancedCelestialsContext.getLunarForecast().getCurrentEvent(level.getRainLevel(1) < 1).value().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
             // Global Calculation
             if (this.mobCategoryCounts.getInt(entityClassification) >= i) {
                 cir.setReturnValue(false);

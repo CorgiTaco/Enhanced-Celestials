@@ -31,7 +31,7 @@ public class MixinLocalMobCapCalculator {
         if (enhancedCelestialsContext != null) {
             Object2IntMap<MobCategory> counts = ((MobCountsAccess) instance).getCounts();
             final int currentCount = counts.getOrDefault(mobCategory, 0);
-            return currentCount < mobCategory.getMaxInstancesPerChunk() * enhancedCelestialsContext.getLunarForecast().getCurrentEvent().value().getSpawnMultiplierForMonsterCategory(mobCategory);
+            return currentCount < mobCategory.getMaxInstancesPerChunk() * enhancedCelestialsContext.getLunarForecast().getCurrentEvent(level.getRainLevel(1) < 1).value().getSpawnMultiplierForMonsterCategory(mobCategory);
         } else {
             return instance.canSpawn(mobCategory);
         }
