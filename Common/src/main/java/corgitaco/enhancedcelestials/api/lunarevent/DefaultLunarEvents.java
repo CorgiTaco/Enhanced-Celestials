@@ -6,16 +6,17 @@ import corgitaco.corgilib.entity.condition.AnyCondition;
 import corgitaco.corgilib.entity.condition.FlipCondition;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.ECItemTags;
-import corgitaco.enhancedcelestials.api.EnhancedCelestialsBuiltinRegistries;
+import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import corgitaco.enhancedcelestials.core.ECSounds;
-import corgitaco.enhancedcelestials.reg.RegistrationProvider;
-import corgitaco.enhancedcelestials.reg.RegistryObject;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
@@ -23,16 +24,19 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class DefaultLunarEvents {
 
+    public static final Map<ResourceKey<LunarEvent>, LunarEventFactory> LUNAR_EVENT_FACTORIES = new Reference2ObjectOpenHashMap<>();
+
+
     public static final Collection<Integer> DEFAULT_PHASES = IntArraySet.of(0, 1, 2, 3, 4, 5, 6, 7);
     public static final Collection<Integer> DEFAULT_SUPER_MOON_PHASES = IntArraySet.of(0);
 
-    public static final RegistrationProvider<LunarEvent> LUNAR_EVENTS = RegistrationProvider.get(EnhancedCelestialsBuiltinRegistries.LUNAR_EVENT, EnhancedCelestials.MOD_ID);
 
-    public static final RegistryObject<LunarEvent> DEFAULT = createEvent("default", () ->
+    public static final ResourceKey<LunarEvent> DEFAULT = createEvent("default", () ->
             new LunarEvent(
                     ImmutableMap.of(),
                     new LunarEventClientSettings(
@@ -50,7 +54,7 @@ public class DefaultLunarEvents {
                     DropSettings.EMPTY)
     );
 
-    public static final RegistryObject<LunarEvent> SUPER_MOON = createEvent("super_moon", () ->
+    public static final ResourceKey<LunarEvent> SUPER_MOON = createEvent("super_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
@@ -74,7 +78,7 @@ public class DefaultLunarEvents {
                     DropSettings.EMPTY)
     );
 
-    public static final RegistryObject<LunarEvent> BLOOD_MOON = createEvent("blood_moon", () ->
+    public static final ResourceKey<LunarEvent> BLOOD_MOON = createEvent("blood_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
@@ -103,7 +107,7 @@ public class DefaultLunarEvents {
                     DropSettings.EMPTY)
     );
 
-    public static final RegistryObject<LunarEvent> SUPER_BLOOD_MOON = createEvent("super_blood_moon", () ->
+    public static final ResourceKey<LunarEvent> SUPER_BLOOD_MOON = createEvent("super_blood_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
@@ -132,7 +136,7 @@ public class DefaultLunarEvents {
                     DropSettings.EMPTY)
     );
 
-    public static final RegistryObject<LunarEvent> HARVEST_MOON = createEvent("harvest_moon", () ->
+    public static final ResourceKey<LunarEvent> HARVEST_MOON = createEvent("harvest_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
@@ -155,7 +159,7 @@ public class DefaultLunarEvents {
                     new DropSettings(ImmutableMap.of(ECItemTags.HARVEST_MOON_CROPS, 2.0)))
     );
 
-    public static final RegistryObject<LunarEvent> SUPER_HARVEST_MOON = createEvent("super_harvest_moon", () ->
+    public static final ResourceKey<LunarEvent> SUPER_HARVEST_MOON = createEvent("super_harvest_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
@@ -178,7 +182,7 @@ public class DefaultLunarEvents {
                     new DropSettings(ImmutableMap.of(ECItemTags.HARVEST_MOON_CROPS, 4.0)))
     );
 
-    public static final RegistryObject<LunarEvent> BLUE_MOON = createEvent("blue_moon", () ->
+    public static final ResourceKey<LunarEvent> BLUE_MOON = createEvent("blue_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.1, 4, DEFAULT_PHASES)),
                     new LunarEventClientSettings(
@@ -203,7 +207,7 @@ public class DefaultLunarEvents {
                     DropSettings.EMPTY)
     );
 
-    public static final RegistryObject<LunarEvent> SUPER_BLUE_MOON = createEvent("super_blue_moon", () ->
+    public static final ResourceKey<LunarEvent> SUPER_BLUE_MOON = createEvent("super_blue_moon", () ->
             new LunarEvent(
                     ImmutableMap.of(Level.OVERWORLD, new LunarEvent.SpawnRequirements(0.05, 20, DEFAULT_SUPER_MOON_PHASES)),
                     new LunarEventClientSettings(
@@ -229,10 +233,18 @@ public class DefaultLunarEvents {
     );
 
 
-    public static RegistryObject<LunarEvent> createEvent(String id, Supplier<LunarEvent> event) {
-        return LUNAR_EVENTS.register(id, event);
+    public static ResourceKey<LunarEvent> createEvent(String id, Supplier<LunarEvent> event) {
+        ResourceKey<LunarEvent> lunarEventResourceKey = ResourceKey.create(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, EnhancedCelestials.createLocation(id));
+        LUNAR_EVENT_FACTORIES.put(lunarEventResourceKey, placedFeatureHolderGetter -> event.get());
+        return lunarEventResourceKey;
     }
 
     public static void loadClass() {
+    }
+
+    @FunctionalInterface
+    public interface LunarEventFactory {
+
+        LunarEvent generate(BootstapContext<LunarEvent> placedFeatureHolderGetter);
     }
 }

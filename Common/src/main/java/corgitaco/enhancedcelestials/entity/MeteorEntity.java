@@ -5,13 +5,13 @@ import corgitaco.enhancedcelestials.core.ECEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +43,7 @@ public final class MeteorEntity extends Entity {
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return new ClientboundAddEntityPacket(this);
     }
 
@@ -60,7 +60,7 @@ public final class MeteorEntity extends Entity {
         if (!level.isClientSide) {
             if (onGround || verticalCollision || horizontalCollision) {
                 discard();
-                level.explode(this, getX(), getY(), getZ(), 5F, Explosion.BlockInteraction.DESTROY);
+                level.explode(this, getX(), getY(), getZ(), 5F, Level.ExplosionInteraction.TNT);
             }
         } else {
             Vec3 reverse = getDeltaMovement().multiply(-1, -1, -1);

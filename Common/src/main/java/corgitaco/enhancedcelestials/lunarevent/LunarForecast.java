@@ -14,10 +14,11 @@ import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.longs.Long2LongFunction;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -70,7 +71,7 @@ public class LunarForecast {
 
         for (Map.Entry<ResourceKey<LunarEvent>, LunarEvent> resourceKeyLunarEventEntry : lunarEventRegistry.entrySet()) {
             Holder<LunarEvent> lunarEventHolder = lunarEventRegistry.getHolderOrThrow(resourceKeyLunarEventEntry.getKey());
-            ResourceKey<Level> levelResourceKey = ResourceKey.create(Registry.DIMENSION_REGISTRY, dimensionSettingsHolder.unwrapKey().orElseThrow().location());
+            ResourceKey<Level> levelResourceKey = ResourceKey.create(Registries.DIMENSION, dimensionSettingsHolder.unwrapKey().orElseThrow().location());
             if (lunarEventHolder.value().getEventChancesByDimension().containsKey(levelResourceKey)) {
                 possibleEvents.add(lunarEventHolder);
             }
@@ -126,7 +127,7 @@ public class LunarForecast {
      * @param result Either a tag or ResourceKey for a given lunar event.
      * @return A pair of both the command message & boolean determining whether the command was a success(true) or failure(false).
      */
-    public Pair<Component, Boolean> setOrReplaceEventWithResponse(ResourceOrTagLocationArgument.Result<LunarEvent> result, long currentDay, RandomSource randomSource) {
+    public Pair<Component, Boolean> setOrReplaceEventWithResponse(ResourceOrTagKeyArgument.Result<LunarEvent> result, long currentDay, RandomSource randomSource) {
         if (result.test(this.currentEvent)) {
             return Pair.of(Component.translatable("Event is already active"), false);
         }

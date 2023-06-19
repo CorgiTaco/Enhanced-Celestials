@@ -11,7 +11,7 @@ import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
@@ -21,11 +21,11 @@ public class SetLunarEventCommand {
 
     public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
         return Commands.literal("setLunarEvent")
-                .then(Commands.argument("lunarEvent", ResourceOrTagLocationArgument.resourceOrTag(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY))
-                .executes(cs -> setLunarEvent(cs.getSource(), ResourceOrTagLocationArgument.getRegistryType(cs, "lunarEvent", EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, ERROR_LUNAR_EVENT_INVALID))));
+                .then(Commands.argument("lunarEvent", ResourceOrTagKeyArgument.resourceOrTagKey(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY))
+                .executes(cs -> setLunarEvent(cs.getSource(), ResourceOrTagKeyArgument.getResourceOrTagKey(cs, "lunarEvent", EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, ERROR_LUNAR_EVENT_INVALID))));
     }
 
-    public static int setLunarEvent(CommandSourceStack source, ResourceOrTagLocationArgument.Result<LunarEvent> lunarEventResult) {
+    public static int setLunarEvent(CommandSourceStack source, ResourceOrTagKeyArgument.Result<LunarEvent> lunarEventResult) {
         ServerLevel world = source.getLevel();
         EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
         if (enhancedCelestialsContext == null) {

@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.core;
 
 import corgitaco.enhancedcelestials.EnhancedCelestials;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
@@ -12,6 +12,6 @@ public final class EnhancedCelestialsBlockTags {
     }
 
     private static TagKey<Block> create(String name) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, EnhancedCelestials.createLocation(name));
+        return TagKey.create(Registries.BLOCK, EnhancedCelestials.createLocation(name));
     }
 }

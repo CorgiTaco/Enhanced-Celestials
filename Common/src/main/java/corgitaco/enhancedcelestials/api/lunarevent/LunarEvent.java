@@ -4,12 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import corgitaco.corgilib.entity.condition.Condition;
 import corgitaco.corgilib.entity.condition.ConditionContext;
-import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.client.LunarEventClientSettings;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +23,7 @@ public class LunarEvent {
 
     public static final Codec<LunarEvent> DIRECT_CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
-                    Codec.unboundedMap(ResourceKey.codec(Registry.DIMENSION_REGISTRY), SpawnRequirements.CODEC).fieldOf("dimension_chances").forGetter(LunarEvent::getEventChancesByDimension),
+                    Codec.unboundedMap(ResourceKey.codec(Registries.DIMENSION), SpawnRequirements.CODEC).fieldOf("dimension_chances").forGetter(LunarEvent::getEventChancesByDimension),
                     LunarEventClientSettings.CODEC.fieldOf("client_settings").forGetter(LunarEvent::getClientSettings),
                     LunarTextComponents.CODEC.fieldOf("text_components").forGetter(LunarEvent::getTextComponents),
                     LunarMobSettings.CODEC.fieldOf("mob_settings").forGetter(LunarEvent::getLunarMobSettings),

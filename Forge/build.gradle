@@ -43,6 +43,9 @@ configurations {
 
     library
     implementation.extendsFrom library
+
+    dataImplementation.extendsFrom implementation
+    dataCompileOnly.extendsFrom compileOnly
 }
 
 minecraft.runs.all {
@@ -61,6 +64,13 @@ reobf {
     shadowJar {
     }
 }
+
+sourceSets {
+    data
+}
+
+
+
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
 
@@ -70,7 +80,7 @@ mixin {
 }
 
 minecraft {
-    mappings channel: 'parchment', version: "1.18.2-${parchment_version}-1.19"
+    mappings channel: 'parchment', version: "1.19.3-${parchment_version}-1.19.3"
 
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
@@ -80,6 +90,8 @@ minecraft {
     }
 
     runs {
+        def runArgs = []
+
         client {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
@@ -101,7 +113,7 @@ minecraft {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Server'
-            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
+            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}_asm.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
             def output = sourceSets.main.output;
             def commonOutput = project(":Common").sourceSets.main.output;
             environment("MOD_CLASSES", [output.classesDirs.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
@@ -115,19 +127,21 @@ minecraft {
         }
 
         data {
+            def dataArgs = [("-Dfabricoutput=" + project(':Fabric').file('src/generated/resources').toString()), ("-Dforgeoutput=" + project(':Forge').file('src/generated/resources')), "-Ddatagen=true"];
+            jvmArgs dataArgs
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', project(':Common').file('src/generated/resources'), '--existing', project(':Common').file('src/main/resources'), "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}_asm.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
             taskName 'Data'
-            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
-            def output = sourceSets.main.output;
-            def commonOutput = project(":Common").sourceSets.main.output;
-            environment("MOD_CLASSES", [output.classesDirs.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
+            def output = sourceSets.main.output
+            def commonOutput = project(":Common").sourceSets.main.output
+            environment("MOD_CLASSES", [output.classesDirs.asPath, sourceSets.data.output.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
 
             mods {
-                modDataRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
+                enhancedcelestials {
+                    source sourceSets.main as SourceSet
+                    source sourceSets.data as SourceSet
+                    source project(":Common").sourceSets.main as SourceSet
                 }
             }
         }
@@ -140,7 +154,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("maven.modrinth:corgilib:1.19.2-${corgilib_version}-forge")
+    implementation fg.deobf("maven.modrinth:corgilib:1.19.3-${corgilib_version}-forge")
+
+    dataImplementation sourceSets.main.output
 }
 reg.configureJarTask(shadowJar)
 

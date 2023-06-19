@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.util;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class ColorUtil {
     private static final long BIT_MASK = 0xFF; // 255

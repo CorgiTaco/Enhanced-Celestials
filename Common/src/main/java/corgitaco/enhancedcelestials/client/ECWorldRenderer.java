@@ -1,7 +1,6 @@
 package corgitaco.enhancedcelestials.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Vector3f;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.api.client.ColorSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
@@ -11,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.joml.Vector3f;
 
 public class ECWorldRenderer {
 
@@ -69,7 +69,8 @@ public class ECWorldRenderer {
                 ColorSettings colorSettings = currentEvent.getClientSettings().colorSettings();
                 ColorSettings lastColorSettings = lastEvent.getClientSettings().colorSettings();
 
-                Vector3f targetColor = lastColorSettings.getGLSkyLightColor().copy();
+                Vector3f glSkyLightColor = lastColorSettings.getGLSkyLightColor();
+                Vector3f targetColor = new Vector3f(glSkyLightColor.x(), glSkyLightColor.y(), glSkyLightColor.z());
 
                 float skyDarken = (level.getSkyDarken(1.0F) - 0.2F) / 0.8F;
                 float eventBlend = lunarForecast.getBlend() - skyDarken;

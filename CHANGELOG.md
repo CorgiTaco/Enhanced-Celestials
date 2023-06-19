@@ -1,3 +1,8 @@
+# 3.0.0.0
+* Port to 1.19.3
+
+# End 1.19.2, Start 1.19.3
+***
 # 2.1.0.5
 * Fix skylight colors.
 * Lunar events will no longer apply their effects when raining if `requires_clear_skies` is set to true in LunarDimensionSettings json. Overworld sets this value to true by default.

@@ -11,6 +11,7 @@ import corgitaco.enhancedcelestials.mixin.access.ColorAccess;
 import corgitaco.enhancedcelestials.mixin.access.StyleAccess;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -22,8 +23,8 @@ import java.util.function.Supplier;
 
 public class CodecUtil {
 
-    public static final Codec<MobEffect> MOB_EFFECT = createLoggedExceptionRegistryCodec(Registry.MOB_EFFECT);
-    public static final Codec<EntityType<?>> ENTITY_TYPE = createLoggedExceptionRegistryCodec(Registry.ENTITY_TYPE);
+    public static final Codec<MobEffect> MOB_EFFECT = createLoggedExceptionRegistryCodec(BuiltInRegistries.MOB_EFFECT);
+    public static final Codec<EntityType<?>> ENTITY_TYPE = createLoggedExceptionRegistryCodec(BuiltInRegistries.ENTITY_TYPE);
 
 
 

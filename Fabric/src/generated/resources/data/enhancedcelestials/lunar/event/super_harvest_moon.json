@@ -1,0 +1,79 @@
+{
+  "client_settings": {
+    "color_settings": {
+      "moon_texture_color": "ffdb63",
+      "sky_light_color": "ffdb63"
+    },
+    "moon_size": 40.0,
+    "moon_texture_location": "minecraft:textures/environment/moon_phases.png",
+    "sound_track": {
+      "sound_id": "enhancedcelestials:harvest_moon"
+    }
+  },
+  "dimension_chances": {
+    "minecraft:overworld": {
+      "chance": 0.05,
+      "min_number_of_nights_between": 20,
+      "valid_moon_phases": [
+        0
+      ]
+    }
+  },
+  "drops": {
+    "drop_enhancer": {
+      "#enhancedcelestials:harvest_moon_crops": 4.0
+    }
+  },
+  "mob_settings": {
+    "blocks_sleeping": {
+      "type": "corgilib:flipped",
+      "condition_to_flip": {
+        "type": "corgilib:any"
+      }
+    },
+    "lunar_spawn_settings": {
+      "force_surface_spawning": false,
+      "mob_spawn_settings": {
+        "spawn_costs": {},
+        "spawners": {
+          "ambient": [],
+          "axolotls": [],
+          "creature": [],
+          "misc": [],
+          "monster": [],
+          "underground_water_creature": [],
+          "water_ambient": [],
+          "water_creature": []
+        }
+      },
+      "slimes_spawn_everywhere": false,
+      "use_biome_spawn_settings": true
+    },
+    "mob_effects": [],
+    "spawn_category_multiplier": {}
+  },
+  "text_components": {
+    "end_notification": {
+      "type": "CHAT",
+      "component": {
+        "key": "enhancedcelestials.notification.super_harvest_moon.set"
+      }
+    },
+    "name": {
+      "key": "enhancedcelestials.name.super_harvest_moon",
+      "style": {
+        "color": "ffff55"
+      }
+    },
+    "start_notification": {
+      "type": "CHAT",
+      "component": {
+        "key": "enhancedcelestials.notification.super_harvest_moon.rise",
+        "style": {
+          "bold": true,
+          "color": "ffff55"
+        }
+      }
+    }
+  }
+}

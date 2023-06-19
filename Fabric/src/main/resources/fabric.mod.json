@@ -33,9 +33,9 @@
   "depends": {
     "fabricloader": ">=0.13.0",
     "fabric": "*",
-    "minecraft": ">=1.18.2",
+    "minecraft": ">=1.19.3",
     "java": ">=17",
-    "corgilib": ">=1.0.0.22"
+    "corgilib": ">=2.0.0.0"
   },
   "accessWidener": "enhancedcelestials.aw"
 }

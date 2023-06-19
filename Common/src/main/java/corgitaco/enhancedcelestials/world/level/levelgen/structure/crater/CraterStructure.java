@@ -137,4 +137,9 @@ public class CraterStructure extends Structure {
                         ).apply(builder, PieceStructureInfo::new)
         );
     }
+
+
+    static {
+        String s = "";
+    }
 }
