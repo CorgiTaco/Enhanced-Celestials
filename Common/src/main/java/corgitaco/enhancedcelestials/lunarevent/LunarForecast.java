@@ -108,7 +108,7 @@ public class LunarForecast {
     }
 
     /**
-     * Clears the current forecast & resets the last checked game time to allow updateForecast to refill the forecast.
+     * Clears the current forecast andd resets the last checked game time to allow updateForecast to refill the forecast.
      */
     public void recompute(ServerLevel level) {
         this.forecast.clear();
@@ -125,7 +125,7 @@ public class LunarForecast {
      * of the forecast and replacing any currently active lunar event at index 0.
      *
      * @param result Either a tag or ResourceKey for a given lunar event.
-     * @return A pair of both the command message & boolean determining whether the command was a success(true) or failure(false).
+     * @return A pair of both the command message and boolean determining whether the command was a success(true) or failure(false).
      */
     public Pair<Component, Boolean> setOrReplaceEventWithResponse(ResourceOrTagKeyArgument.Result<LunarEvent> result, long currentDay, RandomSource randomSource) {
         if (result.test(this.currentEvent)) {

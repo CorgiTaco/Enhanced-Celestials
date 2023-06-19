@@ -23,6 +23,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -55,12 +56,19 @@ public class ECDataGen {
 
     @SubscribeEvent
     static void onDatagen(final GatherDataEvent event) {
-        CompletableFuture<HolderLookup.Provider> completablefuture = event.getLookupProvider().thenApply(provider -> makeBuilder(false).buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider));
+        PackOutput forgeOut = new PackOutput(Paths.get(System.getProperty("forgeoutput", null)));
+        PackOutput fabricOut = new PackOutput(Paths.get(System.getProperty("fabricoutput", null)));
+
+        CompletableFuture<HolderLookup.Provider> providerFabric = event.getLookupProvider().thenApply(provider -> makeBuilder(true).buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider));
+        CompletableFuture<HolderLookup.Provider> providerForge = event.getLookupProvider().thenApply(provider -> makeBuilder(false).buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider));
 
         final var gen = event.getGenerator();
 
-        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(gen.getPackOutput(), EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, completablefuture, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new ECItemTagsProvider(gen.getPackOutput(), completablefuture, new BlockTagsProvider(gen.getPackOutput(), completablefuture, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()) {
+        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(forgeOut, false, EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, providerForge, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(fabricOut, true, ResourceKey.createRegistryKey(new ResourceLocation("lunar/event")), providerFabric, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
+
+
+        gen.addProvider(event.includeServer(), new ECItemTagsProvider(gen.getPackOutput(), providerForge, new BlockTagsProvider(gen.getPackOutput(), providerForge, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()) {
             @Override
             protected void addTags(HolderLookup.Provider pProvider) {
 
@@ -80,7 +88,7 @@ public class ECDataGen {
         }
 
 
-        gen.addProvider(event.includeServer(), new ForgeDump(new PackOutput(Paths.get(System.getProperty("forgeoutput", null))), event.getLookupProvider(), makeBuilder(false), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
-        gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(new PackOutput(Paths.get(System.getProperty("fabricoutput", null))), event.getLookupProvider(), makeBuilder(true), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
+        gen.addProvider(event.includeServer(), new ForgeDump(forgeOut, event.getLookupProvider(), makeBuilder(false), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
+        gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(fabricOut, event.getLookupProvider(), makeBuilder(true), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
     }
 }
