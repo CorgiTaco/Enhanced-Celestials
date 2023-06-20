@@ -99,7 +99,7 @@ public class DefaultLunarEvents {
                             new CustomTranslationTextComponent("enhancedcelestials.notification.blood_moon.set")
                     ),
                     new LunarMobSettings(
-                            ImmutableMap.of(MobCategory.MONSTER, 4.5D),
+                            ImmutableMap.of(MobCategory.MONSTER, 2.25D),
                             new LunarMobSpawnInfo(true, true, false, MobSpawnSettings.EMPTY),
                             List.of(),
                             AnyCondition.INSTANCE
