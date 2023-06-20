@@ -1,3 +1,6 @@
+# 4.0.0.1
+* Fix blood moon mob spawn rate.
+
 # 4.0.0.0
 * Port to 1.19.4
 
