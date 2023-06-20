@@ -26,17 +26,17 @@ public abstract class MixinLivingEntity extends Entity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void lunarEntityTick(CallbackInfo ci) {
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this.level()).getLunarContext();
         if (enhancedCelestialsContext != null) {
-            enhancedCelestialsContext.getLunarForecast().getCurrentEvent(level.getRainLevel(1) < 1).value().livingEntityTick((LivingEntity) (Object) this);
+            enhancedCelestialsContext.getLunarForecast().getCurrentEvent(level().getRainLevel(1) < 1).value().livingEntityTick((LivingEntity) (Object) this);
         }
     }
 
     @Inject(method = "checkBedExists", at = @At("HEAD"), cancellable = true)
     private void blockSleeping(CallbackInfoReturnable<Boolean> cir) {
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this.level).getLunarContext();
+        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) this.level()).getLunarContext();
         if (enhancedCelestialsContext != null) {
-            if (enhancedCelestialsContext.getLunarForecast().getCurrentEvent(level.getRainLevel(1) < 1).value().blockSleeping((LivingEntity) (Object) this)) {
+            if (enhancedCelestialsContext.getLunarForecast().getCurrentEvent(level().getRainLevel(1) < 1).value().blockSleeping((LivingEntity) (Object) this)) {
                 if (((LivingEntity) (Object) this) instanceof ServerPlayer) {
                     ((ServerPlayer) (Object) this).displayClientMessage(Component.translatable("enhancedcelestials.sleep.fail").withStyle(ChatFormatting.RED), true);
                 }

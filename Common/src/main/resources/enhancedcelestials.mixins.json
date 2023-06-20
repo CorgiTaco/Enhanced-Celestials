@@ -9,7 +9,6 @@
     "MixinEntityDensityManager",
     "MixinLivingEntity",
     "MixinLocalMobCapCalculator",
-    "MixinLootTableManager",
     "MixinPlayerList",
     "MixinServerWorld",
     "MixinSlimeEntity",

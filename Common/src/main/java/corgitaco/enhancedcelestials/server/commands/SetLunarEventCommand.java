@@ -45,7 +45,7 @@ public class SetLunarEventCommand {
             if (!world.isNight()) {
                 world.setDayTime((currentDay * dayLength) + 13000L);
             }
-            source.sendSuccess(component.getFirst(), true);
+            source.sendSuccess(component::getFirst, true);
             return 1;
         } else {
             source.sendFailure(component.getFirst());

@@ -27,7 +27,7 @@ public class LunarForecastCommand {
         }
         LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
         lunarForecast.recompute(world);
-        source.sendSuccess(Component.translatable("enhancedcelestials.lunarforecast.recompute"), true);
+        source.sendSuccess(() -> Component.translatable("enhancedcelestials.lunarforecast.recompute"), true);
         return 1;
     }
 
@@ -41,7 +41,7 @@ public class LunarForecastCommand {
             return 0;
         }
 
-        source.sendSuccess(enhancedCelestialsContext.getLunarForecast().getForecastComponent(world.getDayTime()), true);
+        source.sendSuccess(() -> enhancedCelestialsContext.getLunarForecast().getForecastComponent(world.getDayTime()), true);
         return 1;
     }
 }

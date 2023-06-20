@@ -49,10 +49,10 @@ public class MeteorStrikeEntity extends Entity {
 
         Vec3 position = position();
 
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (isReady()) {
-                if (level.random.nextFloat() < 0.01) {
-                    float angle = this.level.random.nextFloat() * Mth.TWO_PI;
+                if (level().random.nextFloat() < 0.01) {
+                    float angle = this.level().random.nextFloat() * Mth.TWO_PI;
 
                     float addedDistance = Mth.nextFloat(this.random, 2F, getBbWidth() / 2F);
                     double addX = Mth.sin(angle) * addedDistance;
@@ -60,11 +60,11 @@ public class MeteorStrikeEntity extends Entity {
 
                     Vec3 meteorSpawnPos = position.add(addX, Mth.nextInt(random, 450, 500), addZ);
 
-                    MeteorEntity meteorEntity = new MeteorEntity(level);
+                    MeteorEntity meteorEntity = new MeteorEntity(level());
                     meteorEntity.setPos(meteorSpawnPos);
-                    meteorEntity.setSize(Mth.nextFloat(level.random, 0.3F, 3F));
+                    meteorEntity.setSize(Mth.nextFloat(level().random, 0.3F, 3F));
                     meteorEntity.setDeltaMovement(0, -0.6, 0);
-                    level.addFreshEntity(meteorEntity);
+                    level().addFreshEntity(meteorEntity);
                 }
                 if (life > 400) {
                     discard();

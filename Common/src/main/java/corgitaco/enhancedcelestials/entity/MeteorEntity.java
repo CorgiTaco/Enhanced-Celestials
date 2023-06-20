@@ -57,10 +57,10 @@ public final class MeteorEntity extends Entity {
         setDeltaMovement(velocity.subtract(0, 0.3, 0));
         move(MoverType.SELF, velocity);
 
-        if (!level.isClientSide) {
-            if (onGround || verticalCollision || horizontalCollision) {
+        if (!level().isClientSide) {
+            if (onGround() || verticalCollision || horizontalCollision) {
                 discard();
-                level.explode(this, getX(), getY(), getZ(), 5F, Level.ExplosionInteraction.TNT);
+                level().explode(this, getX(), getY(), getZ(), 5F, Level.ExplosionInteraction.TNT);
             }
         } else {
             Vec3 reverse = getDeltaMovement().multiply(-1, -1, -1);
@@ -69,7 +69,7 @@ public final class MeteorEntity extends Entity {
             for (float xOffset = -bbWidth; xOffset <= bbWidth; xOffset += 1) {
                 for (float zOffset = -bbWidth; zOffset <= bbWidth; zOffset += 1) {
                     for (int i = 0; i < 5; i++) {
-                        level.addParticle(ParticleTypes.FLAME, getX() + xOffset, getY() + Mth.nextDouble(random, -0.4, 0.4), getZ() + zOffset, reverse.x(), reverse.y(), reverse.z());
+                        level().addParticle(ParticleTypes.FLAME, getX() + xOffset, getY() + Mth.nextDouble(random, -0.4, 0.4), getZ() + zOffset, reverse.x(), reverse.y(), reverse.z());
                     }
                 }
             }

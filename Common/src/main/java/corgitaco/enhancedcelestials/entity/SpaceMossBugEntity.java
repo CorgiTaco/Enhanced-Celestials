@@ -56,7 +56,7 @@ public final class SpaceMossBugEntity extends PathfinderMob {
     public void tick() {
         super.tick();
 
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (tickCount % 20 == 0) {
                 var sporeDelay = getSporeDelay();
                 if (sporeDelay > 0) {
@@ -69,16 +69,16 @@ public final class SpaceMossBugEntity extends PathfinderMob {
 
                 var blockPos = blockPosition();
 
-                if (level.isEmptyBlock(blockPos) && blockState.canSurvive(level, blockPos) && level.setBlock(blockPos, blockState, Block.UPDATE_CLIENTS)) {
+                if (level().isEmptyBlock(blockPos) && blockState.canSurvive(level(), blockPos) && level().setBlock(blockPos, blockState, Block.UPDATE_CLIENTS)) {
                     setCoveredInSpores(false);
                     setSporeDelay((byte) 254);
                 }
             }
         }
 
-        if (level.isClientSide && isCoveredInSpores()) {
+        if (level().isClientSide && isCoveredInSpores()) {
             for (int i = 0; i < 5; i++) {
-                level.addParticle(ParticleTypes.FALLING_NECTAR,
+                level().addParticle(ParticleTypes.FALLING_NECTAR,
                         getX() + Mth.nextDouble(random, -0.4D, 0.4D),
                         getY() + Mth.nextDouble(random, -0.4D, 0.4D),
                         getZ() + Mth.nextDouble(random, -0.4D, 0.4D),

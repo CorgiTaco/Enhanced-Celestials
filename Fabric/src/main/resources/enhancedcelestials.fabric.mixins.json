@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "RegistryDataLoaderAccess",
-    "RegistrySynchronizationAccess"
+    "RegistrySynchronizationAccess",
+    "world.level.storage.loot.MixinLootTableManager"
   ],
   "client": [
   ],

@@ -74,7 +74,7 @@ public class LunarEvent {
     public void livingEntityTick(LivingEntity entity) {
         this.lunarMobSettings.effectsForEntityTag().forEach((entityFilterMapPair) -> {
             Condition entityFilter = entityFilterMapPair.getFirst();
-            if (entityFilter.passes(new ConditionContext(entity.level, entity, entity.isDeadOrDying(), 0))) {
+            if (entityFilter.passes(new ConditionContext(entity.level(), entity, entity.isDeadOrDying(), 0))) {
                 MobEffectInstanceBuilder builder = entityFilterMapPair.getSecond();
                 entity.addEffect(builder.makeInstance());
             }
@@ -86,7 +86,7 @@ public class LunarEvent {
     }
 
     public boolean blockSleeping(LivingEntity entity) {
-        return this.lunarMobSettings.blockSleeping().passes(new ConditionContext(entity.level, entity, entity.isDeadOrDying(), 0));
+        return this.lunarMobSettings.blockSleeping().passes(new ConditionContext(entity.level(), entity, entity.isDeadOrDying(), 0));
     }
 
     public LunarTextComponents getTextComponents() {

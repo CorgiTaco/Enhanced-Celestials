@@ -42,7 +42,7 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
         var most = uuid.getMostSignificantBits();
         var least = uuid.getLeastSignificantBits();
 
-        dispatcher.renderBatched(state, BlockPos.ZERO, entity.level, matrices, consumer, false, source);
+        dispatcher.renderBatched(state, BlockPos.ZERO, entity.level(), matrices, consumer, false, source);
 
 
         for (int i = 0; i < Math.max(Math.floorMod(least, 5), 1); i++) {
@@ -57,7 +57,7 @@ public class MeteorEntityRenderer extends EntityRenderer<MeteorEntity> {
                     ((random >> 5 & 1) == 1 ? y : x),
                     ((random >> 10 & 1) == 1 ? z : y)
             );
-            dispatcher.renderBatched(state, BlockPos.ZERO, entity.level, matrices, consumer, false, source);
+            dispatcher.renderBatched(state, BlockPos.ZERO, entity.level(), matrices, consumer, false, source);
             matrices.popPose();
         }
 
