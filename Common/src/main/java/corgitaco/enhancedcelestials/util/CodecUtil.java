@@ -33,7 +33,7 @@ public class CodecUtil {
             return DataResult.success(ClickEvent.Action.valueOf(s));
         } catch (Exception e) {
             EnhancedCelestials.LOGGER.error(e.getMessage());
-            return DataResult.error(e.getMessage());
+            return DataResult.error(e::getMessage);
         }
     }, ClickEvent.Action::name);
 
@@ -81,7 +81,7 @@ public class CodecUtil {
                     registryElements.append(i).append(". \"").append(registry.getKey(object).toString()).append("\"\n");
                 }
 
-                return DataResult.error(String.format("\"%s\" is not a valid entityType in registry: %s.\nCurrent Registry Values:\n\n%s\n", location.toString(), registry.toString(), registryElements.toString()));
+                return DataResult.error(() -> String.format("\"%s\" is not a valid entityType in registry: %s.\nCurrent Registry Values:\n\n%s\n", location.toString(), registry.toString(), registryElements.toString()));
             }
             return DataResult.success(result.get());
         }, registry::getKey);

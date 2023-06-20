@@ -5,6 +5,7 @@ import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarEventInstance;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 
@@ -25,7 +26,7 @@ public class LunarForecastChangedPacket implements S2CPacket {
 
     public static LunarForecastChangedPacket readFromPacket(FriendlyByteBuf buf) {
         try {
-            return new LunarForecastChangedPacket(buf.readWithCodec(LunarForecast.Data.CODEC), buf.readBoolean());
+            return new LunarForecastChangedPacket(buf.readWithCodec(NbtOps.INSTANCE, LunarForecast.Data.CODEC), buf.readBoolean());
         } catch (Exception e) {
             throw new IllegalStateException("Lunar Forecast packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
@@ -34,7 +35,7 @@ public class LunarForecastChangedPacket implements S2CPacket {
     @Override
     public void write(FriendlyByteBuf buf) {
         try {
-            buf.writeWithCodec(LunarForecast.Data.CODEC, this.lunarForecast);
+            buf.writeWithCodec(NbtOps.INSTANCE, LunarForecast.Data.CODEC, this.lunarForecast);
             buf.writeBoolean(this.isNight);
         } catch (Exception e) {
             throw new IllegalStateException("Lunar Forecast packet could not be written to. This is really really bad...\n\n" + e.getMessage());

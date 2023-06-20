@@ -4,6 +4,7 @@ import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
 import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import corgitaco.enhancedcelestials.lunarevent.LunarForecast;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 
@@ -19,7 +20,7 @@ public class LunarContextConstructionPacket implements S2CPacket {
 
     public static LunarContextConstructionPacket readFromPacket(FriendlyByteBuf buf) {
         try {
-            return new LunarContextConstructionPacket(buf.readWithCodec(LunarForecast.Data.CODEC));
+            return new LunarContextConstructionPacket(buf.readWithCodec(NbtOps.INSTANCE, LunarForecast.Data.CODEC));
         } catch (Exception e) {
             throw new IllegalStateException("Lunar Context packet could not be read. This is really really bad...\n\n" + e.getMessage());
         }
@@ -28,7 +29,7 @@ public class LunarContextConstructionPacket implements S2CPacket {
     @Override
     public void write(FriendlyByteBuf buf) {
         try {
-            buf.writeWithCodec(LunarForecast.Data.CODEC, this.data);
+            buf.writeWithCodec(NbtOps.INSTANCE, LunarForecast.Data.CODEC, this.data);
         } catch (Exception e) {
             throw new IllegalStateException("Lunar Context packet could not be written to. This is really really bad...\n\n" + e.getMessage());
 

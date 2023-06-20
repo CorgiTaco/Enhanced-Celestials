@@ -52,11 +52,11 @@ public class CraterPiece extends StructurePiece {
         BlockPos origin = this.structureInfo.origin();
         int baseHeight = origin.getY();
 
-        BlockPos subtract = origin.offset(-radius, 0, -radiusZ);
+        BlockPos subtract = origin.offset((int) -radius, 0, (int) -radiusZ);
         int startX = subtract.getX();
         int startZ = subtract.getZ();
 
-        BlockPos add = origin.offset(radius, 0, radiusZ);
+        BlockPos add = origin.offset((int) radius, 0,(int)radiusZ);
         int endX = add.getX();
         int endZ = add.getZ();
 

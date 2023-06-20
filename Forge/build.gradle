@@ -83,7 +83,8 @@ mixin {
 }
 
 minecraft {
-    mappings channel: 'parchment', version: "1.19.3-${parchment_version}-1.19.3"
+//    mappings channel: 'parchment', version: "1.19.4-${parchment_version}-1.19.4"
+    mappings channel: 'official', version: "${minecraft_version}"
 
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
@@ -157,7 +158,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("maven.modrinth:corgilib:1.19.3-${corgilib_version}-forge")
+    implementation fg.deobf("maven.modrinth:corgilib:1.19.4-${corgilib_version}-forge")
 
     dataImplementation sourceSets.main.output
 }

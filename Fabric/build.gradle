@@ -1,7 +1,6 @@
 import com.modrinth.minotaur.TaskModrinthUpload
 import com.modrinth.minotaur.dependencies.DependencyType
 import com.modrinth.minotaur.dependencies.ModDependency
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 import java.util.stream.Collectors
 
@@ -64,14 +63,14 @@ dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.19.3:${parchment_version}@zip")
+//        parchment("org.parchmentmc.data:parchment-1.19.4:${parchment_version}@zip")
     }
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
-    modImplementation("maven.modrinth:corgilib:1.19.3-${corgilib_version}-fabric")
+    modImplementation("maven.modrinth:corgilib:1.19.4-${corgilib_version}-fabric")
 
 //    modImplementation("com.github.CorgiTaco:databreaker:${databreaker_version}") {
 //        exclude module: "fabric-loader"
