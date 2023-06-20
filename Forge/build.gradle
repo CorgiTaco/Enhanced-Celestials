@@ -1,3 +1,6 @@
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.ModDependency
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 import java.util.stream.Collectors
@@ -20,12 +23,12 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
         classpath 'org.parchmentmc:librarian:1.+'
-        classpath group: 'gradle.plugin.com.modrinth.minotaur', name: 'Minotaur', version: '1.2.1'
     }
 }
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id "net.darkhax.curseforgegradle" version "1.0.7"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 apply plugin: 'java'
@@ -196,11 +199,11 @@ jar {
     archiveClassifier.set('slim')
 }
 
+String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
 
 task forge_publishCurseForge(type: TaskPublishCurseForge) {
     apiToken = "$System.env.CURSEFORGE_KEY"
     int projectId = 438447
-    String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
 
     def mainFile = upload(projectId, shadowJar)
     mainFile.changelog = changelogText
@@ -210,6 +213,27 @@ task forge_publishCurseForge(type: TaskPublishCurseForge) {
     mainFile.addModLoader("forge")
     mainFile.addRequirement("corgilib")
 }
+
+
+
+// Make sure it runs after build!
+task forge_publishModrinth (type: TaskModrinthUpload){
+    modrinth {
+
+        token = "$System.env.MODRINTH_KEY"
+        projectId = '2rL16t1O'
+        versionName = "${archivesBaseName}-${project.version}"
+        versionNumber = "${project.minecraft_version}-${project.version}-forge"
+        versionType = "${project.release_type}"
+        uploadFile = shadowJar
+        changelog = changelogText
+        gameVersions = ["${project.minecraft_version}"]
+        dependencies = [new ModDependency("ziOp6EO8", DependencyType.REQUIRED)]
+
+        loaders = ['forge']
+    }
+}
+
 
 task forge_checkForRefmap() {
     doLast {
@@ -230,12 +254,12 @@ task forge_checkForRefmap() {
     }
 }
 
+
 task forge_buildAndReleaseCurseforge {}
 tasks.forge_checkForRefmap.mustRunAfter tasks.build
 tasks.forge_publishCurseForge.mustRunAfter tasks.forge_checkForRefmap
 tasks.forge_buildAndReleaseCurseforge.dependsOn(tasks.build, tasks.forge_checkForRefmap, tasks.forge_publishCurseForge)
 
-apply from: 'gradle/modrinth.gradle'
 task forge_buildAndReleaseModrinth {}
 tasks.forge_checkForRefmap.mustRunAfter tasks.build
 tasks.forge_publishModrinth.mustRunAfter tasks.forge_checkForRefmap

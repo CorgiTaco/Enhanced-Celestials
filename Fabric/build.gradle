@@ -1,11 +1,13 @@
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.ModDependency
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 import java.util.stream.Collectors
 
 buildscript {
     repositories {
         maven { url = 'https://maven.parchmentmc.org' }
-    }
-    dependencies {
-        classpath group: 'gradle.plugin.com.modrinth.minotaur', name: 'Minotaur', version: '1.2.1'
     }
 }
 
@@ -16,6 +18,7 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id "net.darkhax.curseforgegradle" version "1.0.7"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 tasks.build.dependsOn(tasks.findByName("shadowJar"))
@@ -172,10 +175,12 @@ task fabric_checkForRefmap() {
     }
 }
 
+String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
+
+
 task fabric_publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     apiToken = "$System.env.CURSEFORGE_KEY"
     int projectId = 443694
-    String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
 
     def mainFile = upload(projectId, remapJar)
     mainFile.changelog = changelogText
@@ -186,12 +191,28 @@ task fabric_publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurs
     mainFile.addModLoader("fabric")
 }
 
+
+// Make sure it runs after build!
+task fabric_publishModrinth (type: TaskModrinthUpload){
+    modrinth {
+        token = "$System.env.MODRINTH_KEY"
+        projectId = '2rL16t1O'
+        versionName = "${archivesBaseName}-${project.version}"
+        versionNumber = "${project.minecraft_version}-${project.version}-fabric"
+        versionType = "${project.release_type}"
+        uploadFile = remapJar
+        changelog = changelogText
+        gameVersions = ["${project.minecraft_version}"]
+        dependencies = [new ModDependency("ziOp6EO8", DependencyType.REQUIRED)]
+        loaders = ['fabric']
+    }
+}
+
 task fabric_buildAndReleaseCurseforge {}
 tasks.fabric_checkForRefmap.mustRunAfter tasks.build
 tasks.fabric_publishCurseForge.mustRunAfter tasks.fabric_checkForRefmap
 tasks.fabric_buildAndReleaseCurseforge.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishCurseForge)
 
-apply from: 'gradle/modrinth.gradle'
 task fabric_buildAndReleaseModrinth {}
 tasks.fabric_checkForRefmap.mustRunAfter tasks.build
 tasks.fabric_publishModrinth.mustRunAfter tasks.fabric_checkForRefmap
