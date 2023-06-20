@@ -1,3 +1,6 @@
+# 5.0.0.1
+* Fix blood moon mob spawn rate.
+
 # 5.0.0.0
 * Port to 1.20.1
 
