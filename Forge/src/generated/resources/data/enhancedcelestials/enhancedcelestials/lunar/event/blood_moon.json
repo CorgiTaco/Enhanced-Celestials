@@ -53,7 +53,7 @@
     },
     "mob_effects": [],
     "spawn_category_multiplier": {
-      "monster": 4.5
+      "monster": 2.25
     }
   },
   "text_components": {
