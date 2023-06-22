@@ -27,7 +27,7 @@ public abstract class MixinLootTableManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 
-    @Inject(method = "lambda$scheduleElementParse$5", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/SimpleJsonResourceReloadListener;scanDirectory(Lnet/minecraft/server/packs/resources/ResourceManager;Ljava/lang/String;Lcom/google/gson/Gson;Ljava/util/Map;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "lambda$scheduleElementParse$5(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/world/level/storage/loot/LootDataType;Ljava/util/Map;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/SimpleJsonResourceReloadListener;scanDirectory(Lnet/minecraft/server/packs/resources/ResourceManager;Ljava/lang/String;Lcom/google/gson/Gson;Ljava/util/Map;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private static void appendTables(ResourceManager resourceManager, LootDataType $$1x, Map<LootDataType<?>, Map<ResourceLocation, ?>> typeMapMap, CallbackInfo ci, Map<ResourceLocation, JsonElement> values) {
 
         String appendTablesDir = "append_loot_tables";
