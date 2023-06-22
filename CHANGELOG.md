@@ -1,3 +1,6 @@
+# 5.0.0.2
+Fix Forge `MixinLootTableManager` injection signature, fixes #161
+
 # 5.0.0.1
 * Fix blood moon mob spawn rate.
 
