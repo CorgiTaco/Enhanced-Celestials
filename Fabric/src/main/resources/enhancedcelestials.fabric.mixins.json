@@ -4,8 +4,7 @@
   "package": "corgitaco.enhancedcelestials.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "RegistryDataLoaderAccess",
-    "RegistrySynchronizationAccess",
+    "RegistryDataLoaderPathFixer",
     "world.level.storage.loot.MixinLootTableManager"
   ],
   "client": [
