@@ -1,3 +1,6 @@
+# 5.0.0.3
+* Fix a crash related to dynamic registries.
+
 # 5.0.0.2
 Fix Forge `MixinLootTableManager` injection signature, fixes #161
 
