@@ -23,6 +23,15 @@
     {
       "id": "#minecraft:crops",
       "required": false
-    }
+    },
+    {
+      "id": "#minecraft:villager_plantable_seeds",
+      "required": false
+    },
+    "minecraft:beetroot",
+    "minecraft:carrot",
+    "minecraft:nether_wart",
+    "minecraft:potato",
+    "minecraft:wheat"
   ]
 }
