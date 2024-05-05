@@ -1,3 +1,6 @@
+# 5.0.0.4
+* Fix Harvest moon crops missing in item tag.
+
 # 5.0.0.3
 * Fix a crash related to dynamic registries.
 
