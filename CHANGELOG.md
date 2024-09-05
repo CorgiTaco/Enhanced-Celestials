@@ -1,3 +1,8 @@
+# 5.0.1.0
+* Move to arch loom and fix project compiling
+* Switch datapack path to `<modid>/enhancedcelestials/<path>` instead of `<modid>/<path>` on fabric.
+* Fix tags on fabric.
+
 # 5.0.0.4
 * Fix Harvest moon crops missing in item tag.
 
