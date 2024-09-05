@@ -32,6 +32,6 @@ side="BOTH"
 [[dependencies.enhancedcelestials]]
 modId = "corgilib"
 mandatory = true
-versionRange = "[4.0.0.0,)"
+versionRange = "[4.0.3.2,)"
 ordering = "BEFORE"
 side = "BOTH"
