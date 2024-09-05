@@ -9,7 +9,7 @@ import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
-import corgitaco.enhancedcelestials.platform.Services;
+import corgitaco.enhancedcelestials.platform.services.IPlatformHelper;
 import corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.longs.Long2LongFunction;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
@@ -115,7 +115,7 @@ public class LunarForecast {
         this.lastCheckedGameTime = Long.MIN_VALUE;
         if (updateForecast(level, this.dimensionSettingsHolder.value(), this)) {
             List<ServerPlayer> players = level.players();
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
+            IPlatformHelper.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
         }
     }
 
@@ -216,7 +216,7 @@ public class LunarForecast {
     private void serverTick(ServerLevel level, Holder<LunarEvent> lastCurrentEvent, LunarDimensionSettings lunarDimensionSettings, long currentDay) {
         List<ServerPlayer> players = level.players();
         if (updateForecast(level, lunarDimensionSettings, this)) {
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
+            IPlatformHelper.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
         }
 
         updatePastEventsAndRecentAndCurrentEvents(this, currentDay, lunarDimensionSettings.trackedPastEventsMaxCount());
@@ -237,7 +237,7 @@ public class LunarForecast {
 
         // Sync every 5 minutes just in case.
         if (level.getGameTime() % 6000L == 0) {
-            Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
+            IPlatformHelper.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, level.isNight()));
         }
     }
 
@@ -246,7 +246,7 @@ public class LunarForecast {
      */
     private void onLunarEventChange(Holder<LunarEvent> lastCurrentEvent, List<ServerPlayer> players, boolean isNight) {
         this.blend = 0;
-        Services.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
+        IPlatformHelper.PLATFORM.sendToAllClients(players, new LunarForecastChangedPacket(this, isNight));
         notifyPlayers(lastCurrentEvent, players);
     }
 

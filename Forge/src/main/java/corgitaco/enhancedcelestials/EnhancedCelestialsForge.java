@@ -13,8 +13,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class EnhancedCelestialsForge {
 
     public EnhancedCelestialsForge() {
-        // This only exists to ensure classloading
-        ECSounds.SOUNDS.getModId();
+        ECSounds.loadClass();
         ECRegistries.loadClasses();
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::commonSetup);

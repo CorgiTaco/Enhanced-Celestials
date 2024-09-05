@@ -6,8 +6,8 @@ import corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarDimensionSettings
 import corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarEvents;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import corgitaco.enhancedcelestials.providers.ECItemTagsProvider;
-import corgitaco.enhancedcelestials.providers.ECLunarEventTagsProvider;
+import corgitaco.enhancedcelestials.datagen.providers.ECItemTagsProvider;
+import corgitaco.enhancedcelestials.datagen.providers.ECLunarEventTagsProvider;
 import corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructures;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -77,7 +77,7 @@ public class ECDataGen {
 
             @Override
             public String getName() {
-                return "Forge " +  super.getName();
+                return "Forge " + super.getName();
             }
         }
 

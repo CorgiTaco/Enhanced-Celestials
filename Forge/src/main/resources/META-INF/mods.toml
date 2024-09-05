@@ -5,7 +5,7 @@ license="Source code and binaries fall under LGPLv3 while textures and models ar
 
 [[mods]] #mandatory
 modId="enhancedcelestials" #mandatory
-version="${file.jarVersion}" #mandatory
+version="${version}" #mandatory
 displayName="Enhanced Celestials" #mandatory
 #displayURL="http://example.com/" #optional
 #logoFile="examplemod.png" #optional

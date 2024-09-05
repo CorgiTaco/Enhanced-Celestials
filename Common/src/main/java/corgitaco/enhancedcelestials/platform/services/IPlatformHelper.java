@@ -1,12 +1,15 @@
 package corgitaco.enhancedcelestials.platform.services;
 
 import corgitaco.enhancedcelestials.network.S2CPacket;
+import corgitaco.enhancedcelestials.platform.Services;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.nio.file.Path;
 import java.util.List;
 
 public interface IPlatformHelper {
+
+     IPlatformHelper PLATFORM = Services.load(IPlatformHelper.class);
 
     /**
      * Gets the name of the current platform
