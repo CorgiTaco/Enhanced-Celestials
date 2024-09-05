@@ -91,7 +91,7 @@ publisher {
         github(project.properties["github_token"].toString())
     }
 
-    curseID.set(project.properties["curseforge_id"].toString())
+    curseID.set(project.properties["curseforge_forge_id"].toString())
     modrinthID.set(project.properties["modrinth_id"].toString())
     githubRepo.set("https://github.com/JT122406/Enhanced-Celestials")
     setReleaseType(ReleaseType.RELEASE)
