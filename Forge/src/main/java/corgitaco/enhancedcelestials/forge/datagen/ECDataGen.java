@@ -57,33 +57,12 @@ public class ECDataGen {
     @SubscribeEvent
     static void onDatagen(final GatherDataEvent event) {
         EnhancedCelestials.commonSetup();
-        PackOutput forgeOut = new PackOutput(Paths.get(System.getProperty("forgeoutput", null)));
-        PackOutput fabricOut = new PackOutput(Paths.get(System.getProperty("fabricoutput", null)));
-
-        CompletableFuture<HolderLookup.Provider> providerFabric = event.getLookupProvider().thenApply(provider -> makeBuilder(true).buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider));
         CompletableFuture<HolderLookup.Provider> providerForge = event.getLookupProvider().thenApply(provider -> makeBuilder(false).buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider));
 
         final var gen = event.getGenerator();
 
-        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(forgeOut, false, EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, providerForge, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(fabricOut, true, ResourceKey.createRegistryKey(new ResourceLocation("lunar/event")), providerFabric, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
-
+        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(gen.getPackOutput(), false, EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, providerForge, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new ECItemTagsProvider(gen.getPackOutput(), providerForge, CompletableFuture.completedFuture(blockTagKey -> Optional.empty()), EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
-
-        class ForgeDump extends DatapackBuiltinEntriesProvider {
-
-            public ForgeDump(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, RegistrySetBuilder datapackEntriesBuilder, Set<String> modIds) {
-                super(output, registries, datapackEntriesBuilder, modIds);
-            }
-
-            @Override
-            public String getName() {
-                return "Forge " + super.getName();
-            }
-        }
-
-
-        gen.addProvider(event.includeServer(), new ForgeDump(forgeOut, event.getLookupProvider(), makeBuilder(false), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
-        gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(fabricOut, event.getLookupProvider(), makeBuilder(true), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
+        gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(gen.getPackOutput(), event.getLookupProvider(), makeBuilder(false), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
     }
 }

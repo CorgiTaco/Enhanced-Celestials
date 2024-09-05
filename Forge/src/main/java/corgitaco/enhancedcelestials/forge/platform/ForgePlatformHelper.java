@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.forge.platform;
 
+import com.google.auto.service.AutoService;
 import corgitaco.enhancedcelestials.forge.network.ForgeNetworkHandler;
 import corgitaco.enhancedcelestials.network.S2CPacket;
 import corgitaco.enhancedcelestials.platform.services.IPlatformHelper;
@@ -10,6 +11,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 
+@AutoService(IPlatformHelper.class)
 public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override

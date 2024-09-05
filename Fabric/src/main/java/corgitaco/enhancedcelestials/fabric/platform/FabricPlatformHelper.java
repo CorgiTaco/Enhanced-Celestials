@@ -1,5 +1,6 @@
 package corgitaco.enhancedcelestials.fabric.platform;
 
+import com.google.auto.service.AutoService;
 import corgitaco.enhancedcelestials.fabric.network.FabricNetworkHandler;
 import corgitaco.enhancedcelestials.network.S2CPacket;
 import corgitaco.enhancedcelestials.platform.services.IPlatformHelper;
@@ -8,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.nio.file.Path;
 
+@AutoService(IPlatformHelper.class)
 public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override

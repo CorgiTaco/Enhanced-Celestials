@@ -14,6 +14,7 @@ architectury {
 
 val minecraftVersion = project.properties["minecraft_version"] as String
 
+
 configurations {
     create("common")
     "common" {
@@ -46,8 +47,6 @@ loom {
         programArgs("--all", "--mod", "enhancedcelestials")
         programArgs("--output", project(":Common").file("src/main/generated/resources").absolutePath)
         programArgs("--existing", project(":Common").file("src/main/resources").absolutePath)
-        val dataArgs = listOf ("-Dfabricoutput=" + project(":Fabric").file("src/generated/resources").toString(), ("-Dforgeoutput=" + project(":Forge").file("src/generated/resources")), "-Ddatagen=true");
-        vmArgs(dataArgs)
     }
 }
 

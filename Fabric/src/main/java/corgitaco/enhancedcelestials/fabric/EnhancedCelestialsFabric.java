@@ -1,6 +1,6 @@
 package corgitaco.enhancedcelestials.fabric;
 
-import corgitaco.corgilib.CorgiLibFabric;
+import corgitaco.corgilib.fabric.CorgiLibFabric;
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;

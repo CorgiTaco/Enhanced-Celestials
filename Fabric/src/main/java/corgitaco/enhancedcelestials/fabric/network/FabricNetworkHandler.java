@@ -1,6 +1,8 @@
 package corgitaco.enhancedcelestials.fabric.network;
 
 import corgitaco.enhancedcelestials.EnhancedCelestials;
+import corgitaco.enhancedcelestials.network.LunarContextConstructionPacket;
+import corgitaco.enhancedcelestials.network.LunarForecastChangedPacket;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

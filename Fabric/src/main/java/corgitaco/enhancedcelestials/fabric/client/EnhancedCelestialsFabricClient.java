@@ -1,5 +1,7 @@
 package corgitaco.enhancedcelestials.fabric.client;
 
+import corgitaco.enhancedcelestials.client.ECEntityRenderers;
+import corgitaco.enhancedcelestials.client.EnhancedCelestialsModelLayers;
 import corgitaco.enhancedcelestials.core.ECBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -12,9 +14,7 @@ public class EnhancedCelestialsFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         ECEntityRenderers.register(EntityRendererRegistry::register);
 
-        EnhancedCelestialsModelLayers.register((modelLayerLocation, layerDefinitionSupplier) -> {
-            EntityModelLayerRegistry.registerModelLayer(modelLayerLocation, layerDefinitionSupplier::get);
-        });
+        EnhancedCelestialsModelLayers.register((modelLayerLocation, layerDefinitionSupplier) -> EntityModelLayerRegistry.registerModelLayer(modelLayerLocation, layerDefinitionSupplier::get));
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ECBlocks.SPACE_MOSS_CARPET.get(), ECBlocks.SPACE_MOSS_GRASS.get());
     }
