@@ -7,7 +7,6 @@ license="Source code and binaries fall under LGPLv3 while textures and models ar
 modId="enhancedcelestials" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Enhanced Celestials" #mandatory
-#updateJSONURL="http://myurl.me/" #optional
 #displayURL="http://example.com/" #optional
 #logoFile="examplemod.png" #optional
 authors="Corgi Taco"
@@ -26,7 +25,7 @@ side="BOTH"
 [[dependencies.enhancedcelestials]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.20,)"
+versionRange="[1.20.1,)"
 ordering="NONE"
 side="BOTH"
 

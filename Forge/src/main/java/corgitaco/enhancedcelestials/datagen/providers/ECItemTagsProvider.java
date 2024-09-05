@@ -1,4 +1,4 @@
-package corgitaco.enhancedcelestials.providers;
+package corgitaco.enhancedcelestials.datagen.providers;
 
 import corgitaco.enhancedcelestials.api.ECItemTags;
 import net.minecraft.core.HolderLookup;

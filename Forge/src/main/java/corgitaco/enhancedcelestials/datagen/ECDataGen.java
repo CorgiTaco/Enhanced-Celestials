@@ -1,5 +1,6 @@
-package corgitaco.enhancedcelestials;
+package corgitaco.enhancedcelestials.datagen;
 
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarDimensionSettings;
 import corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarEvents;

@@ -1,4 +1,4 @@
-package corgitaco.enhancedcelestials.providers;
+package corgitaco.enhancedcelestials.datagen.providers;
 
 import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
