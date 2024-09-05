@@ -1,0 +1,59 @@
+{
+  "client_settings": {
+    "color_settings": {
+      "moon_texture_color": "ffffff",
+      "sky_light_color": "3333ff"
+    },
+    "moon_size": 20.0,
+    "moon_texture_location": "minecraft:textures/environment/moon_phases.png"
+  },
+  "dimension_chances": {},
+  "drops": {
+    "drop_enhancer": {}
+  },
+  "mob_settings": {
+    "blocks_sleeping": {
+      "type": "corgilib:flipped",
+      "condition_to_flip": {
+        "type": "corgilib:any"
+      }
+    },
+    "lunar_spawn_settings": {
+      "force_surface_spawning": false,
+      "mob_spawn_settings": {
+        "spawn_costs": {},
+        "spawners": {
+          "ambient": [],
+          "axolotls": [],
+          "creature": [],
+          "misc": [],
+          "monster": [],
+          "underground_water_creature": [],
+          "water_ambient": [],
+          "water_creature": []
+        }
+      },
+      "slimes_spawn_everywhere": false,
+      "use_biome_spawn_settings": true
+    },
+    "mob_effects": [],
+    "spawn_category_multiplier": {}
+  },
+  "text_components": {
+    "end_notification": {
+      "type": "CHAT",
+      "component": {
+        "key": ""
+      }
+    },
+    "name": {
+      "key": "enhancedcelestials.name.moon"
+    },
+    "start_notification": {
+      "type": "CHAT",
+      "component": {
+        "key": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "client_settings": {
+    "color_settings": {
+      "moon_texture_color": "ffff",
+      "sky_light_color": "ffff"
+    },
+    "moon_size": 40.0,
+    "moon_texture_location": "minecraft:textures/environment/moon_phases.png",
+    "sound_track": {
+      "sound_id": "enhancedcelestials:blue_moon"
+    }
+  },
+  "dimension_chances": {
+    "minecraft:overworld": {
+      "chance": 0.05,
+      "min_number_of_nights_between": 20,
+      "valid_moon_phases": [
+        0
+      ]
+    }
+  },
+  "drops": {
+    "drop_enhancer": {}
+  },
+  "mob_settings": {
+    "blocks_sleeping": {
+      "type": "corgilib:flipped",
+      "condition_to_flip": {
+        "type": "corgilib:any"
+      }
+    },
+    "lunar_spawn_settings": {
+      "force_surface_spawning": false,
+      "mob_spawn_settings": {
+        "spawn_costs": {},
+        "spawners": {
+          "ambient": [],
+          "axolotls": [],
+          "creature": [],
+          "misc": [],
+          "monster": [],
+          "underground_water_creature": [],
+          "water_ambient": [],
+          "water_creature": []
+        }
+      },
+      "slimes_spawn_everywhere": false,
+      "use_biome_spawn_settings": true
+    },
+    "mob_effects": [
+      {
+        "filter": {
+          "type": "corgilib:any"
+        },
+        "mob_effect": {
+          "ambient": true,
+          "amplifier": 4,
+          "duration_in_ticks": 1210,
+          "effect": "minecraft:luck",
+          "show_icon": false,
+          "visible": false
+        }
+      }
+    ],
+    "spawn_category_multiplier": {}
+  },
+  "text_components": {
+    "end_notification": {
+      "type": "CHAT",
+      "component": {
+        "key": "enhancedcelestials.notification.super_blue_moon.set"
+      }
+    },
+    "name": {
+      "key": "enhancedcelestials.name.super_blue_moon",
+      "style": {
+        "color": "55ffff"
+      }
+    },
+    "start_notification": {
+      "type": "CHAT",
+      "component": {
+        "key": "enhancedcelestials.notification.super_blue_moon.rise",
+        "style": {
+          "color": "55ffff"
+        }
+      }
+    }
+  }
+}

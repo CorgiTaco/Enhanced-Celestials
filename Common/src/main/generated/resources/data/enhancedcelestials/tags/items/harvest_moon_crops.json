@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "#c:crop",
+      "required": false
+    },
+    {
+      "id": "#forge:crop",
+      "required": false
+    },
+    {
+      "id": "#minecraft:crop",
+      "required": false
+    },
+    {
+      "id": "#c:crops",
+      "required": false
+    },
+    {
+      "id": "#forge:crops",
+      "required": false
+    },
+    {
+      "id": "#minecraft:crops",
+      "required": false
+    }
+  ]
+}

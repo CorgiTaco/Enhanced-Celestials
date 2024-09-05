@@ -4,8 +4,8 @@
   "package": "corgitaco.enhancedcelestials.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "RegistryDataLoaderPathFixer",
-    "world.level.storage.loot.MixinLootTableManager"
+    "corgitaco.enhancedcelestials.fabric.mixin.RegistryDataLoaderPathFixer",
+    "corgitaco.enhancedcelestials.fabric.mixin.world.level.storage.loot.MixinLootTableManager"
   ],
   "client": [
   ],

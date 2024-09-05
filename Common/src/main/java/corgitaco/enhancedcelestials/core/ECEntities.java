@@ -5,6 +5,8 @@ import corgitaco.enhancedcelestials.entity.MeteorEntity;
 import corgitaco.enhancedcelestials.entity.MeteorStrikeEntity;
 import corgitaco.enhancedcelestials.entity.SpaceMossBugEntity;
 import corgitaco.enhancedcelestials.platform.services.RegistrationService;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -36,6 +38,7 @@ public final class ECEntities {
     private static <T extends Entity> Supplier<EntityType<T>> createEntity(String name, EntityType.Builder<T> builder) {
         BUILDER.setLength(0);
 
-        return RegistrationService.INSTANCE.register((net.minecraft.core.Registry<EntityType<T>>) Registries.ENTITY_TYPE, name, () -> builder.build(FORMATTER.format("%s:%s", EnhancedCelestials.MOD_ID, name).toString()));
+        Supplier entityTypeSupplier = () -> builder.build(FORMATTER.format("%s:%s", EnhancedCelestials.MOD_ID, name).toString());
+        return RegistrationService.INSTANCE.register(BuiltInRegistries.ENTITY_TYPE, name, entityTypeSupplier);
     }
 }
