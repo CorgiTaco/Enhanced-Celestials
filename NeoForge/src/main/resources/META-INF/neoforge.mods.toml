@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "Source code and binaries fall under LGPLv3 while textures and models are Copyright 2022-present chaottic. All Rights Reserved"
+issueTrackerURL = "https://github.com/CorgiTaco/Enhanced-Celestials/issues"
+[[mods]]
+modId = "enhancedcelestials"
+version = "${version}" #mandatory
+displayName = "Enhanced Celestials" #mandatory
+displayURL = "https://github.com/CorgiTaco/Enhanced-Celestials" #optional
+#logoFile = "assets/corgilib/corgilib.png" #optional
+authors = "Corgi Taco"
+credits = "Joseph T. McQuigg (JT122406), LudoCrypt - Ambient sounds"
+description = '''
+A minecraft mod adding new Lunar Events!
+'''
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.enhancedcelestials]] #optional
+modId = "neoforge" #mandatory
+type = "required"#mandatory
+versionRange = "[21,)" #mandatory
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.enhancedcelestials]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "enhancedcelestials.mixins.json"
+[[mixins]]
+config = "enhancedcelestials_asm.mixins.json"
+[[mixins]]
+config = "enhancedcelestials.neoforge.mixins.json"

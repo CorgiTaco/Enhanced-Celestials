@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "corgitaco.enhancedcelestials.mixin",
+  "package": "dev.corgitaco.enhancedcelestials.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinBlock",
@@ -14,18 +14,6 @@
     "MixinSlimeEntity",
     "MixinWorld",
     "MixinWorldEntitySpawner",
-    "access.ChunkAccessAccess",
-    "access.ChunkMapAccess",
-    "access.ColorAccess",
-    "access.DimensionTypeAccess",
-    "access.EffectInstanceAccess",
-    "access.JsonReloadListenerAccess",
-    "access.LocalMobCapCalculatorAccess",
-    "access.MobCountsAccess",
-    "access.MobSpawnInfoAccess",
-    "access.StructuresAccess",
-    "access.StyleAccess",
-    "access.WorldEntitySpawnerAccess",
     "server.MixinCommands"
   ],
   "client": [

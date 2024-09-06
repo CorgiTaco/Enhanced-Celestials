@@ -1,8 +1,13 @@
 accessWidener v2 named
 
 accessible class net/minecraft/world/level/LocalMobCapCalculator$MobCounts
-accessible class net/minecraft/core/RegistrySynchronization$NetworkedRegistryData
-accessible class net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 
-accessible method net/minecraft/core/RegistrySynchronization$NetworkedRegistryData <init> (Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Codec;)V
 accessible method net/minecraft/core/registries/BuiltInRegistries registerSimple (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/Registry;
+accessible method net/minecraft/world/level/biome/MobSpawnSettings <init> (FLjava/util/Map;Ljava/util/Map;)V
+
+accessible field net/minecraft/world/level/LocalMobCapCalculator chunkMap Lnet/minecraft/server/level/ChunkMap;
+accessible field net/minecraft/server/level/ChunkMap level Lnet/minecraft/server/level/ServerLevel;
+accessible field net/minecraft/world/level/LocalMobCapCalculator$MobCounts counts Lit/unimi/dsi/fastutil/objects/Object2IntMap;
+accessible field net/minecraft/world/level/biome/MobSpawnSettings spawners Ljava/util/Map;
+accessible field net/minecraft/world/level/NaturalSpawner MAGIC_NUMBER I
+accessible field net/minecraft/world/level/biome/MobSpawnSettings mobSpawnCosts Ljava/util/Map;
