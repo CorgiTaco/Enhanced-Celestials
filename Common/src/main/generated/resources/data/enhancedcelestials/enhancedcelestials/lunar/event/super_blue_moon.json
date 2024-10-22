@@ -74,7 +74,7 @@
     "name": {
       "key": "enhancedcelestials.name.super_blue_moon",
       "style": {
-        "color": "55ffff"
+        "color": "aqua"
       }
     },
     "start_notification": {
@@ -82,7 +82,7 @@
       "component": {
         "key": "enhancedcelestials.notification.super_blue_moon.rise",
         "style": {
-          "color": "55ffff"
+          "color": "aqua"
         }
       }
     }

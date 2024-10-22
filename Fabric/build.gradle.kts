@@ -3,7 +3,7 @@ import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
     id("com.hypherionmc.modutils.modpublisher") version "2.+"
 }
 
@@ -30,14 +30,18 @@ configurations {
     }
 }
 
-loom.accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
+loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+
+
+// Fabric Datagen Gradle config.  Remove if not using Fabric datagen
+fabricApi.configureDataGeneration()
 
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
     modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
 
-    "common"(project(":Common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":Common", "transformProductionFabric"))
+    "common"(project(":common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":common", "transformProductionFabric"))
 
     modApi("corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
 }
@@ -52,7 +56,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json")
+        exclude("architectury.common.json", "dev/corgitaco/enhancedcelestials/fabric/datagen/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
@@ -82,8 +86,8 @@ publisher {
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FABRIC, ModLoader.QUILT)
     setCurseEnvironment(CurseEnvironment.SERVER)
-    setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21)
-    val depends = mutableListOf("fabric-api")
+    setJavaVersions(JavaVersion.VERSION_21)
+    val depends = mutableListOf("fabric-api", "corgilib")
     curseDepends.required.set(depends)
     modrinthDepends.required.set(depends)
 }

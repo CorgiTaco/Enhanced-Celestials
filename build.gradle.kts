@@ -3,7 +3,7 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 plugins {
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    id("com.gradleup.shadow") version "8.3.3" apply false
     java
     idea
     `maven-publish`
@@ -13,8 +13,8 @@ val minecraftVersion = project.properties["minecraft_version"] as String
 architectury.minecraft = minecraftVersion
 
 allprojects {
-    version = "${minecraftVersion}-${project.properties["version"]}"
-    group = project.properties["group"] as String
+    version = project.properties["mod_version"] as String
+    group = project.properties["maven_group"] as String
 }
 
 subprojects {
@@ -26,7 +26,6 @@ subprojects {
 
     val loom = project.extensions.getByName<LoomGradleExtensionAPI>("loom")
     loom.silentMojangMappingsLicense()
-    loom.mixin.useLegacyMixinAp.set(false)
 
     repositories {
         mavenCentral()
@@ -35,8 +34,8 @@ subprojects {
         maven("https://maven.fabricmc.net/")
         maven("https://maven.minecraftforge.net/")
         maven("https://maven.neoforged.net/releases/")
-        maven("https://maven.architectury.dev/")
         maven("https://maven.jt-dev.tech/releases")
+        maven("https://maven.jt-dev.tech/snapshots")
     }
 
     @Suppress("UnstableApiUsage")
@@ -44,10 +43,10 @@ subprojects {
         "minecraft"("com.mojang:minecraft:$minecraftVersion")
         "mappings"(loom.layered{
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-${project.properties["parchment"]}@zip")
+            parchment("org.parchmentmc.data:parchment-1.21:${project.properties["parchment"]}@zip")
         })
 
-        compileOnly("org.jetbrains:annotations:24.1.0")
+        compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("com.google.auto.service:auto-service:1.1.1")
         annotationProcessor("com.google.auto.service:auto-service:1.1.1")
     }
@@ -72,10 +71,10 @@ subprojects {
         repositories {
             mavenLocal()
             maven {
-                val releasesRepoUrl = "https://maven.jt-dev.tech/releases"
-                val snapshotsRepoUrl = "https://maven.jt-dev.tech/snapshots"
+                val releasesRepoUrl = "https://example.com/releases"
+                val snapshotsRepoUrl = "https://example.com/snapshots"
                 url = uri(if (project.version.toString().endsWith("SNAPSHOT") || project.version.toString().startsWith("0")) snapshotsRepoUrl else releasesRepoUrl)
-                name = "JTDev-Maven-Repository"
+                name = "ExampleRepo"
                 credentials {
                     username = project.properties["repoLogin"]?.toString()
                     password = project.properties["repoPassword"]?.toString()

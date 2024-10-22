@@ -31,7 +31,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -139,7 +139,7 @@ public class LunarForecast {
             ResourceKey<LunarEvent> resourceKey = left.orElseThrow();
             removeIfActive(currentDay);
             this.forecast.add(0, new LunarEventInstance(resourceKey, currentDay, true));
-            return Pair.of(Component.translatable("Set lunar event to \"%s\"", resourceKey.location()), true);
+            return Pair.of(Component.translatable("Set lunar event to \"%s\"", resourceKey.location().toString()), true);
         }
         Optional<TagKey<LunarEvent>> right = unwrappedResult.right();
 
@@ -150,7 +150,7 @@ public class LunarForecast {
             Holder<LunarEvent> randomElement = tag.get().getRandomElement(randomSource).orElseThrow();
             removeIfActive(currentDay);
             this.forecast.add(0, new LunarEventInstance(randomElement.unwrapKey().orElseThrow(), currentDay, true));
-            return Pair.of(Component.translatable("Set lunar event to \"%s\" from tag \"%s\"", lunarEventTagKey.location(), lunarEventTagKey.location()), true);
+            return Pair.of(Component.translatable("Set lunar event to \"%s\" from tag \"%s\"", lunarEventTagKey.location().toString(), lunarEventTagKey.location().toString()), true);
         }
         return Pair.of(Component.translatable("Could not set lunar event for result:\n\"%s\"", result.toString()), false);
     }

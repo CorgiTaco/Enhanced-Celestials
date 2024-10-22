@@ -12,7 +12,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class LunarForecastSavedData extends SavedData {
     public static final String DATA_NAME = EnhancedCelestials.MOD_ID + "_lunar_event_data";

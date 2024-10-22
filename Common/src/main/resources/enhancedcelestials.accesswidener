@@ -1,6 +1,7 @@
 accessWidener v2 named
 
 accessible class net/minecraft/world/level/LocalMobCapCalculator$MobCounts
+accessible class net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 
 accessible method net/minecraft/core/registries/BuiltInRegistries registerSimple (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/Registry;
 accessible method net/minecraft/world/level/biome/MobSpawnSettings <init> (FLjava/util/Map;Ljava/util/Map;)V

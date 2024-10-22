@@ -5,7 +5,7 @@ import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Mixin(Level.class)
 public abstract class MixinWorld implements EnhancedCelestialsWorldData {

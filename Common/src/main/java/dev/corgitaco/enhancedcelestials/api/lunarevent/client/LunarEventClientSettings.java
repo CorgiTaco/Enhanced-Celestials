@@ -6,7 +6,7 @@ import dev.corgitaco.enhancedcelestials.api.client.ColorSettings;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public record LunarEventClientSettings(ColorSettings colorSettings, float moonSize,

@@ -8,7 +8,7 @@ pluginManagement.repositories {
 }
 
 plugins {
-    id("com.gradle.develocity") version("3.17.6")
+    id("com.gradle.develocity") version("3.18.1")
 }
 
 develocity.buildScan {
@@ -16,6 +16,6 @@ develocity.buildScan {
     termsOfUseAgree = "yes"
 }
 
-include("Common", "Fabric", "Forge", "NeoForge")
+include("common", "fabric", "forge", "neoforge")
 
 rootProject.name = "Enhanced Celestials"

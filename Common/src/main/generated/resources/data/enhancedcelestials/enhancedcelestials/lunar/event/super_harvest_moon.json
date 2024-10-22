@@ -62,7 +62,7 @@
     "name": {
       "key": "enhancedcelestials.name.super_harvest_moon",
       "style": {
-        "color": "ffff55"
+        "color": "yellow"
       }
     },
     "start_notification": {
@@ -71,7 +71,7 @@
         "key": "enhancedcelestials.notification.super_harvest_moon.rise",
         "style": {
           "bold": true,
-          "color": "ffff55"
+          "color": "yellow"
         }
       }
     }

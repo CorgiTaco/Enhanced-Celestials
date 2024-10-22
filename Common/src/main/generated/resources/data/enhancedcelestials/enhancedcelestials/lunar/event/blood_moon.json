@@ -66,7 +66,7 @@
     "name": {
       "key": "enhancedcelestials.name.blood_moon",
       "style": {
-        "color": "ff5555"
+        "color": "red"
       }
     },
     "start_notification": {
@@ -74,7 +74,7 @@
       "component": {
         "key": "enhancedcelestials.notification.blood_moon.rise",
         "style": {
-          "color": "ff5555"
+          "color": "red"
         }
       }
     }

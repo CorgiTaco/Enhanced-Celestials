@@ -31,8 +31,8 @@ public record LunarContextConstructionPacket(LunarForecast.Data data) implements
             if (enhancedCelestialsContext == null) {
                 ((EnhancedCelestialsWorldData) level).setLunarContext(EnhancedCelestialsContext.forLevel(level, Optional.of(this.data)));
             } else {
-                EnhancedCelestials.LOGGER.warn("Attempted lunar context reconstruction from:");
-                new Throwable().printStackTrace();
+//                EnhancedCelestials.LOGGER.warn("Attempted lunar context reconstruction from:");
+//                new Throwable().printStackTrace();
             }
         }
     }

@@ -6,11 +6,13 @@ import dev.corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarDimensionSett
 import dev.corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarEvents;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import dev.corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructures;
 import dev.corgitaco.enhancedcelestials.neoforge.datagen.providers.ECItemTagsProvider;
 import dev.corgitaco.enhancedcelestials.neoforge.datagen.providers.ECLunarEventTagsProvider;
-import net.minecraft.core.*;
-import net.minecraft.core.registries.BuiltInRegistries;
+import dev.corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructures;
+import net.minecraft.core.Cloner;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
@@ -55,12 +57,15 @@ public class ECDataGen {
         EnhancedCelestials.commonSetup();
         Cloner.Factory factory = new Cloner.Factory();
         RegistryDataLoader.WORLDGEN_REGISTRIES.forEach(registryData -> registryData.runWithArguments(factory::addCodec));
-        CompletableFuture<HolderLookup.Provider> providerForge = event.getLookupProvider().thenApply(provider -> makeBuilder(false).buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider, factory)).thenApply(RegistrySetBuilder.PatchedRegistries::full);
 
         final var gen = event.getGenerator();
+        DatapackBuiltinEntriesProvider datapackBuiltinEntriesProvider = new DatapackBuiltinEntriesProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), makeBuilder(false), Set.of("minecraft", EnhancedCelestials.MOD_ID));
+        gen.addProvider(event.includeServer(), datapackBuiltinEntriesProvider);
 
-        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(gen.getPackOutput(), false, EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, providerForge, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new ECItemTagsProvider(gen.getPackOutput(), providerForge, CompletableFuture.completedFuture(blockTagKey -> Optional.empty()), EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(gen.getPackOutput(), event.getLookupProvider(), makeBuilder(false), Set.of(EnhancedCelestials.MOD_ID, "minecraft")));
+
+        CompletableFuture<HolderLookup.Provider> lookupProvider = datapackBuiltinEntriesProvider.getRegistryProvider();
+
+        gen.addProvider(event.includeServer(), new ECLunarEventTagsProvider(gen.getPackOutput(), false, EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, lookupProvider, EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new ECItemTagsProvider(gen.getPackOutput(), lookupProvider, CompletableFuture.completedFuture(blockTagKey -> Optional.empty()), EnhancedCelestials.MOD_ID, event.getExistingFileHelper()));
     }
 }

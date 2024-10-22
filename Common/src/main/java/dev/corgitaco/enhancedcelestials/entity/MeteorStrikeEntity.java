@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class MeteorStrikeEntity extends Entity {
     private static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(MeteorStrikeEntity.class, EntityDataSerializers.FLOAT);

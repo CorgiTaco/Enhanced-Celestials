@@ -31,6 +31,4 @@ side = "BOTH"
 [[mixins]]
 config = "enhancedcelestials.mixins.json"
 [[mixins]]
-config = "enhancedcelestials_asm.mixins.json"
-[[mixins]]
 config = "enhancedcelestials.neoforge.mixins.json"

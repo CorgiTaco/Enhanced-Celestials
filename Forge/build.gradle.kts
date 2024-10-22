@@ -3,7 +3,7 @@ import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
     id("com.hypherionmc.modutils.modpublisher") version "2.+"
 }
 
@@ -13,7 +13,6 @@ architectury {
 }
 
 val minecraftVersion = project.properties["minecraft_version"] as String
-
 
 configurations {
     create("common")
@@ -32,28 +31,30 @@ configurations {
 }
 
 loom {
-    accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
+    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 
     forge {
         convertAccessWideners.set(true)
         extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 
-        mixinConfigs("enhancedcelestials.mixins.json", "enhancedcelestials_asm.mixins.json", "enhancedcelestials.forge.mixins.json")
+        mixinConfig("enhancedcelestials-common.mixins.json")
+        mixinConfig("enhancedcelestials.mixins.json")
     }
 
     // Forge Datagen Gradle config.  Remove if not using Forge datagen
     runs.create("datagen") {
         data()
         programArgs("--all", "--mod", "enhancedcelestials")
-        programArgs("--output", project(":Common").file("src/main/generated/resources").absolutePath)
-        programArgs("--existing", project(":Common").file("src/main/resources").absolutePath)
+        programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
+        programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
     }
 }
 
 dependencies {
     forge("net.minecraftforge:forge:$minecraftVersion-${project.properties["forge_version"]}")
-    "common"(project(":Common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":Common", "transformProductionForge"))
+
+    "common"(project(":common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":common", "transformProductionForge"))
 
     modApi("corgitaco.corgilib:Corgilib-Forge:$minecraftVersion-${project.properties["corgilib_version"]}")
 }
@@ -68,8 +69,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json", ".cache/**",
-            "dev/corgitaco/ohthetreesyoullgrow/forge/data/**")
+        exclude("architectury.common.json", "dev/corgitaco/enhancedcelestials/forge/datagen/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
@@ -78,6 +78,10 @@ tasks {
         inputFile.set(shadowJar.get().archiveFile)
         dependsOn(shadowJar)
     }
+}
+
+configurations.configureEach {
+    resolutionStrategy.force("net.sf.jopt-simple:jopt-simple:5.0.4")
 }
 
 publisher {
@@ -89,7 +93,7 @@ publisher {
 
     curseID.set(project.properties["curseforge_forge_id"].toString())
     modrinthID.set(project.properties["modrinth_id"].toString())
-    githubRepo.set("https://github.com/JT122406/Enhanced-Celestials")
+    githubRepo.set("https://github.com/CorgiTaco/Enhanced-Celestials/")
     setReleaseType(ReleaseType.RELEASE)
     projectVersion.set("${project.version}-forge")
     displayName.set("${project.properties["mod_name"]}-forge-${project.version}")
@@ -98,7 +102,10 @@ publisher {
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FORGE, ModLoader.NEOFORGE)
     setCurseEnvironment(CurseEnvironment.SERVER)
-    setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21)
+    setJavaVersions(JavaVersion.VERSION_21)
+    val depends = mutableListOf("corgilib")
+    curseDepends.required.set(depends)
+    modrinthDepends.required.set(depends)
 }
 
 private fun getPublishingCredentials(): Pair<String?, String?> {

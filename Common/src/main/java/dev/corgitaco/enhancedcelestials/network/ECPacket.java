@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface ECPacket extends CustomPacketPayload {
     List<Handler<?>> PACKETS = Util.make(new ArrayList<>(), list -> {
         EnhancedCelestials.LOGGER.info("Initializing network...");
         list.add(new Handler<>(LunarContextConstructionPacket.TYPE, PacketDirection.SERVER_TO_CLIENT, LunarContextConstructionPacket.CODEC, LunarContextConstructionPacket::handle));
-        list.add(new Handler<>(LunarForecastChangedPacket.TYPE, PacketDirection.CLIENT_TO_SERVER, LunarForecastChangedPacket.CODEC, LunarForecastChangedPacket::handle));
+        list.add(new Handler<>(LunarForecastChangedPacket.TYPE, PacketDirection.SERVER_TO_CLIENT, LunarForecastChangedPacket.CODEC, LunarForecastChangedPacket::handle));
         EnhancedCelestials.LOGGER.info("Initialized network!");
     });
 
