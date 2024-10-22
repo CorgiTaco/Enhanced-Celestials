@@ -11,7 +11,6 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class NeoForgeRegistrationService implements RegistrationService {
 
     public static final List<Consumer<DataPackRegistryEvent.NewRegistry>> DATAPACK_REGISTRIES = new ArrayList<>();
 
-    public static final Map<ResourceKey, DeferredRegister> CACHED = new Reference2ObjectOpenHashMap<>();
+    public static final Map<ResourceKey<?>, DeferredRegister> CACHED = new Reference2ObjectOpenHashMap<>();
 
 
     @Override

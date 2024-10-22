@@ -1,7 +1,6 @@
 package dev.corgitaco.enhancedcelestials.neoforge;
 
 import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
-import dev.corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import dev.corgitaco.enhancedcelestials.core.ECRegistries;
 import dev.corgitaco.enhancedcelestials.neoforge.platform.NeoForgeRegistrationService;
 import net.neoforged.bus.api.IEventBus;
@@ -15,9 +14,8 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
  */
 @Mod(EnhancedCelestials.MOD_ID)
 public class EnhancedCelestialsNeoForge {
-    public EnhancedCelestialsNeoForge(IEventBus bus) {
+    public EnhancedCelestialsNeoForge(final IEventBus bus) {
         ECRegistries.loadClasses();
-
         bus.addListener(this::commonSetup);
         bus.addListener(this::clientSetup);
         bus.<DataPackRegistryEvent.NewRegistry>addListener(event -> NeoForgeRegistrationService.DATAPACK_REGISTRIES.forEach(newRegistryConsumer -> newRegistryConsumer.accept(event)));

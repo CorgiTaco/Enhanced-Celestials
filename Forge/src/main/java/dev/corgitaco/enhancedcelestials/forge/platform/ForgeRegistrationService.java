@@ -23,7 +23,7 @@ public class ForgeRegistrationService implements RegistrationService {
 
     public static final List<Consumer<DataPackRegistryEvent.NewRegistry>> DATAPACK_REGISTRIES = new ArrayList<>();
 
-    public static final Map<ResourceKey, DeferredRegister> CACHED = new Reference2ObjectOpenHashMap<>();
+    public static final Map<ResourceKey<?>, DeferredRegister> CACHED = new Reference2ObjectOpenHashMap<>();
 
 
     @Override
