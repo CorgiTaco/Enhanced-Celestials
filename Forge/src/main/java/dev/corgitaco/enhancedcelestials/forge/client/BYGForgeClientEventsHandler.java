@@ -1,5 +1,6 @@
 package dev.corgitaco.enhancedcelestials.forge.client;
 
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.client.ECEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -12,5 +13,6 @@ public class BYGForgeClientEventsHandler {
     @SubscribeEvent
     public static void ec_onEntityRenderersEvent$RegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         ECEntityRenderers.register(event::registerEntityRenderer);
+        EnhancedCelestials.LOGGER.info("Entity renderer register");
     }
 }
