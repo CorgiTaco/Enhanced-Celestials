@@ -30,7 +30,7 @@ configurations {
     }
 }
 
-loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+loom.accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
 
 
 // Fabric Datagen Gradle config.  Remove if not using Fabric datagen
@@ -40,8 +40,8 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
     modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
 
-    "common"(project(":common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":common", "transformProductionFabric"))
+    "common"(project(":Common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":Common", "transformProductionFabric"))
 
     modApi("corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
 }

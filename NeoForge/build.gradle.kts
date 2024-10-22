@@ -31,22 +31,22 @@ configurations {
 }
 
 loom {
-    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+    accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
 
     // NeoForge Datagen Gradle config.  Remove if not using NeoForge datagen
     runs.create("datagen") {
         data()
         programArgs("--all", "--mod", "enhancedcelestials")
-        programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
-        programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+        programArgs("--output", project(":Common").file("src/main/generated/resources").absolutePath)
+        programArgs("--existing", project(":Common").file("src/main/resources").absolutePath)
     }
 }
 
 dependencies {
     neoForge("net.neoforged:neoforge:${project.properties["neoforge_version"]}")
 
-    "common"(project(":common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":common", "transformProductionNeoForge"))
+    "common"(project(":Common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":Common", "transformProductionNeoForge"))
 
     modApi("corgitaco.corgilib:Corgilib-NeoForge:$minecraftVersion-${project.properties["corgilib_version"]}")
 }

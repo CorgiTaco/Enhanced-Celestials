@@ -31,7 +31,7 @@ configurations {
 }
 
 loom {
-    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+    accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
 
     forge {
         convertAccessWideners.set(true)
@@ -40,21 +40,13 @@ loom {
         mixinConfig("enhancedcelestials-common.mixins.json")
         mixinConfig("enhancedcelestials.mixins.json")
     }
-
-    // Forge Datagen Gradle config.  Remove if not using Forge datagen
-    runs.create("datagen") {
-        data()
-        programArgs("--all", "--mod", "enhancedcelestials")
-        programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
-        programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
-    }
 }
 
 dependencies {
     forge("net.minecraftforge:forge:$minecraftVersion-${project.properties["forge_version"]}")
 
-    "common"(project(":common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":common", "transformProductionForge"))
+    "common"(project(":Common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":Common", "transformProductionForge"))
 
     modApi("corgitaco.corgilib:Corgilib-Forge:$minecraftVersion-${project.properties["corgilib_version"]}")
 }
