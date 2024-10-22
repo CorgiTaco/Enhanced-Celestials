@@ -14,13 +14,13 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 @Mod(EnhancedCelestials.MOD_ID)
 public class EnhancedCelestialsForge {
 
-    public EnhancedCelestialsForge() {
+    public EnhancedCelestialsForge(final FMLJavaModLoadingContext context) {
         ECRegistries.loadClasses();
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus bus = context.getModEventBus();
         bus.addListener(this::commonSetup);
         bus.addListener(this::clientSetup);
         bus.<DataPackRegistryEvent.NewRegistry>addListener(event -> ForgeRegistrationService.DATAPACK_REGISTRIES.forEach(newRegistryConsumer -> newRegistryConsumer.accept(event)));
-        ForgeRegistrationService.CACHED.values().forEach(deferredRegister -> deferredRegister.register(FMLJavaModLoadingContext.get().getModEventBus()));
+        ForgeRegistrationService.CACHED.values().forEach(deferredRegister -> deferredRegister.register(context.getModEventBus()));
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
