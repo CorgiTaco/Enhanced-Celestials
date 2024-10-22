@@ -1,12 +1,12 @@
 package dev.corgitaco.enhancedcelestials;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 public class EnhancedCelestials {
     public static final String MOD_ID = "enhancedcelestials";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final boolean NEW_CONTENT = false;
 
