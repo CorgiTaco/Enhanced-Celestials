@@ -13,6 +13,7 @@ import corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructureTy
 public record ECRegistries() {
 
     public static void loadClasses() {
+        ECSounds.loadClass();
         EnhancedCelestialsRegistry.init();
         if (EnhancedCelestials.NEW_CONTENT) {
             ECBlocks.classLoad();

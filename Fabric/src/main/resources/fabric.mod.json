@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "corgitaco.enhancedcelestials.EnhancedCelestialsFabric"
+      "corgitaco.enhancedcelestials.fabric.EnhancedCelestialsFabric"
     ],
     "client":[
-      "corgitaco.enhancedcelestials.client.EnhancedCelestialsFabricClient"
+      "corgitaco.enhancedcelestials.fabric.client.EnhancedCelestialsFabricClient"
     ]
   },
   "mixins": [
@@ -35,7 +35,6 @@
     "fabric": "*",
     "minecraft": ">=1.20.1",
     "java": ">=17",
-    "corgilib": ">=4.0.0.0"
-  },
-  "accessWidener": "enhancedcelestials.aw"
+    "corgilib": ">=4.0.3.2"
+  }
 }
