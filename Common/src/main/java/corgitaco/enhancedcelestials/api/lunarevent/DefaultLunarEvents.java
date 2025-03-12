@@ -25,6 +25,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DefaultLunarEvents {
@@ -47,8 +48,8 @@ public class DefaultLunarEvents {
                     ),
                     new LunarTextComponents(
                             new CustomTranslationTextComponent("enhancedcelestials.name.moon"),
-                            CustomTranslationTextComponent.DEFAULT,
-                            CustomTranslationTextComponent.DEFAULT
+                            Optional.empty(),
+                            Optional.empty()
                     ),
                     LunarMobSettings.DEFAULT,
                     DropSettings.EMPTY)

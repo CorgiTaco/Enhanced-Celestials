@@ -1,7 +1,7 @@
 package corgitaco.enhancedcelestials.mixin;
 
-import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
+import corgitaco.enhancedcelestials.EnhancedCelestials;
+import corgitaco.enhancedcelestials.lunarevent.EnhancedCelestialsLunarForecastWorldData;
 import corgitaco.enhancedcelestials.mixin.access.ChunkMapAccess;
 import corgitaco.enhancedcelestials.mixin.access.MobCountsAccess;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -15,23 +15,27 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 @Mixin(LocalMobCapCalculator.class)
 public class MixinLocalMobCapCalculator {
 
-    @Shadow @Final private ChunkMap chunkMap;
+    @Shadow
+    @Final
+    private ChunkMap chunkMap;
 
     // TODO: Do we want to make more mobs spawn on players with better gear?!
     @Redirect(method = "canSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/LocalMobCapCalculator$MobCounts;canSpawn(Lnet/minecraft/world/entity/MobCategory;)Z"))
     private boolean useLunarEventMobCap(LocalMobCapCalculator.MobCounts instance, MobCategory mobCategory) {
         ServerLevel level = ((ChunkMapAccess) this.chunkMap).getLevel();
-        @Nullable
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-        if (enhancedCelestialsContext != null) {
+
+        Optional<EnhancedCelestialsLunarForecastWorldData> lunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(level);
+
+        if (lunarForecastWorldData.isPresent()) {
+            EnhancedCelestialsLunarForecastWorldData data = lunarForecastWorldData.orElseThrow();
             Object2IntMap<MobCategory> counts = ((MobCountsAccess) instance).getCounts();
             final int currentCount = counts.getOrDefault(mobCategory, 0);
-            return currentCount < mobCategory.getMaxInstancesPerChunk() * enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getSpawnMultiplierForMonsterCategory(mobCategory);
+            return currentCount < mobCategory.getMaxInstancesPerChunk() * data.currentLunarEvent().getSpawnMultiplierForMonsterCategory(mobCategory);
         } else {
             return instance.canSpawn(mobCategory);
         }

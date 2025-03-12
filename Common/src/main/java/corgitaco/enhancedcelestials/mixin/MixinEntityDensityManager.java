@@ -1,7 +1,6 @@
 package corgitaco.enhancedcelestials.mixin;
 
-import corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
+import corgitaco.enhancedcelestials.EnhancedCelestials;
 import corgitaco.enhancedcelestials.mixin.access.ChunkMapAccess;
 import corgitaco.enhancedcelestials.mixin.access.LocalMobCapCalculatorAccess;
 import corgitaco.enhancedcelestials.mixin.access.WorldEntitySpawnerAccess;
@@ -34,15 +33,15 @@ public class MixinEntityDensityManager {
     @Inject(method = "canSpawnForCategory", at = @At("HEAD"), cancellable = true)
     private void modifySpawnCapByCategory(MobCategory entityClassification, ChunkPos chunkPos, CallbackInfoReturnable<Boolean> cir) {
         ServerLevel level = ((ChunkMapAccess) ((LocalMobCapCalculatorAccess) this.localMobCapCalculator).getChunkMap()).getLevel();
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-        if (enhancedCelestialsContext != null) {
-            int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
+
+        EnhancedCelestials.lunarForecastWorldData(level).ifPresent(data -> {
+            int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * data.currentLunarEvent().getSpawnMultiplierForMonsterCategory(entityClassification)) / WorldEntitySpawnerAccess.getMagicNumber());
             // Global Calculation
             if (this.mobCategoryCounts.getInt(entityClassification) >= i) {
                 cir.setReturnValue(false);
             } else {
                 cir.setReturnValue(this.localMobCapCalculator.canSpawn(entityClassification, chunkPos));
             }
-        }
+        });
     }
 }

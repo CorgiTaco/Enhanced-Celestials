@@ -40,6 +40,7 @@ dependencies {
     "shadowBundle"(project(":Common", "transformProductionFabric"))
 
     modApi("corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
+    modApi("dev.corgitaco:Data_Anchor-fabric-$minecraftVersion:${project.properties["data_anchor_version"]}")
 }
 
 tasks {
