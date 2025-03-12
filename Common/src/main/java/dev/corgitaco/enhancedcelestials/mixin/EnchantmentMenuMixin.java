@@ -3,9 +3,8 @@ package dev.corgitaco.enhancedcelestials.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import dev.corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
-import dev.corgitaco.enhancedcelestials.lunarevent.LunarForecast;
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
+import dev.corgitaco.enhancedcelestials.lunarevent.EnhancedCelestialsLunarForecastWorldData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
@@ -33,13 +33,15 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
 
     @ModifyExpressionValue(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getEnchantmentCost(Lnet/minecraft/util/RandomSource;IILnet/minecraft/world/item/ItemStack;)I"))
     private int modifyCost(int original, ItemStack stack, Level level, BlockPos pos) {
-        EnhancedCelestialsContext lunarContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-        if (lunarContext != null) {
-            LunarForecast lunarForecast = lunarContext.getLunarForecast();
-            double xp = lunarForecast.currentLunarEvent().value().enchantmentTableCostAmplifier();
-            return (int) (original * xp);
+
+        Optional<EnhancedCelestialsLunarForecastWorldData> enhancedCelestialsLunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(level);
+        if (enhancedCelestialsLunarForecastWorldData.isEmpty()) {
+            return original;
         }
-        return original;
+
+        EnhancedCelestialsLunarForecastWorldData data = enhancedCelestialsLunarForecastWorldData.orElseThrow();
+        double xp = data.currentLunarEvent().enchantmentTableCostAmplifier();
+        return (int) (original * xp);
     }
 
     @WrapMethod(method = "getEnchantmentList")
@@ -53,13 +55,14 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
         }
 
         if (player != null) {
-            EnhancedCelestialsContext lunarContext = ((EnhancedCelestialsWorldData) player.level()).getLunarContext();
-            if (lunarContext != null) {
-                LunarForecast lunarForecast = lunarContext.getLunarForecast();
-                double enchantmentTableCostAmplifier = lunarForecast.currentLunarEvent().value().enchantmentTableCostAmplifier();
-                int ogCost = (int) (cost / enchantmentTableCostAmplifier);
-                return original.call(registryAccess, stack, slot, ogCost);
+            Optional<EnhancedCelestialsLunarForecastWorldData> enhancedCelestialsLunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(player.level());
+            if (enhancedCelestialsLunarForecastWorldData.isEmpty()) {
+                return original.call(registryAccess, stack, slot, cost);
             }
+            EnhancedCelestialsLunarForecastWorldData data = enhancedCelestialsLunarForecastWorldData.orElseThrow();
+            double enchantmentTableCostAmplifier = data.currentLunarEvent().enchantmentTableCostAmplifier();
+            int ogCost = (int) (cost / enchantmentTableCostAmplifier);
+            return original.call(registryAccess, stack, slot, ogCost);
         }
 
         return original.call(registryAccess, stack, slot, cost);

@@ -1,7 +1,6 @@
 package dev.corgitaco.enhancedcelestials.mixin;
 
-import dev.corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -24,16 +23,13 @@ public class MixinSlimeEntity {
     @Inject(method = "checkSlimeSpawnRules", at = @At("HEAD"), cancellable = true)
     private static void allowSlimeSpawnsAnywhere(EntityType<Slime> slimeEntityType, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource randomSource, CallbackInfoReturnable<Boolean> cir) {
         if (accessor instanceof ServerLevel serverLevel) {
-            EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) serverLevel).getLunarContext();
-            if (enhancedCelestialsContext != null) {
-                boolean slimesSpawnEverywhere = enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getLunarMobSettings().lunarMobSpawnInfo().slimesSpawnEverywhere();
-
+            EnhancedCelestials.lunarForecastWorldData(serverLevel).ifPresent(data -> {
+                boolean slimesSpawnEverywhere = data.currentLunarEvent().getLunarMobSettings().lunarMobSpawnInfo().slimesSpawnEverywhere();
                 boolean aboveY = pos.getY() > 50 && pos.getY() >= accessor.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()) - 1;
-
                 if (slimesSpawnEverywhere && aboveY && randomSource.nextFloat() < 0.5F && randomSource.nextFloat() < accessor.getMoonBrightness() && accessor.getMaxLocalRawBrightness(pos) <= randomSource.nextInt(8)) {
                     cir.setReturnValue(checkMobSpawnRules(slimeEntityType, accessor, spawnType, pos, randomSource));
                 }
-            }
+            });
         }
     }
 }

@@ -1,9 +1,8 @@
 package dev.corgitaco.enhancedcelestials.client;
 
-import dev.corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
-import dev.corgitaco.enhancedcelestials.lunarevent.LunarForecast;
+import dev.corgitaco.enhancedcelestials.lunarevent.EnhancedCelestialsLunarForecastWorldData;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -12,6 +11,8 @@ import net.minecraft.client.resources.sounds.AmbientSoundHandler;
 import net.minecraft.client.resources.sounds.BiomeAmbientSoundsHandler;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundEvent;
+
+import java.util.Optional;
 
 public class LunarSoundHandler implements AmbientSoundHandler {
 
@@ -28,15 +29,16 @@ public class LunarSoundHandler implements AmbientSoundHandler {
     @Override
     public void tick() {
         this.activeLunarSoundsMap.removeIf(AbstractTickableSoundInstance::isStopped);
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
 
-        if (enhancedCelestialsContext == null) {
+        Optional<EnhancedCelestialsLunarForecastWorldData> lunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(this.world);
+        if (lunarForecastWorldData.isEmpty()) {
             this.activeLunarSoundsMap.forEach(BiomeAmbientSoundsHandler.LoopSoundInstance::fadeOut);
             return;
         }
 
-        LunarForecast lunarForecast = enhancedCelestialsContext.getLunarForecast();
-        LunarEvent currentEvent = lunarForecast.currentLunarEvent().value();
+        EnhancedCelestialsLunarForecastWorldData data = lunarForecastWorldData.orElseThrow();
+
+        LunarEvent currentEvent = data.currentLunarEvent();
         SoundEvent soundTrack = currentEvent.getClientSettings().soundTrack(); // Use client directly here.
         if (currentEvent != this.lunarEvent || this.activeLunarSoundsMap.isEmpty()) {
             this.lunarEvent = currentEvent;

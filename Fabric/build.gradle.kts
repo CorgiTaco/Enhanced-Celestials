@@ -52,6 +52,7 @@ dependencies {
     // Mod dependencies
     modLocalRuntime ("maven.modrinth:sodium:${project.properties["sodium_version"]}")
     modLocalRuntime ("maven.modrinth:iris:${project.properties["iris_version"]}")
+    modApi("dev.corgitaco:Data_Anchor-fabric-$minecraftVersion:${project.properties["data_anchor_version"]}")
 }
 
 tasks {
@@ -83,7 +84,7 @@ publisher {
         github(project.properties["github_token"].toString())
     }
 
-    curseID.set(project.properties["curseforge_id"].toString())
+    curseID.set(project.properties["curseforge_fabric_id"].toString())
     modrinthID.set(project.properties["modrinth_id"].toString())
     githubRepo.set("https://github.com/JT122406/Enhanced-Celestials")
     setReleaseType(ReleaseType.RELEASE)

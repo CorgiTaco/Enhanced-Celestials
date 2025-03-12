@@ -1,8 +1,7 @@
 package dev.corgitaco.enhancedcelestials.mixin;
 
-import dev.corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarMobSpawnInfo;
-import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -32,9 +32,8 @@ public class MixinWorldEntitySpawner {
 
     @Inject(method = "mobsAt", at = @At("RETURN"), cancellable = true)
     private static void useLunarSpawner(ServerLevel world, StructureManager $$1, ChunkGenerator $$2, MobCategory classification, BlockPos $$4, Holder<Biome> $$5, CallbackInfoReturnable<WeightedRandomList<MobSpawnSettings.SpawnerData>> cir) {
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-        if (enhancedCelestialsContext != null) {
-            LunarMobSpawnInfo lunarSpawner = enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getLunarSpawner();
+        EnhancedCelestials.lunarForecastWorldData(world).ifPresent(data -> {
+            LunarMobSpawnInfo lunarSpawner = data.currentLunarEvent().getLunarSpawner();
             if (lunarSpawner != null) {
                 MobSpawnSettings mobSpawnInfo = lunarSpawner.spawnInfo();
                 if (lunarSpawner.useBiomeSpawnSettings()) {
@@ -45,16 +44,16 @@ public class MixinWorldEntitySpawner {
                     cir.setReturnValue(mobSpawnInfo.getMobs(classification));
                 }
             }
-        }
+        });
     }
 
     @Inject(method = "getRoughBiome", at = @At("RETURN"), cancellable = true)
-    private static void useLunarSpawner(BlockPos pos, net.minecraft.world.level.chunk.ChunkAccess chunk, CallbackInfoReturnable<Biome> cir) {
+    private static void useLunarSpawner(BlockPos pos, ChunkAccess chunk, CallbackInfoReturnable<Biome> cir) {
         if (chunk instanceof LevelChunk levelChunk) {
             Level world = levelChunk.getLevel();
-            EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-            if (enhancedCelestialsContext != null) {
-                LunarMobSpawnInfo lunarSpawner = enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getLunarSpawner();
+
+            EnhancedCelestials.lunarForecastWorldData(world).ifPresent(data -> {
+                LunarMobSpawnInfo lunarSpawner = data.currentLunarEvent().getLunarSpawner();
                 if (lunarSpawner != null) {
                     MobSpawnSettings lunarMobSpawnInfo = lunarSpawner.spawnInfo();
                     Biome.BiomeBuilder fakeBiome = (new Biome.BiomeBuilder()).hasPrecipitation(false).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(4159204).waterFogColor(329011).fogColor(12638463).skyColor(1).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build());
@@ -74,15 +73,14 @@ public class MixinWorldEntitySpawner {
                     fakeBiome.generationSettings(BiomeGenerationSettings.EMPTY);
                     cir.setReturnValue(fakeBiome.build());
                 }
-            }
+            });
         }
     }
 
     @Inject(method = "getRandomPosWithin", at = @At("RETURN"), cancellable = true)
     private static void forceSurface(Level world, LevelChunk chunk, CallbackInfoReturnable<BlockPos> cir) {
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-        if (enhancedCelestialsContext != null) {
-            LunarMobSpawnInfo lunarSpawner = enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getLunarSpawner();
+        EnhancedCelestials.lunarForecastWorldData(world).ifPresent(data -> {
+            LunarMobSpawnInfo lunarSpawner = data.currentLunarEvent().getLunarSpawner();
             if (lunarSpawner != null) {
                 if (lunarSpawner.forceSurfaceSpawning()) {
                     BlockPos returnValue = cir.getReturnValue();
@@ -95,6 +93,6 @@ public class MixinWorldEntitySpawner {
                     }
                 }
             }
-        }
+        });
     }
 }

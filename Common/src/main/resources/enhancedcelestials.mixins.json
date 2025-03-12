@@ -12,10 +12,7 @@
     "MixinEntityDensityManager",
     "MixinLivingEntity",
     "MixinLocalMobCapCalculator",
-    "MixinPlayerList",
-    "MixinServerWorld",
     "MixinSlimeEntity",
-    "MixinWorld",
     "MixinWorldEntitySpawner",
     "PlayerMixin",
     "server.MixinCommands"

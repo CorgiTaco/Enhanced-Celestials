@@ -1,7 +1,6 @@
 package dev.corgitaco.enhancedcelestials.mixin;
 
-import dev.corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -14,13 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
 public class MixinBlock {
+
     @Inject(method = "popResource*", at = @At("HEAD"))
     private static void modifyDrops(Level world, BlockPos pos, ItemStack stack, CallbackInfo ci) {
         if (!world.isClientSide) {
-            EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) world).getLunarContext();
-            if (enhancedCelestialsContext != null) {
-                enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().onBlockItemDrop((ServerLevel) world, stack);
-            }
+            EnhancedCelestials.lunarForecastWorldData(world).ifPresent(data ->
+                    data.currentLunarEvent().onBlockItemDrop((ServerLevel) world, stack)
+            );
         }
     }
 }

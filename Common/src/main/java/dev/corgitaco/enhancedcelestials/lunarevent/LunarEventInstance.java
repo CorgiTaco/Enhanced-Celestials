@@ -8,6 +8,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
+import java.util.List;
+
 public class LunarEventInstance {
 
     public static final Codec<LunarEventInstance> CODEC = RecordCodecBuilder.create(builder ->
@@ -16,6 +18,8 @@ public class LunarEventInstance {
                     Codec.LONG.fieldOf("scheduledDay").forGetter(lunarEventInstance -> lunarEventInstance.scheduledDay),
                     Codec.BOOL.fieldOf("forced").forGetter(lunarEventInstance -> lunarEventInstance.forced)
             ).apply(builder, LunarEventInstance::new));
+
+    public static final Codec<List<LunarEventInstance>> LIST_CODEC = LunarEventInstance.CODEC.listOf();
 
 
     private final ResourceKey<LunarEvent> lunarEventKey;

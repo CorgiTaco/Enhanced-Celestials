@@ -1,11 +1,8 @@
 package dev.corgitaco.enhancedcelestials.platform.services;
 
-import dev.corgitaco.enhancedcelestials.network.ECPacket;
 import dev.corgitaco.enhancedcelestials.platform.Services;
-import net.minecraft.server.level.ServerPlayer;
 
 import java.nio.file.Path;
-import java.util.List;
 
 public interface IPlatformHelper {
 
@@ -32,14 +29,6 @@ public interface IPlatformHelper {
      * @return True if in a development environment, false otherwise.
      */
     boolean isDevelopmentEnvironment();
-
-    <P extends ECPacket> void sendToClient(ServerPlayer player, P packet);
-
-    default <P extends ECPacket> void sendToAllClients(List<ServerPlayer> players, P packet) {
-        for (ServerPlayer player : players) {
-            sendToClient(player, packet);
-        }
-    }
 
     Path configDir();
 }

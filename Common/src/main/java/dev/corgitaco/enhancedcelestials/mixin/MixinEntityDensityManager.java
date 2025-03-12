@@ -1,7 +1,6 @@
 package dev.corgitaco.enhancedcelestials.mixin;
 
-import dev.corgitaco.enhancedcelestials.EnhancedCelestialsWorldData;
-import dev.corgitaco.enhancedcelestials.core.EnhancedCelestialsContext;
+import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
@@ -31,15 +30,15 @@ public class MixinEntityDensityManager {
     @Inject(method = "canSpawnForCategory", at = @At("HEAD"), cancellable = true)
     private void modifySpawnCapByCategory(MobCategory entityClassification, ChunkPos chunkPos, CallbackInfoReturnable<Boolean> cir) {
         ServerLevel level = this.localMobCapCalculator.chunkMap.level;
-        EnhancedCelestialsContext enhancedCelestialsContext = ((EnhancedCelestialsWorldData) level).getLunarContext();
-        if (enhancedCelestialsContext != null) {
-            int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * enhancedCelestialsContext.getLunarForecast().currentLunarEvent().value().getSpawnMultiplierForMonsterCategory(entityClassification)) / NaturalSpawner.MAGIC_NUMBER);
+
+        EnhancedCelestials.lunarForecastWorldData(level).ifPresent(data -> {
+            int i = (int) (entityClassification.getMaxInstancesPerChunk() * (this.spawnableChunkCount * data.currentLunarEvent().getSpawnMultiplierForMonsterCategory(entityClassification)) / NaturalSpawner.MAGIC_NUMBER);
             // Global Calculation
             if (this.mobCategoryCounts.getInt(entityClassification) >= i) {
                 cir.setReturnValue(false);
             } else {
                 cir.setReturnValue(this.localMobCapCalculator.canSpawn(entityClassification, chunkPos));
             }
-        }
+        });
     }
 }

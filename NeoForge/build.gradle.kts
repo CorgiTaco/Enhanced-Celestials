@@ -49,6 +49,7 @@ dependencies {
     "shadowBundle"(project(":Common", "transformProductionNeoForge"))
 
     modApi("corgitaco.corgilib:Corgilib-NeoForge:$minecraftVersion-${project.properties["corgilib_version"]}")
+    modApi("dev.corgitaco:Data_Anchor-neoforge-$minecraftVersion:${project.properties["data_anchor_version"]}")
 }
 
 tasks {

@@ -1,13 +1,10 @@
 package dev.corgitaco.enhancedcelestials.neoforge.platform;
 
 import com.google.auto.service.AutoService;
-import dev.corgitaco.enhancedcelestials.network.ECPacket;
 import dev.corgitaco.enhancedcelestials.platform.services.IPlatformHelper;
-import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.nio.file.Path;
 
@@ -27,11 +24,6 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public boolean isDevelopmentEnvironment() {
         return !FMLLoader.isProduction();
-    }
-
-    @Override
-    public <P extends ECPacket> void sendToClient(ServerPlayer player, P packet) {
-        PacketDistributor.sendToPlayer(player, packet);
     }
 
     @Override

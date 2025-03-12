@@ -2,7 +2,6 @@ package dev.corgitaco.enhancedcelestials.forge;
 
 import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.core.ECRegistries;
-import dev.corgitaco.enhancedcelestials.forge.network.ForgeNetworkHandler;
 import dev.corgitaco.enhancedcelestials.forge.platform.ForgeRegistrationService;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +24,5 @@ public class EnhancedCelestialsForge {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         EnhancedCelestials.commonSetup();
-        ForgeNetworkHandler.init();
     }
 }
