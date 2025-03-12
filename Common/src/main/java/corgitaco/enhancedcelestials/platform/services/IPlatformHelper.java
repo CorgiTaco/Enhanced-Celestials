@@ -1,6 +1,5 @@
 package corgitaco.enhancedcelestials.platform.services;
 
-import corgitaco.enhancedcelestials.network.S2CPacket;
 import corgitaco.enhancedcelestials.platform.Services;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -32,14 +31,6 @@ public interface IPlatformHelper {
      * @return True if in a development environment, false otherwise.
      */
     boolean isDevelopmentEnvironment();
-
-    <P extends S2CPacket> void sendToClient(ServerPlayer player, P packet);
-
-    default <P extends S2CPacket> void sendToAllClients(List<ServerPlayer> players, P packet) {
-        for (ServerPlayer player : players) {
-            sendToClient(player, packet);
-        }
-    }
 
     Path configDir();
 }
