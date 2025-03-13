@@ -7,7 +7,7 @@ import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEventProbabilities;
+import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEventDimensionChance;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarTextComponents;
 import dev.corgitaco.enhancedcelestials.util.CustomTranslationTextComponent;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
@@ -501,12 +501,12 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
         Holder.Reference<LunarDimensionSettings> dimensionSettingsHolder = possibleLunarDimensionSettings.orElseThrow();
 
         Registry<LunarEvent> lunarEvents = level.registryAccess().registry(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY).orElseThrow();
-        final Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> lunarEventSpawnRequirements = createLunarEventSpawnRequirements(dimension, level.registryAccess().registryOrThrow(EnhancedCelestialsRegistry.LUNAR_EVENT_PROBABILITIES_KEY), lunarEvents, dimensionSettingsHolder);
+        final Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> lunarEventSpawnRequirements = createLunarEventSpawnRequirements(dimension, level.registryAccess().registryOrThrow(EnhancedCelestialsRegistry.LUNAR_EVENT_DIMENSION_CHANCE_KEY), lunarEvents, dimensionSettingsHolder);
 
         return lunarEventSpawnRequirements.isEmpty() ? null : new EnhancedCelestialsLunarForecastWorldData(key, level, dimensionSettingsHolder, lunarEventSpawnRequirements);
     }
 
-    private static Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> createLunarEventSpawnRequirements(ResourceKey<Level> dimension, Registry<LunarEventProbabilities> lunarEventProbabilitiesRegistry, Registry<LunarEvent> lunarEvents, Holder.Reference<LunarDimensionSettings> dimensionSettingsHolder) {
+    private static Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> createLunarEventSpawnRequirements(ResourceKey<Level> dimension, Registry<LunarEventDimensionChance> lunarEventProbabilitiesRegistry, Registry<LunarEvent> lunarEvents, Holder.Reference<LunarDimensionSettings> dimensionSettingsHolder) {
         final Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> lunarEventSpawnRequirements = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<ResourceKey<LunarEvent>, LunarEvent> resourceKeyLunarEventEntry : lunarEvents.entrySet()) {
@@ -525,12 +525,12 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
         return lunarEventSpawnRequirements;
     }
 
-    private static void insertOverrides(Registry<LunarEventProbabilities> lunarEventProbabilitiesRegistry, ResourceKey<Level> dimension, Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> lunarEventSpawnRequirements, Registry<LunarEvent> lunarEvents) {
+    private static void insertOverrides(Registry<LunarEventDimensionChance> lunarEventProbabilitiesRegistry, ResourceKey<Level> dimension, Object2ObjectOpenHashMap<Holder<LunarEvent>, LunarEvent.SpawnRequirements> lunarEventSpawnRequirements, Registry<LunarEvent> lunarEvents) {
         Object2ObjectRBTreeMap<ResourceKey<LunarEvent>, StringBuilder> loggerData = new Object2ObjectRBTreeMap<>(Comparator.comparing(ResourceKey::location));
         lunarEventProbabilitiesRegistry.entrySet().stream().sorted(Comparator.comparingInt(value -> value.getValue().priority())).forEachOrdered(lunarEventProbabilitiesEntry -> {
-            ResourceKey<LunarEventProbabilities> lunarEventProbabilitiesKey = lunarEventProbabilitiesEntry.getKey();
-            LunarEventProbabilities lunarEventProbabilitiesEntryValue = lunarEventProbabilitiesEntry.getValue();
-            Map<ResourceKey<LunarEvent>, Map<ResourceKey<Level>, LunarEvent.SpawnRequirements>> lunarEventProbabilitiesByDimension = lunarEventProbabilitiesEntryValue.probabilitiesByEvent();
+            ResourceKey<LunarEventDimensionChance> lunarEventProbabilitiesKey = lunarEventProbabilitiesEntry.getKey();
+            LunarEventDimensionChance lunarEventDimensionChanceEntryValue = lunarEventProbabilitiesEntry.getValue();
+            Map<ResourceKey<LunarEvent>, Map<ResourceKey<Level>, LunarEvent.SpawnRequirements>> lunarEventProbabilitiesByDimension = lunarEventDimensionChanceEntryValue.probabilitiesByEvent();
 
             lunarEventProbabilitiesByDimension.forEach((lunarEventResourceKey, value) -> {
                 LunarEvent.SpawnRequirements spawnRequirementsOverride = value.get(dimension);
@@ -545,7 +545,7 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
                                 lunarEventResourceKey.location().toString(),
                                 s,
                                 lunarEventProbabilitiesKey.location().toString(),
-                                lunarEventProbabilitiesEntryValue.priority()
+                                lunarEventDimensionChanceEntryValue.priority()
                         )));
 
                         lunarEventSpawnRequirements.put(lunarEvents.getHolderOrThrow(lunarEventResourceKey), spawnRequirementsOverride);
@@ -559,9 +559,9 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
                             builder.append(", ");
                         }
 
-                        builder.append("[Probability=%s,Priority%d]".formatted(
+                        builder.append("[Probability=%s,Priority=%d]".formatted(
                                 lunarEventProbabilitiesKey.location().toString(),
-                                lunarEventProbabilitiesEntryValue.priority()
+                                lunarEventDimensionChanceEntryValue.priority()
                         ));
                     }
 
