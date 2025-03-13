@@ -5,7 +5,7 @@ import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEventProbabilities;
+import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEventDimensionChance;
 import dev.corgitaco.enhancedcelestials.core.ECEntities;
 import dev.corgitaco.enhancedcelestials.core.ECRegistries;
 import net.fabricmc.api.ModInitializer;
@@ -22,7 +22,7 @@ public class EnhancedCelestialsFabric implements ModInitializer {
 
         DynamicRegistries.registerSynced(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, LunarEvent.DIRECT_CODEC);
         DynamicRegistries.registerSynced(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, LunarDimensionSettings.CODEC);
-        DynamicRegistries.register(EnhancedCelestialsRegistry.LUNAR_EVENT_PROBABILITIES_KEY, LunarEventProbabilities.CODEC);
+        DynamicRegistries.register(EnhancedCelestialsRegistry.LUNAR_EVENT_DIMENSION_CHANCE_KEY, LunarEventDimensionChance.CODEC);
         if (EnhancedCelestials.NEW_CONTENT) {
             ECEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
         }
