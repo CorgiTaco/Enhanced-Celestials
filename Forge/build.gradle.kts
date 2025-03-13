@@ -3,7 +3,7 @@ import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
     id("com.hypherionmc.modutils.modpublisher") version "2.+"
 }
 
@@ -32,7 +32,7 @@ configurations {
 }
 
 loom {
-    accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
+    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 
     forge {
         convertAccessWideners.set(true)
@@ -45,8 +45,8 @@ loom {
     runs.create("datagen") {
         data()
         programArgs("--all", "--mod", "enhancedcelestials")
-        programArgs("--output", project(":Common").file("src/main/generated/resources").absolutePath)
-        programArgs("--existing", project(":Common").file("src/main/resources").absolutePath)
+        programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
+        programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
     }
 }
 
@@ -55,9 +55,8 @@ dependencies {
         forge("net.neoforged:forge:$minecraftVersion-${project.properties["neoforge_version"]}")
     else forge("net.minecraftforge:forge:$minecraftVersion-${project.properties["forge_version"]}")
 
-
-    "common"(project(":Common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":Common", "transformProductionForge"))
+    "common"(project(":common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":common", "transformProductionForge"))
 
     modApi("corgitaco.corgilib:Corgilib-Forge:$minecraftVersion-${project.properties["corgilib_version"]}")
     modApi("dev.corgitaco:Data_Anchor-forge-$minecraftVersion:${project.properties["data_anchor_version"]}")
@@ -73,8 +72,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json", ".cache/**",
-            "dev/corgitaco/ohthetreesyoullgrow/forge/data/**")
+        exclude("architectury.common.json", "dev/corgitaco/enhancedcelestials/forge/datagen/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
