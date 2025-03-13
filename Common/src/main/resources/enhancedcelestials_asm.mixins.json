@@ -2,10 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "corgitaco.enhancedcelestials.asm",
-  "plugin": "corgitaco.enhancedcelestials.asm.EnhancedCelestialsASMMixinPlugin",
+  "plugin": "dev.corgitaco.enhancedcelestials.asm.EnhancedCelestialsASMMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinRegistryAccess"
+    "dev.corgitaco.enhancedcelestials.asm.MixinRegistryAccess"
   ],
   "client": [
   ],

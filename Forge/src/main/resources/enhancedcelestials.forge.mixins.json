@@ -4,7 +4,7 @@
   "package": "corgitaco.enhancedcelestials.forge.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "world.level.storage.loot.MixinLootTableManager"
+    "dev.corgitaco.enhancedcelestials.forge.mixin.world.level.storage.loot.MixinLootTableManager"
   ],
   "client": [
   ],

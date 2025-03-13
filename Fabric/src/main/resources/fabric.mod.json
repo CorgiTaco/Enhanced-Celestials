@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "corgitaco.enhancedcelestials.fabric.EnhancedCelestialsFabric"
+      "dev.corgitaco.enhancedcelestials.fabric.EnhancedCelestialsFabric"
     ],
     "client":[
-      "corgitaco.enhancedcelestials.fabric.client.EnhancedCelestialsFabricClient"
+      "dev.corgitaco.enhancedcelestials.fabric.client.EnhancedCelestialsFabricClient"
     ]
   },
   "mixins": [

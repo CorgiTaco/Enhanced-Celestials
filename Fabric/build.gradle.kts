@@ -3,7 +3,7 @@ import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
     id("com.hypherionmc.modutils.modpublisher") version "2.+"
 }
 
@@ -30,14 +30,15 @@ configurations {
     }
 }
 
-loom.accessWidenerPath.set(project(":Common").loom.accessWidenerPath)
+loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+
 
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
     modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
 
-    "common"(project(":Common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":Common", "transformProductionFabric"))
+    "common"(project(":common", "namedElements")) { isTransitive = false }
+    "shadowBundle"(project(":common", "transformProductionFabric"))
 
     modApi("corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
     modApi("dev.corgitaco:Data_Anchor-fabric-$minecraftVersion:${project.properties["data_anchor_version"]}")
@@ -53,7 +54,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json")
+        exclude("architectury.common.json", "dev/corgitaco/enhancedcelestials/fabric/datagen/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
