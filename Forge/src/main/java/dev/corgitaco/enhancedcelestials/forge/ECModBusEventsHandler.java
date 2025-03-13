@@ -4,6 +4,7 @@ import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
+import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEventProbabilities;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,5 +18,7 @@ public class ECModBusEventsHandler {
     public static void registerDatapack(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, LunarEvent.DIRECT_CODEC, LunarEvent.DIRECT_CODEC);
         event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, LunarDimensionSettings.CODEC, LunarDimensionSettings.CODEC);
+        event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_EVENT_PROBABILITIES_KEY, LunarEventProbabilities.CODEC, LunarEventProbabilities.CODEC);
+
     }
 }
