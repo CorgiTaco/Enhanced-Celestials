@@ -1,4 +1,5 @@
 # 5.0.3.0
+* LOTS OF REFACTORS, CLEAN UP, AND CODE CHANGES, EXPECT MODS WHO RELY ON THIS TO BREAK!!!
 * Rewrite mod internals to use Data Anchor.
 * Add a way to override lunar event probabilities without replacing the file.
 
