@@ -35,3 +35,10 @@ mandatory = true
 versionRange = "[4.0.3.2,)"
 ordering = "BEFORE"
 side = "BOTH"
+
+[[dependencies.enhancedcelestials]]
+modId = "dataanchor"
+mandatory = true
+versionRange = "[1.0.0.9,)"
+ordering = "BEFORE"
+side = "BOTH"

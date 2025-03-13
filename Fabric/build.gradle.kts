@@ -88,7 +88,7 @@ publisher {
     setLoaders(ModLoader.FABRIC, ModLoader.QUILT)
     setCurseEnvironment(CurseEnvironment.SERVER)
     setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21)
-    val depends = mutableListOf("fabric-api")
+    val depends = mutableListOf("fabric-api", "corgilib", "data-anchor")
     curseDepends.required.set(depends)
     modrinthDepends.required.set(depends)
 }

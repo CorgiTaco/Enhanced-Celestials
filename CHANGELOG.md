@@ -1,3 +1,7 @@
+# 5.0.3.0
+* Rewrite mod internals to use Data Anchor.
+* Add a way to override lunar event probabilities without replacing the file.
+
 # 5.0.2.3
 * Fix LunarForecast when requires clear skies is false.
 
