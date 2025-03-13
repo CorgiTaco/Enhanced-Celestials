@@ -23,6 +23,9 @@
     ],
     "client":[
       "dev.corgitaco.enhancedcelestials.fabric.client.EnhancedCelestialsFabricClient"
+    ],
+    "fabric-datagen": [
+      "dev.corgitaco.enhancedcelestials.fabric.datagen.FabricDatagen"
     ]
   },
   "mixins": [

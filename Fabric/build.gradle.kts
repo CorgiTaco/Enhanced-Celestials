@@ -32,6 +32,9 @@ configurations {
 
 loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 
+fabricApi.configureDataGeneration {
+    outputDirectory = project(":common").file("src/main/generated/resources")
+}
 
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
