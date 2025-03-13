@@ -24,7 +24,7 @@ public class ECModBusEventsHandler {
         }
         event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, LunarEvent.DIRECT_CODEC, LunarEvent.DIRECT_CODEC);
         event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, LunarDimensionSettings.CODEC, LunarDimensionSettings.CODEC);
-        event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_EVENT_DIMENSION_CHANCE_KEY, LunarEventDimensionChance.CODEC, null);
+        event.dataPackRegistry(EnhancedCelestialsRegistry.LUNAR_EVENT_DIMENSION_CHANCE_KEY, LunarEventDimensionChance.CODEC, LunarEventDimensionChance.CODEC);
 
     }
 }
