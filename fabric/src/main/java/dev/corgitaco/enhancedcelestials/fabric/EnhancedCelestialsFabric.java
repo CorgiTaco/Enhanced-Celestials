@@ -22,7 +22,7 @@ public class EnhancedCelestialsFabric implements ModInitializer {
 
         DynamicRegistries.registerSynced(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY, LunarEvent.DIRECT_CODEC);
         DynamicRegistries.registerSynced(EnhancedCelestialsRegistry.LUNAR_DIMENSION_SETTINGS_KEY, LunarDimensionSettings.CODEC);
-        DynamicRegistries.register(EnhancedCelestialsRegistry.LUNAR_EVENT_DIMENSION_CHANCE_KEY, LunarEventDimensionChance.CODEC);
+        DynamicRegistries.registerSynced(EnhancedCelestialsRegistry.LUNAR_EVENT_DIMENSION_CHANCE_KEY, LunarEventDimensionChance.CODEC);
         if (EnhancedCelestials.NEW_CONTENT) {
             ECEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
         }
