@@ -101,6 +101,9 @@ publisher {
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FORGE, ModLoader.NEOFORGE)
     setCurseEnvironment(CurseEnvironment.SERVER)
+    val depends = mutableListOf("corgilib", "data-anchor")
+    curseDepends.required.set(depends)
+    modrinthDepends.required.set(depends)
     setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21)
 }
 

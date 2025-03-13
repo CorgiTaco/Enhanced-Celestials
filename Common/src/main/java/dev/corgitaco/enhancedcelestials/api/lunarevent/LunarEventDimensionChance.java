@@ -15,7 +15,7 @@ public record LunarEventDimensionChance(int priority,
     public static Codec<LunarEventDimensionChance> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.INT.fieldOf("priority").forGetter(LunarEventDimensionChance::priority),
-                    Codec.unboundedMap(ResourceKey.codec(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY), Codec.unboundedMap(ResourceKey.codec(Registries.DIMENSION), LunarEvent.SpawnRequirements.CODEC)).fieldOf("dimension_probabilities").forGetter(LunarEventDimensionChance::probabilitiesByEvent)
+                    Codec.unboundedMap(ResourceKey.codec(EnhancedCelestialsRegistry.LUNAR_EVENT_KEY), Codec.unboundedMap(ResourceKey.codec(Registries.DIMENSION), LunarEvent.SpawnRequirements.CODEC)).fieldOf("event_dimension_chances").forGetter(LunarEventDimensionChance::probabilitiesByEvent)
             ).apply(instance, LunarEventDimensionChance::new)
     );
 }
