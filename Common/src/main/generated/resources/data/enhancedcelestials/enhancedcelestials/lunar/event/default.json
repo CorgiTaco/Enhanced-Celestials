@@ -40,20 +40,8 @@
     "spawn_category_multiplier": {}
   },
   "text_components": {
-    "end_notification": {
-      "type": "CHAT",
-      "component": {
-        "key": ""
-      }
-    },
     "name": {
       "key": "enhancedcelestials.name.moon"
-    },
-    "start_notification": {
-      "type": "CHAT",
-      "component": {
-        "key": ""
-      }
     }
   }
 }

@@ -1,4 +1,4 @@
-package dev.corgitaco.enhancedcelestials.forge.datagen.providers;
+package dev.corgitaco.enhancedcelestials.datagen.providers;
 
 import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.EnhancedCelestialsRegistry;
@@ -10,8 +10,6 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,10 +18,16 @@ import static dev.corgitaco.enhancedcelestials.api.lunarevent.DefaultLunarEvents
 public class ECLunarEventTagsProvider extends TagsProvider<LunarEvent> {
     private final boolean useMinecraftNameSpace;
 
-    public ECLunarEventTagsProvider(PackOutput pOutput, boolean useMinecraftNameSpace, ResourceKey<? extends Registry<LunarEvent>> pRegistryKey, CompletableFuture<HolderLookup.Provider> pLookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pOutput, pRegistryKey, pLookupProvider, modId, existingFileHelper);
+    public ECLunarEventTagsProvider(PackOutput output, ResourceKey<? extends Registry<LunarEvent>> registryKey, CompletableFuture<HolderLookup.Provider> lookupProvider, boolean useMinecraftNameSpace) {
+        super(output, registryKey, lookupProvider);
         this.useMinecraftNameSpace = useMinecraftNameSpace;
     }
+
+    public ECLunarEventTagsProvider(PackOutput output, ResourceKey<? extends Registry<LunarEvent>> registryKey, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<LunarEvent>> parentProvider, boolean useMinecraftNameSpace) {
+        super(output, registryKey, lookupProvider, parentProvider);
+        this.useMinecraftNameSpace = useMinecraftNameSpace;
+    }
+
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
