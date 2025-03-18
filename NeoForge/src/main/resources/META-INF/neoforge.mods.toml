@@ -28,6 +28,20 @@ versionRange = "[1.21.0,)"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.enhancedcelestials]]
+modId = "corgilib"
+type = "required"
+versionRange = "[5.0.0.2,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.enhancedcelestials]]
+modId = "dataanchor"
+type = "required"
+versionRange = "[2.0.0.3,)"
+ordering = "NONE"
+side = "BOTH"
+
 [[mixins]]
 config = "enhancedcelestials.mixins.json"
 [[mixins]]
