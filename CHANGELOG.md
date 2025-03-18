@@ -1,3 +1,6 @@
+# 6.0.2.0
+* Rewrite Enhanced Celestials to use Data Anchor.
+
 # 6.0.1.3
 * Fix LunarForecast when requires clear skies is false.
 
