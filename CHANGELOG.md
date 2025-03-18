@@ -1,3 +1,6 @@
+# 5.0.3.1
+* Increase min version of Data Anchor to resolve Lunar Event world data saving issues.
+
 # 5.0.3.0
 * LOTS OF REFACTORS, CLEAN UP, AND CODE CHANGES, EXPECT MODS WHO RELY ON THIS TO BREAK!!!
 * Rewrite mod internals to use Data Anchor.
