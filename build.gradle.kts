@@ -73,10 +73,10 @@ subprojects {
         repositories {
             mavenLocal()
             maven {
-                val releasesRepoUrl = "https://example.com/releases"
-                val snapshotsRepoUrl = "https://example.com/snapshots"
+                val releasesRepoUrl = "https://maven.jt-dev.tech/releases"
+                val snapshotsRepoUrl = "https://maven.jt-dev.tech/snapshots"
                 url = uri(if (project.version.toString().endsWith("SNAPSHOT") || project.version.toString().startsWith("0")) snapshotsRepoUrl else releasesRepoUrl)
-                name = "ExampleRepo"
+                name = "JTDev-Maven-Repository"
                 credentials {
                     username = project.properties["repoLogin"]?.toString()
                     password = project.properties["repoPassword"]?.toString()
