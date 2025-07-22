@@ -1,3 +1,6 @@
+# 6.0.2.1
+* Bump corgilib version and other fixes.
+
 # 6.0.2.0
 * Rewrite Enhanced Celestials to use Data Anchor.
 

@@ -43,7 +43,7 @@ dependencies {
     "common"(project(":Common", "namedElements")) { isTransitive = false }
     "shadowBundle"(project(":Common", "transformProductionFabric"))
 
-    modApi("corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
+    modApi("dev.corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
 
     modLocalRuntime("org.joml:joml:1.10.4")
     modLocalRuntime("org.anarres:jcpp:1.4.14")

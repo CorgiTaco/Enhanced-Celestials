@@ -48,7 +48,7 @@ dependencies {
     "common"(project(":Common", "namedElements")) { isTransitive = false }
     "shadowBundle"(project(":Common", "transformProductionNeoForge"))
 
-    modApi("corgitaco.corgilib:Corgilib-NeoForge:$minecraftVersion-${project.properties["corgilib_version"]}")
+    modApi("dev.corgitaco.corgilib:Corgilib-NeoForge:$minecraftVersion-${project.properties["corgilib_version"]}")
     modApi("dev.corgitaco:Data_Anchor-neoforge-$minecraftVersion:${project.properties["data_anchor_version"]}")
 }
 
