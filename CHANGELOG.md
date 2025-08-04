@@ -1,3 +1,6 @@
+# 6.0.2.3
+* Add defaulted values if some keys are not specified for Lunar Events.
+
 # 6.0.2.2
 * Make getForecast accessible externally.
 
