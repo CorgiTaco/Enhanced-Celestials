@@ -1,3 +1,6 @@
+# 6.0.2.2
+* Make getForecast accessible externally.
+
 # 6.0.2.1
 * Bump corgilib version and other fixes.
 
