@@ -12,6 +12,6 @@ sourceSets.main.get().resources.srcDir("src/main/generated/resources")
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
 
-    modCompileOnly("dev.corgitaco.corgilib:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
+    modCompileOnly("dev.corgitaco:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
     modCompileOnly("dev.corgitaco:Data_Anchor-common-$minecraftVersion:${project.properties["data_anchor_version"]}")
 }

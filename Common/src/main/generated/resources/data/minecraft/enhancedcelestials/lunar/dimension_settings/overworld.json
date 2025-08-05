@@ -3,7 +3,7 @@
   "default": "enhancedcelestials:default",
   "max_days_between_all_events": 98,
   "min_days_between_all_events": 2,
-  "requires_clear_skies": false,
+  "requires_clear_skies": true,
   "tracked_past_events_max_count": 100,
   "year_length_in_days": 100
 }
