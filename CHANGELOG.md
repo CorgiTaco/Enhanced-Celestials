@@ -1,3 +1,6 @@
+# 6.0.2.4
+* Update libraries to latest versions. Fixes Datapack crashes.
+
 # 6.0.2.3
 * Add defaulted values if some keys are not specified for Lunar Events.
 
