@@ -1,3 +1,15 @@
+# 6.0.2.4
+* Update libraries to latest versions. Fixes Datapack crashes.
+
+# 6.0.2.3
+* Add defaulted values if some keys are not specified for Lunar Events.
+
+# 6.0.2.2
+* Make getForecast accessible externally.
+
+# 6.0.2.1
+* Bump corgilib version and other fixes.
+
 # 6.0.2.0
 * Rewrite Enhanced Celestials to use Data Anchor.
 

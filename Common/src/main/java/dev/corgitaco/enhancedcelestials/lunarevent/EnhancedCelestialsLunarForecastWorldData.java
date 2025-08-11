@@ -471,6 +471,10 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
         }
     }
 
+    public List<LunarEventInstance> getForecast() {
+        return forecast;
+    }
+
     public LunarDimensionSettings getDimensionSettings() {
         return dimensionSettingsHolder.value();
     }

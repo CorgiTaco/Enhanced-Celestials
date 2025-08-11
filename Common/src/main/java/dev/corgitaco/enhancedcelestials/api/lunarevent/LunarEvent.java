@@ -28,10 +28,10 @@ public class LunarEvent {
                     LunarTextComponents.CODEC.fieldOf("text_components").forGetter(LunarEvent::getTextComponents),
                     LunarMobSettings.CODEC.fieldOf("mob_settings").forGetter(LunarEvent::getLunarMobSettings),
                     DropSettings.CODEC.fieldOf("drops").forGetter(LunarEvent::getDropSettings),
-                    Codec.DOUBLE.fieldOf("anvil_cost_amplifier").forGetter(LunarEvent::anvilCostAmplifier),
-                    Codec.DOUBLE.fieldOf("enchantment_table_cost_amplifier").forGetter(LunarEvent::enchantmentTableCostAmplifier),
-                    Codec.DOUBLE.fieldOf("xp_amplifier").forGetter(LunarEvent::xpAmplifier),
-                    Codec.DOUBLE.fieldOf("beacon_radius_amplifier").forGetter(LunarEvent::beaconRadiusAmplifier)
+                    Codec.DOUBLE.fieldOf("anvil_cost_amplifier").orElse(1.0).forGetter(LunarEvent::anvilCostAmplifier),
+                    Codec.DOUBLE.fieldOf("enchantment_table_cost_amplifier").orElse(1.0).forGetter(LunarEvent::enchantmentTableCostAmplifier),
+                    Codec.DOUBLE.fieldOf("xp_amplifier").orElse(1.0).forGetter(LunarEvent::xpAmplifier),
+                    Codec.DOUBLE.fieldOf("beacon_radius_amplifier").orElse(1.0).forGetter(LunarEvent::beaconRadiusAmplifier)
             ).apply(builder, LunarEvent::new)
     );
 

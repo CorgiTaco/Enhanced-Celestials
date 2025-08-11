@@ -2,8 +2,8 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
-    id("com.gradleup.shadow") version "8.3.3" apply false
+    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
+    id("com.gradleup.shadow") version "8.3.8" apply false
     java
     idea
     `maven-publish`
@@ -22,7 +22,7 @@ subprojects {
     apply(plugin = "architectury-plugin")
     apply(plugin = "maven-publish")
 
-    base.archivesName.set(project.properties["archives_base_name"] as String + "-${project.name}")
+    base.archivesName.set(project.properties["archives_base_name"] as String + "-${project.name}-$minecraftVersion")
 
     val loom = project.extensions.getByName<LoomGradleExtensionAPI>("loom")
     loom.silentMojangMappingsLicense()
