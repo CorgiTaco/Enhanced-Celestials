@@ -1,3 +1,6 @@
+# 6.0.2.5
+* Fix chat spam when events switch. Fix an issue with events blending. Fixes #247
+
 # 6.0.2.4
 * Update libraries to latest versions. Fixes Datapack crashes.
 
