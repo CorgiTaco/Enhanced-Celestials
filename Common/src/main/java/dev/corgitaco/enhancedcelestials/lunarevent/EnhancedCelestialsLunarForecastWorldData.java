@@ -83,7 +83,7 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
     public void readFromNetwork(CompoundTag tag) {
         super.readFromNetwork(tag);
 
-        if (lastTickEvent != currentLunarEvent()) {
+        if (lastTickEvent != currentLunarEventHolder()) {
             eventSwitched(lastLunarEventHolder(), currentLunarEventHolder());
         }
     }
@@ -137,7 +137,7 @@ public class EnhancedCelestialsLunarForecastWorldData extends SyncedLevelTracked
             if (level.isRaining() && this.dimensionSettingsHolder.value().requiresClearSkies()) {
                 lastTickEvent = defaultLunarEvent();
             } else {
-                lastTickEvent = getLunarEventForDay(getCurrentDay());
+                lastTickEvent = currentLunarEventHolder();
             }
         } else {
             lastTickEvent = defaultLunarEvent();
