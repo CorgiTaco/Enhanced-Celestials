@@ -1,7 +1,3 @@
-# Enhanced Celestials
+# Enhanced Celestials 
 
-
-# Legal
-Textures and models are © 2022-present chaottic. All Rights Reserved.
-
-You may not use the textures or models.
+A Minecraft mod adding a series of lunar events including Blood Moons, Harvest Moons, and Blue Moons. Each event has unique effects on the world and mobs, and can be configured in various ways.

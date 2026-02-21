@@ -8,7 +8,6 @@
     "BeaconBlockEntityMixin",
     "EnchantmentMenuMixin",
     "MixinBlock",
-    "MixinConfiguredFeature",
     "MixinEntityDensityManager",
     "MixinLivingEntity",
     "MixinLocalMobCapCalculator",

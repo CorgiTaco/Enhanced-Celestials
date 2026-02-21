@@ -8,7 +8,6 @@ import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarDimensionSettings;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
 import dev.corgitaco.enhancedcelestials.neoforge.datagen.providers.ECItemTagsProvider;
 import dev.corgitaco.enhancedcelestials.neoforge.datagen.providers.ECLunarEventTagsProvider;
-import dev.corgitaco.enhancedcelestials.world.level.levelgen.structure.ECStructures;
 import net.minecraft.core.Cloner;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -42,12 +41,6 @@ public class ECDataGen {
             DefaultLunarDimensionSettings.LUNAR_DIMENSION_SETTINGS_FACTORIES.forEach((lunarEventResourceKey, factory) -> {
                 pContext.register(ResourceKey.create(dimensionSettingsKey, lunarEventResourceKey.location()), factory.generate(pContext));
             });
-        }).add(Registries.STRUCTURE, pContext -> {
-            if (EnhancedCelestials.NEW_CONTENT) {
-                ECStructures.STRUCTURE_FACTORIES.forEach((resourceKey, factory) -> {
-                    pContext.register(resourceKey, factory.generate(pContext));
-                });
-            }
         });
     }
 
