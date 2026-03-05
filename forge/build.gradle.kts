@@ -72,7 +72,6 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json", "dev/corgitaco/enhancedcelestials/forge/datagen/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
