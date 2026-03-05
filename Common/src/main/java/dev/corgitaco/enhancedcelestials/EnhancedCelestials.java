@@ -14,8 +14,6 @@ public class EnhancedCelestials {
     public static final String MOD_ID = "enhancedcelestials";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final boolean NEW_CONTENT = false;
-
     public static final TrackedDataKey<EnhancedCelestialsLunarForecastWorldData> LUNAR_FORECAST_WORLD_DATA = TrackedDataRegistries.LEVEL.register(
             createLocation("lunar_forecast"),
             EnhancedCelestialsLunarForecastWorldData.class,
