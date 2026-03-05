@@ -1,3 +1,7 @@
+# 5.0.3.2
+* Add translations
+* Add Data gen to jar.
+
 # 5.0.3.1
 * Increase min version of Data Anchor to resolve Lunar Event world data saving issues.
 
