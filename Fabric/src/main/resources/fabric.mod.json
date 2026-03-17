@@ -14,7 +14,7 @@
   "contact": {
     "sources": "https://github.com/CorgiTaco/Enhanced-Celestials"
   },
-  "license": "Source code and binaries fall under LGPLv3 while textures and models are Copyright 2022-present chaottic. All Rights Reserved",
+  "license": "Source code and binaries fall under LGPLv3.",
   "icon": "assets/modid/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -34,7 +34,8 @@
     "fabric": "*",
     "minecraft": ">=1.21.1",
     "java": ">=21",
-    "corgilib": ">=5.0.0.5",
-    "dataanchor": ">=2.0.0.3"
+    "corgilib": ">=5.0.0.9",
+    "dataanchor": ">=2.0.0.13",
+    "timecore": ">=1.0.1"
   }
 }

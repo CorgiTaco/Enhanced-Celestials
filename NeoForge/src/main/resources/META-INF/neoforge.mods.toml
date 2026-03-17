@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-license = "Source code and binaries fall under LGPLv3 while textures and models are Copyright 2022-present chaottic. All Rights Reserved"
+license = "Source code and binaries fall under LGPLv3."
 issueTrackerURL = "https://github.com/CorgiTaco/Enhanced-Celestials/issues"
 [[mods]]
 modId = "enhancedcelestials"
@@ -31,7 +31,7 @@ side = "BOTH"
 [[dependencies.enhancedcelestials]]
 modId = "corgilib"
 type = "required"
-versionRange = "[5.0.0.5,)"
+versionRange = "[5.0.0.9,)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -39,6 +39,13 @@ side = "BOTH"
 modId = "dataanchor"
 type = "required"
 versionRange = "[2.0.0.3,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.enhancedcelestials]]
+modId = "timecore"
+type = "required"
+versionRange = "[1.0.1,)"
 ordering = "NONE"
 side = "BOTH"
 

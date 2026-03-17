@@ -53,6 +53,7 @@ dependencies {
     modLocalRuntime ("maven.modrinth:sodium:${project.properties["sodium_version"]}")
     modLocalRuntime ("maven.modrinth:iris:${project.properties["iris_version"]}")
     modApi("dev.corgitaco:Data_Anchor-fabric-$minecraftVersion:${project.properties["data_anchor_version"]}")
+    modApi("dev.corgitaco:TimeCore-fabric-$minecraftVersion:${project.properties["timecore_version"]}")
 }
 
 tasks {

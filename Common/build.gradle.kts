@@ -14,4 +14,7 @@ dependencies {
 
     modCompileOnly("dev.corgitaco:Corgilib-Fabric:$minecraftVersion-${project.properties["corgilib_version"]}")
     modCompileOnly("dev.corgitaco:Data_Anchor-common-$minecraftVersion:${project.properties["data_anchor_version"]}")
+    val mixinExtras = include("io.github.llamalad7:mixinextras-common:0.5.3")
+        ?: error("Failed to include mixinextras-common dependency")
+    implementation(mixinExtras)
 }

@@ -50,6 +50,7 @@ dependencies {
 
     modApi("dev.corgitaco:Corgilib-NeoForge:$minecraftVersion-${project.properties["corgilib_version"]}")
     modApi("dev.corgitaco:Data_Anchor-neoforge-$minecraftVersion:${project.properties["data_anchor_version"]}")
+    modApi("dev.corgitaco:TimeCore-neoforge-$minecraftVersion:${project.properties["timecore_version"]}")
 }
 
 tasks {
