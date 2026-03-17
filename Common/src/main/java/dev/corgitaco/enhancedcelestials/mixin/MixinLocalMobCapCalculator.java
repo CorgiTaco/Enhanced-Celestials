@@ -1,5 +1,7 @@
 package dev.corgitaco.enhancedcelestials.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.lunarevent.EnhancedCelestialsLunarForecastWorldData;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -11,7 +13,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
@@ -20,11 +21,11 @@ public class MixinLocalMobCapCalculator {
 
     @Shadow
     @Final
-    private ChunkMap chunkMap;
+    public ChunkMap chunkMap;
 
     // TODO: Do we want to make more mobs spawn on players with better gear?!
-    @Redirect(method = "canSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/LocalMobCapCalculator$MobCounts;canSpawn(Lnet/minecraft/world/entity/MobCategory;)Z"))
-    private boolean useLunarEventMobCap(LocalMobCapCalculator.MobCounts instance, MobCategory mobCategory) {
+    @WrapOperation(method = "canSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/LocalMobCapCalculator$MobCounts;canSpawn(Lnet/minecraft/world/entity/MobCategory;)Z"))
+    private boolean useLunarEventMobCap(LocalMobCapCalculator.MobCounts instance, MobCategory mobCategory, Operation<Boolean> original) {
         ServerLevel level = this.chunkMap.level;
 
         Optional<EnhancedCelestialsLunarForecastWorldData> lunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(level);
@@ -35,7 +36,7 @@ public class MixinLocalMobCapCalculator {
             final int currentCount = counts.getOrDefault(mobCategory, 0);
             return currentCount < mobCategory.getMaxInstancesPerChunk() * data.currentLunarEvent().getSpawnMultiplierForMonsterCategory(mobCategory);
         } else {
-            return instance.canSpawn(mobCategory);
+            return original.call(instance, mobCategory);
         }
     }
 }

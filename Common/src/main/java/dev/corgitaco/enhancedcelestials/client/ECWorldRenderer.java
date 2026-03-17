@@ -4,14 +4,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.corgitaco.enhancedcelestials.EnhancedCelestials;
 import dev.corgitaco.enhancedcelestials.api.client.ColorSettings;
 import dev.corgitaco.enhancedcelestials.api.lunarevent.LunarEvent;
-import dev.corgitaco.enhancedcelestials.lunarevent.EnhancedCelestialsLunarForecastWorldData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
-
-import java.util.Optional;
 
 public class ECWorldRenderer {
 
@@ -32,30 +28,6 @@ public class ECWorldRenderer {
             float b = Mth.clampedLerp(lastGLColor.z(), currentGLColor.z(), blend);
             RenderSystem.setShaderColor(r, g, b, 1.0F - level.getRainLevel(partialTicks));
         });
-    }
-
-    public static void bindMoonTexture(int moonTextureId, ResourceLocation moonLocation) {
-        ClientLevel level = Minecraft.getInstance().level;
-        Optional<EnhancedCelestialsLunarForecastWorldData> lunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(level);
-
-        if (lunarForecastWorldData.isEmpty()) {
-            RenderSystem.setShaderTexture(moonTextureId, moonLocation);
-            return;
-        }
-        EnhancedCelestialsLunarForecastWorldData data = lunarForecastWorldData.orElseThrow();
-        RenderSystem.setShaderTexture(moonTextureId, data.currentLunarEvent().getClientSettings().moonTextureLocation());
-    }
-
-    public static float getMoonSize(float arg0) {
-        ClientLevel level = Minecraft.getInstance().level;
-        Optional<EnhancedCelestialsLunarForecastWorldData> lunarForecastWorldData = EnhancedCelestials.lunarForecastWorldData(level);
-
-        if (lunarForecastWorldData.isEmpty()) {
-            return arg0;
-        }
-
-        EnhancedCelestialsLunarForecastWorldData data = lunarForecastWorldData.orElseThrow();
-        return Mth.clampedLerp(data.lastLunarEvent().getClientSettings().moonSize(), data.currentLunarEvent().getClientSettings().moonSize(), data.getBlend());
     }
 
     public static void eventLightMap(Vector3f skyVector, float partialTicks) {
