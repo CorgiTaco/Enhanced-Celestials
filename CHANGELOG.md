@@ -1,3 +1,6 @@
+# 6.0.2.6
+* Add announcement screen for EC 2.
+
 # 6.0.2.5
 * Fix chat spam when events switch. Fix an issue with events blending. Fixes #247
 
