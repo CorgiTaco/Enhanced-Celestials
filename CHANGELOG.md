@@ -1,3 +1,6 @@
+# 6.0.2.7
+* Remove time core references. Update EC 2 Announcement screen.
+
 # 6.0.2.6
 * Add announcement screen for EC 2.
 

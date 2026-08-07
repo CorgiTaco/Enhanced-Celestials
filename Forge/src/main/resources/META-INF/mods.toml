@@ -42,10 +42,3 @@ type = "required"
 versionRange = "[2.0.0.3,)"
 ordering = "NONE"
 side = "BOTH"
-
-[[dependencies.enhancedcelestials]]
-modId = "timecore"
-type = "required"
-versionRange = "[1.0.1,)"
-ordering = "NONE"
-side = "BOTH"

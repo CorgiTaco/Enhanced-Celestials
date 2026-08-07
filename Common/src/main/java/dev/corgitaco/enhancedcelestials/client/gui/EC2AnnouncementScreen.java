@@ -3,6 +3,7 @@ package dev.corgitaco.enhancedcelestials.client.gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineLabel;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -25,14 +26,17 @@ public class EC2AnnouncementScreen extends Screen {
         int y = this.height / 2;
 
         this.addRenderableWidget(Button.builder(Component.translatable("enhancedcelestials.ec2_announcement.modrinth"), button -> this.minecraft.setScreen(new EC2LinksScreen(this, EC2LinksScreen.Platform.MODRINTH)))
+                .tooltip(Tooltip.create(Component.translatable("enhancedcelestials.ec2_announcement.modrinth.tooltip")))
                 .bounds(centerX - BUTTON_WIDTH / 2, y - 30, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("enhancedcelestials.ec2_announcement.curseforge"), button -> this.minecraft.setScreen(new EC2LinksScreen(this, EC2LinksScreen.Platform.CURSEFORGE)))
+                .tooltip(Tooltip.create(Component.translatable("enhancedcelestials.ec2_announcement.curseforge.tooltip")))
                 .bounds(centerX - BUTTON_WIDTH / 2, y - 5, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("enhancedcelestials.ec2_announcement.dismiss"), button -> this.onClose())
+                .tooltip(Tooltip.create(Component.translatable("enhancedcelestials.ec2_announcement.dismiss.tooltip")))
                 .bounds(centerX - BUTTON_WIDTH / 2, y + 25, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .build());
     }

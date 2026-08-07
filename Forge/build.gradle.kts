@@ -50,7 +50,6 @@ dependencies {
 
     modApi("dev.corgitaco:Corgilib-Forge:$minecraftVersion-${project.properties["corgilib_version"]}")
     modApi("dev.corgitaco:Data_Anchor-forge-$minecraftVersion:${project.properties["data_anchor_version"]}")
-    modApi("dev.corgitaco:TimeCore-forge-$minecraftVersion:${project.properties["timecore_version"]}")
 
     val mixinExtras = include("io.github.llamalad7:mixinextras-forge:0.5.3")
         ?: error("Failed to include mixinextras-forge dependency")
