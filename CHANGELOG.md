@@ -1,3 +1,6 @@
+# 5.0.3.3
+* Add announcement screen for EC 2.
+
 # 5.0.3.2
 * Add translations
 * Add Data gen to jar.
